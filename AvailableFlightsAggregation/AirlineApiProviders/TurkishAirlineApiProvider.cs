@@ -1,10 +1,10 @@
-﻿using FlightTicketAPIsAggregation.Models;
+﻿using AvailableFlightsAggregation.Models;
 
-namespace FlightTicketAPIsAggregation.AirlineApiProviders
+namespace AvailableFlightsAggregation.AirlineApiProviders
 {
     public class TurkishAirlineApiProvider : IAirlineApiProvider
     {
-        public async Task<AirlineApiResult> GetFlightTicketsAsync()
+        public async Task<AirlineApiResult> GetAvailableFlightsAsync()
         {
             var random = new Random();
             var sleepInterval = random.Next(2000, 6000);
@@ -13,9 +13,9 @@ namespace FlightTicketAPIsAggregation.AirlineApiProviders
             return new AirlineApiResult
             {
                 AirlineName = "Turkish",
-                FlightTickets = new List<FlightTicket>
+                AvailableFlights = new List<Flight>
                 {
-                    new FlightTicket
+                    new Flight
                     {
                         FlightNumber ="ABC123",
                         BoardingDateTime =DateTime.Now,
@@ -27,7 +27,7 @@ namespace FlightTicketAPIsAggregation.AirlineApiProviders
                         DestinationAirport = "Hamburg Airport",
                         Price=50
                     },
-                    new FlightTicket
+                    new Flight
                     {
                         FlightNumber ="DEF456",
                         BoardingDateTime =DateTime.Now.AddHours(2),
@@ -39,7 +39,7 @@ namespace FlightTicketAPIsAggregation.AirlineApiProviders
                         DestinationAirport = "Hamburg Airport",
                         Price=45
                     },
-                    new FlightTicket
+                    new Flight
                     {
                         FlightNumber ="GHI789",
                         BoardingDateTime =DateTime.Now.AddHours(4),

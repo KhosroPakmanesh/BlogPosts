@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "FlightTicketAPIsAggregation": {
+    "AvailableFlightsAggregation": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

@@ -1,7 +1,7 @@
-using FlightTicketAPIsAggregation.DIConfigurations;
-using FlightTicketAPIsAggregation.Hubs;
+using AvailableFlightsAggregation.DIConfigurations;
+using AvailableFlightsAggregation.Hubs;
 
-namespace FlightTicketAPIsAggregation
+namespace AvailableFlightsAggregation
 {
     public class Program
     {
@@ -35,7 +35,7 @@ namespace FlightTicketAPIsAggregation
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.MapHub<FlightTicketsHub>("/flightTicketsHub");
+            app.MapHub<AvailableFlightsHub>("/availableFlightsHub");
 
             app.Run();
         }

@@ -1,10 +1,10 @@
-﻿using FlightTicketAPIsAggregation.Models;
+﻿using AvailableFlightsAggregation.Models;
 
-namespace FlightTicketAPIsAggregation.AirlineApiProviders
+namespace AvailableFlightsAggregation.AirlineApiProviders
 {
     public class QatarAirlineApiProvider : IAirlineApiProvider
     {
-        public async Task<AirlineApiResult> GetFlightTicketsAsync()
+        public async Task<AirlineApiResult> GetAvailableFlightsAsync()
         {
             var random = new Random();
             var sleepInterval = random.Next(2000, 6000);
@@ -13,9 +13,9 @@ namespace FlightTicketAPIsAggregation.AirlineApiProviders
             return new AirlineApiResult
             {
                 AirlineName = "Qatar",
-                FlightTickets = new List<FlightTicket>
+                AvailableFlights = new List<Flight>
                 {
-                    new FlightTicket
+                    new Flight
                     {
                         FlightNumber ="JKL123",
                         BoardingDateTime =DateTime.Now.AddHours(3),
@@ -27,7 +27,7 @@ namespace FlightTicketAPIsAggregation.AirlineApiProviders
                         DestinationAirport = "Hamburg Airport",
                         Price=60
                     },
-                    new FlightTicket
+                    new Flight
                     {
                         FlightNumber ="MNO456",
                         BoardingDateTime =DateTime.Now.AddHours(5),

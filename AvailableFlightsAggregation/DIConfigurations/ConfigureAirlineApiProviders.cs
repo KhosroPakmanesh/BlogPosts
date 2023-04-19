@@ -1,6 +1,6 @@
-﻿using FlightTicketAPIsAggregation.AirlineApiProviders;
+﻿using AvailableFlightsAggregation.AirlineApiProviders;
 
-namespace FlightTicketAPIsAggregation.DIConfigurations;
+namespace AvailableFlightsAggregation.DIConfigurations;
 
 public static class ConfigureAirlineApiProviders
 {

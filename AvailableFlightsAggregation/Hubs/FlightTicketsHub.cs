@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace FlightTicketAPIsAggregation.Hubs
+namespace AvailableFlightsAggregation.Hubs
 {
-    public class FlightTicketsHub : Hub
+    public class AvailableFlightsHub : Hub
     {
         public string GetConnectionId()
         {

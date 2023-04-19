@@ -1,6 +1,6 @@
-﻿namespace FlightTicketAPIsAggregation.Models
+﻿namespace AvailableFlightsAggregation.Models
 {
-    public class FlightTicket
+    public class Flight
     {
         public string FlightNumber { get; set; }
         public DateTime BoardingDateTime { get; set; }

@@ -1,4 +1,4 @@
-namespace FlightTicketAPIsAggregation.Models
+namespace AvailableFlightsAggregation.Models
 {
     public class ErrorViewModel
     {
