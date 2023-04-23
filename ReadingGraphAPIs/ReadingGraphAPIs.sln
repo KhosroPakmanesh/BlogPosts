@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadingGraphAPIs", "ReadingGraphAPIs\ReadingGraphAPIs.csproj", "{379FE916-3A78-4E67-B3FD-1A1A8768B44B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadingGraphAPIs.Tests", "ReadingGraphAPIs.Tests\ReadingGraphAPIs.Tests.csproj", "{268FCB58-0DDE-4D70-873B-3248DD464470}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{379FE916-3A78-4E67-B3FD-1A1A8768B44B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{379FE916-3A78-4E67-B3FD-1A1A8768B44B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{379FE916-3A78-4E67-B3FD-1A1A8768B44B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{379FE916-3A78-4E67-B3FD-1A1A8768B44B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{268FCB58-0DDE-4D70-873B-3248DD464470}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{268FCB58-0DDE-4D70-873B-3248DD464470}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{268FCB58-0DDE-4D70-873B-3248DD464470}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{268FCB58-0DDE-4D70-873B-3248DD464470}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6FD7BDF1-67B1-4890-B917-81034CB1ED5D}
+	EndGlobalSection
+EndGlobal
