@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvalidIdentityAccessHandlerMiddleware", "InvalidIdentityAccessHandlerMiddleware\InvalidIdentityAccessHandlerMiddleware.csproj", "{4A24877B-A0A0-4D2D-B0A5-A14560A4750A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvalidIdentityAccessHandlerMiddleware.Test", "InvalidIdentityAccessHandlerMiddleware.Test\InvalidIdentityAccessHandlerMiddleware.Test.csproj", "{DC2E86CF-C8F9-4180-A78C-E6BBE7EA0BB5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4A24877B-A0A0-4D2D-B0A5-A14560A4750A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A24877B-A0A0-4D2D-B0A5-A14560A4750A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A24877B-A0A0-4D2D-B0A5-A14560A4750A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A24877B-A0A0-4D2D-B0A5-A14560A4750A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC2E86CF-C8F9-4180-A78C-E6BBE7EA0BB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC2E86CF-C8F9-4180-A78C-E6BBE7EA0BB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC2E86CF-C8F9-4180-A78C-E6BBE7EA0BB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC2E86CF-C8F9-4180-A78C-E6BBE7EA0BB5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {23C258B3-759F-463F-AF67-07299DD16D34}
+	EndGlobalSection
+EndGlobal
