@@ -1,20 +1,26 @@
 ﻿using Newtonsoft.Json;
+using System.Dynamic;
 
-namespace Application.Controllers.SocialReview.Extensions
+namespace ReadingGraphAPIs
 {
-    public static class DynamicExtensions
+    public static class StringExtensions
     {
         public static bool TryExtractValue<T>
-            (dynamic dynamicObject, string fieldName, out T extractedValue)
+            (this string stringJson, string fieldName, out T extractedValue)
         {
             try
             {
                 var tokens = ExtractTokens(fieldName);
 
-                var rawTokenValue = ExtractRawTokenValue(dynamicObject, tokens);
+                var dynamicObject = JsonConvert
+                    .DeserializeObject<ExpandoObject>(stringJson)!;
+
+                var rawTokenValue = 
+                    ExtractRawTokenValue(dynamicObject, tokens);
                 if (!string.IsNullOrEmpty(rawTokenValue))
                 {
-                    extractedValue = JsonConvert.DeserializeObject(rawTokenValue, typeof(T));
+                    extractedValue = JsonConvert
+                        .DeserializeObject<T>(rawTokenValue)!;
                     return true;
                 }
             }
@@ -23,36 +29,50 @@ namespace Application.Controllers.SocialReview.Extensions
             extractedValue = default!;            
             return false;
         }
-        public static T ExtractValue<T> (dynamic dynamicObject, string fieldName)
+        public static T ExtractValue<T> 
+            (this string stringJson, string fieldName)
         {
             var tokens = ExtractTokens(fieldName);
+
+            var dynamicObject = JsonConvert
+                .DeserializeObject<ExpandoObject>(stringJson)!;
 
             var rawTokenValue = ExtractRawTokenValue(dynamicObject, tokens);
             if (!string.IsNullOrEmpty(rawTokenValue))
             {
-                return JsonConvert.DeserializeObject(rawTokenValue, typeof(T));
+                return JsonConvert.DeserializeObject<T>(rawTokenValue)!;
             }
 
-            throw new InvalidOperationException($"{fieldName} field name not found!");
+            throw new InvalidOperationException
+                ($"{fieldName} field name not found!");
         }
         public static object ExtractValue
-            (dynamic dynamicObject, string fieldName, Type type)
+            (this string stringJson, string fieldName, Type type)
         {
             var tokens = ExtractTokens(fieldName);
 
-            var rawTokenValue = ExtractRawTokenValue(dynamicObject, tokens);
+            var dynamicObject = JsonConvert
+                .DeserializeObject<ExpandoObject>(stringJson)!;
+
+            var rawTokenValue = 
+                ExtractRawTokenValue(dynamicObject, tokens);
             if (!string.IsNullOrEmpty(rawTokenValue))
             {
-                return JsonConvert.DeserializeObject(rawTokenValue, type);
+                return JsonConvert
+                    .DeserializeObject(rawTokenValue, type)!;
             }
 
-            throw new InvalidOperationException($"{fieldName} field name not found!");
+            throw new InvalidOperationException
+                ($"{fieldName} field name not found!");
         }
-        public static bool HasValue(dynamic dynamicObject, string fieldName)
+        public static bool HasValue(this string stringJson, string fieldName)
         {
             try
             {
                 var tokens = ExtractTokens(fieldName);
+
+                var dynamicObject = JsonConvert
+                    .DeserializeObject<ExpandoObject>(stringJson)!;
 
                 var rawTokenValue = ExtractRawTokenValue(dynamicObject, tokens);
                 if (!string.IsNullOrEmpty(rawTokenValue))

@@ -1,15 +1,12 @@
-using Application.Controllers.SocialReview.Extensions;
-using Newtonsoft.Json;
-using System.Dynamic;
 using Xunit;
 
 namespace ReadingGraphAPIs.Tests
 {
-    public class DynamicExtensionsTests
+    public class StringExtensionsTests
     {
-        private string _stringApiResult=string.Empty;
-        
-        public DynamicExtensionsTests()
+        private string _stringApiResult = string.Empty;
+
+        public StringExtensionsTests()
         {
             string projectDirectory =
                 Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName!;
@@ -23,13 +20,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void TryExtractValueShouldReturnTrueAndIdGivenCorrectNonNestedPathToId()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.TryExtractValue
-                (dynamicApiResult, "id", out string idValue);
+            var operationResult = _stringApiResult.TryExtractValue
+                ( "id", out string idValue);
 
             //Assert
             Assert.True(operationResult);
@@ -38,13 +31,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void TryExtractValueShouldReturnFalseAndNullGivenWrongNonNestedPathToId()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.TryExtractValue
-                (dynamicApiResult, "id1", out string idValue);
+            var operationResult = _stringApiResult.TryExtractValue
+                ("id1", out string idValue);
 
             //Assert
             Assert.False(operationResult);
@@ -53,13 +42,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void TryExtractValueShouldReturnTrueAndNameGivenCorrectNestedPathToName()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.TryExtractValue
-                (dynamicApiResult, "comments.data[1].from.name", out string  nameValue);
+            var operationResult = _stringApiResult.TryExtractValue
+                ("comments.data[1].from.name", out string nameValue);
 
             //Assert
             Assert.True(operationResult);
@@ -68,13 +53,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void TryExtractValueShouldReturnFalseAndNullGivenWrongNestedPathToName()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.TryExtractValue
-                (dynamicApiResult, "comments.data[1].from.name1", out string nameValue);
+            var operationResult = _stringApiResult.TryExtractValue
+                ("comments.data[1].from.name1", out string nameValue);
 
             //Assert
             Assert.False(operationResult);
@@ -83,13 +64,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void TryExtractValueShouldReturnTrueAndRecommendationTypeGivenCorrectNestedPathToRecommendationType()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.TryExtractValue
-                (dynamicApiResult, "data.recommendation_type", out string recommendationTypeValue);
+            var operationResult = _stringApiResult.TryExtractValue
+                ("data.recommendation_type", out string recommendationTypeValue);
 
             //Assert
             Assert.True(operationResult);
@@ -98,28 +75,20 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void TryExtractValueShouldReturnFalseAndNullGivenWrongNestedPathToRecommendationType()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.TryExtractValue
-                (dynamicApiResult, "data.recommendation_type1", out string recommendationTypeValue);
+            var operationResult = _stringApiResult.TryExtractValue
+                ("data.recommendation_type1", out string recommendationTypeValue);
 
             //Assert
             Assert.False(operationResult);
-            Assert.Null( recommendationTypeValue);
+            Assert.Null(recommendationTypeValue);
         }
         [Fact]
         public void TryExtractValueShouldReturnTrueAndBeforeGivenCorrectNestedPathToBefore()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.TryExtractValue
-                (dynamicApiResult, "comments.paging.cursors.before", out string beforeValue);
+            var operationResult = _stringApiResult.TryExtractValue
+                ("comments.paging.cursors.before", out string beforeValue);
 
             //Assert
             Assert.True(operationResult);
@@ -128,13 +97,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void TryExtractValueShouldReturnFalseAndNullGivenWrongNestedPathToBefore()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.TryExtractValue
-                (dynamicApiResult, "comments.paging.cursors.before1", out string beforeValue);
+            var operationResult = _stringApiResult.TryExtractValue
+                ("comments.paging.cursors.before1", out string beforeValue);
 
             //Assert
             Assert.False(operationResult);
@@ -143,32 +108,24 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void TryExtractValueShouldReturnTrueAndCommentGivenCorrectNestedPathToFirstComment()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.TryExtractValue
-                (dynamicApiResult, "comments.data[0]", out Comment comment);
+            var operationResult = _stringApiResult.TryExtractValue
+                ("comments.data[0]", out Comment comment);
 
             //Assert
             Assert.True(operationResult);
             Assert.IsType<Comment>(comment);
             Assert.Equal("105063339084349_801664927626415", comment.Id);
             Assert.Equal("This is John's first comment.", comment.Message);
-            Assert.Equal(new DateTime(2022,11,3).Date, comment.CreatedTime.Date);
+            Assert.Equal(new DateTime(2022, 11, 3).Date, comment.CreatedTime.Date);
             Assert.Equal(13, comment.CommentCount);
         }
         [Fact]
         public void TryExtractValueShouldReturnTrueAndCommentGivenCorrectNestedPathToSecondComment()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.TryExtractValue
-                (dynamicApiResult, "comments.data[1]", out Comment comment);
+            var operationResult = _stringApiResult.TryExtractValue
+                ("comments.data[1]", out Comment comment);
 
             //Assert
             Assert.True(operationResult);
@@ -181,12 +138,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void TryExtractValueShouldReturnFalseGivenWrongtNestedPathToThirdComment()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
             //Act
-            var operationResult = DynamicExtensions.TryExtractValue
-                (dynamicApiResult, "comments.data[2]", out string beforeValue);
+            var operationResult = _stringApiResult.TryExtractValue
+                ("comments.data[2]", out string beforeValue);
 
             //Assert
             Assert.False(operationResult);
@@ -195,13 +149,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void TryExtractValueShouldReturnCommentListGivenCorrectNestedPathToComments()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.TryExtractValue
-                (dynamicApiResult, "comments.data", out List<Comment> comments);
+            var operationResult = _stringApiResult.TryExtractValue
+                ("comments.data", out List<Comment> comments);
 
             //Assert
             Assert.True(operationResult);
@@ -222,13 +172,8 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void ExtractValueShouldReturnIdGivenCorrectNonNestedPathToId()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var idValue = DynamicExtensions.ExtractValue<string>
-                (dynamicApiResult, "id");
+            var idValue = _stringApiResult.ExtractValue<string>("id");
 
             //Assert
             Assert.Equal("105063339084349", idValue);
@@ -236,13 +181,8 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void ExtractValueShouldReturnExceptionGivenWrongNonNestedPathToId()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            Action action = () => DynamicExtensions.ExtractValue<string>
-                (dynamicApiResult, "id1");
+            Action action = () => _stringApiResult.ExtractValue<string>("id1");
 
             //Assert
             var exception = Assert.Throws<InvalidOperationException>(action);
@@ -251,13 +191,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void ExtractValueShouldReturnNameGivenCorrectNestedPathToName()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var nameValue = DynamicExtensions.ExtractValue<string>
-                (dynamicApiResult, "comments.data[1].from.name");
+            var nameValue = _stringApiResult.ExtractValue<string>
+                ("comments.data[1].from.name");
 
             //Assert
             Assert.Equal("Will Smith", nameValue);
@@ -265,13 +201,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void ExtractValueShouldReturnExceptionGivenWrongNestedPathToName()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            Action action = () => DynamicExtensions.ExtractValue<string>
-                (dynamicApiResult, "comments.data[1].from.name1");
+            Action action = () => _stringApiResult.ExtractValue<string>
+                ("comments.data[1].from.name1");
 
             //Assert
             var exception = Assert.Throws<InvalidOperationException>(action);
@@ -280,13 +212,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void ExtractValueShouldReturnRecommendationTypeGivenCorrectNestedPathToRecommendationType()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var recommendationTypeValue = DynamicExtensions.ExtractValue<string>
-                (dynamicApiResult, "data.recommendation_type");
+            var recommendationTypeValue = _stringApiResult.ExtractValue<string>
+                ("data.recommendation_type");
 
             //Assert
             Assert.Equal("positive", recommendationTypeValue);
@@ -294,13 +222,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void ExtractValueShouldReturnExceptionGivenWrongNestedPathToRecommendationType()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            Action action = () => DynamicExtensions.ExtractValue<string>
-                (dynamicApiResult, "data.recommendation_type1");
+            Action action = () => _stringApiResult.ExtractValue<string>
+                ("data.recommendation_type1");
 
             //Assert
             var exception = Assert.Throws<InvalidOperationException>(action);
@@ -309,13 +233,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void ExtractValueShouldReturnBeforeGivenCorrectNestedPathToBefore()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var beforeValue = DynamicExtensions.ExtractValue<string>
-                (dynamicApiResult, "comments.paging.cursors.before");
+            var beforeValue = _stringApiResult.ExtractValue<string>
+                ("comments.paging.cursors.before");
 
             //Assert
             Assert.Contains("QVFIUkQ3Y0VuS0IzZA", beforeValue);
@@ -323,13 +243,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void ExtractValueShouldReturnExceptionGivenWrongNestedPathToBefore()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            Action action = () => DynamicExtensions.ExtractValue<string>
-                (dynamicApiResult, "comments.paging.cursors.before1");
+            Action action = () => _stringApiResult.ExtractValue<string>
+                ("comments.paging.cursors.before1");
 
             //Assert
             var exception = Assert.Throws<InvalidOperationException>(action);
@@ -338,13 +254,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void ExtractValueShouldReturnCommentGivenCorrectNestedPathToFirstComment()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var comment = DynamicExtensions.ExtractValue<Comment>
-                (dynamicApiResult, "comments.data[0]");
+            var comment = _stringApiResult
+                .ExtractValue<Comment>("comments.data[0]");
 
             //Assert
             Assert.IsType<Comment>(comment);
@@ -356,13 +268,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void ExtractValueShouldReturnCommentGivenCorrectNestedPathToSecondComment()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var comment = DynamicExtensions.ExtractValue<Comment>
-                (dynamicApiResult, "comments.data[1]");
+            var comment = _stringApiResult
+                .ExtractValue<Comment>("comments.data[1]");
 
             //Assert
             Assert.IsType<Comment>(comment);
@@ -374,13 +282,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void ExtractValueShouldReturnExceptionGivenWrongtNestedPathToThirdComment()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            Action action = () => DynamicExtensions.ExtractValue<Comment>
-                (dynamicApiResult, "comments.data[2]");
+            Action action = () => _stringApiResult
+                .ExtractValue<Comment>("comments.data[2]");
 
             //Assert
             var exception = Assert.Throws<ArgumentOutOfRangeException>(action);
@@ -389,13 +293,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void ExtractValueShouldReturnCommentListGivenCorrectNestedPathToComments()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var comments = DynamicExtensions.ExtractValue<List<Comment>>
-                (dynamicApiResult, "comments.data");
+            var comments = _stringApiResult
+                .ExtractValue<List<Comment>>("comments.data");
 
             //Assert            
             Assert.IsType<List<Comment>>(comments);
@@ -415,13 +315,8 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void HasValueShouldReturnTrueGivenCorrectNonNestedPathToId()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.HasValue
-                (dynamicApiResult, "id");
+            var operationResult = _stringApiResult.HasValue("id");
 
             //Assert
             Assert.True(operationResult);
@@ -429,13 +324,8 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void HasValueShouldReturnFalseGivenWrongNonNestedPathToId()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.HasValue
-                (dynamicApiResult, "id1");
+            var operationResult = _stringApiResult.HasValue("id1");
 
             //Assert
             Assert.False(operationResult);
@@ -443,13 +333,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void HasValueShouldReturnTrueGivenCorrectNestedPathToName()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.HasValue
-                (dynamicApiResult, "comments.data[1].from.name");
+            var operationResult = _stringApiResult
+                .HasValue("comments.data[1].from.name");
 
             //Assert
             Assert.True(operationResult);
@@ -457,13 +343,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void HasValueShouldReturnFalseGivenWrongNestedPathToName()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.HasValue
-                (dynamicApiResult, "comments.data[1].from.name1");
+            var operationResult = _stringApiResult
+                .HasValue("comments.data[1].from.name1");
 
             //Assert
             Assert.False(operationResult);
@@ -471,13 +353,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void HasValueShouldReturnTrueGivenCorrectNestedPathToRecommendationType()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.HasValue
-                (dynamicApiResult, "data.recommendation_type");
+            var operationResult = _stringApiResult
+                .HasValue("data.recommendation_type");
 
             //Assert
             Assert.True(operationResult);
@@ -485,13 +363,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void HasValueShouldReturnFalseGivenWrongNestedPathToRecommendationType()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.HasValue
-                (dynamicApiResult, "data.recommendation_type1");
+            var operationResult = _stringApiResult
+                .HasValue("data.recommendation_type1");
 
             //Assert
             Assert.False(operationResult);
@@ -499,13 +373,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void HasValueShouldReturnTrueGivenCorrectNestedPathToBefore()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.HasValue
-                (dynamicApiResult, "comments.paging.cursors.before");
+            var operationResult = _stringApiResult
+                .HasValue("comments.paging.cursors.before");
 
             //Assert
             Assert.True(operationResult);
@@ -513,13 +383,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void HasValueShouldReturnFalseGivenWrongNestedPathToBefore()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.HasValue
-                (dynamicApiResult, "comments.paging.cursors.before!");
+            var operationResult = _stringApiResult
+                .HasValue("comments.paging.cursors.before!");
 
             //Assert
             Assert.False(operationResult);
@@ -527,13 +393,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void HasValueShouldReturnTrueGivenCorrectNestedPathToFirstComment()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.HasValue
-                (dynamicApiResult, "comments.data[0]");
+            var operationResult = _stringApiResult
+                .HasValue("comments.data[0]");
 
             //Assert
             Assert.True(operationResult);
@@ -541,13 +403,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void HasValueShouldReturnTruetGivenCorrectNestedPathToSecondComment()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.HasValue
-                (dynamicApiResult, "comments.data[1]");
+            var operationResult = _stringApiResult
+                .HasValue("comments.data[1]");
 
             //Assert
             Assert.True(operationResult);
@@ -555,13 +413,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void HasValueShouldReturnFalseGivenWrongtNestedPathToThirdComment()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.HasValue
-                (dynamicApiResult, "comments.data[2]");
+            var operationResult = _stringApiResult
+                .HasValue("comments.data[2]");
 
             //Assert
             Assert.False(operationResult);
@@ -569,13 +423,9 @@ namespace ReadingGraphAPIs.Tests
         [Fact]
         public void HasValueShouldReturnTrueGivenCorrectNestedPathToComments()
         {
-            //Arrange
-            var dynamicApiResult =
-                JsonConvert.DeserializeObject<ExpandoObject>(_stringApiResult)!;
-
             //Act
-            var operationResult = DynamicExtensions.HasValue
-                (dynamicApiResult, "comments.data");
+            var operationResult = _stringApiResult
+                .HasValue("comments.data");
 
             //Assert
             Assert.True(operationResult);

@@ -40,10 +40,9 @@ namespace InvalidIdentityAccessHandlerMiddleware
 
             app.UseRouting();
 
+            app.UseInvalidIdentityAccessHandler();
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseInvalidIdentityAccessHandler();
 
             app.MapControllerRoute(
                 name: "default",
