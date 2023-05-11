@@ -4,47 +4,47 @@
 }
 
 <!-- Contact-->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="contact-wrapper">
-                    <h3>Get In Touch With Us</h3>
-                </div> <!-- /.contact-wrapper -->
-            </div> <!-- /.col-md-12 -->
-            <div class="col-md-12">
-                <form id="contact-form" asp-controller="Home" asp-action="ContactUs" method="post" enctype="multipart/form-data">
-                    <div class="row">
-                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <input type="text" asp-for="FullName" class="form-control" placeholder="Full Name *">
-                                <span style="font-size:12px;" class="text-danger" asp-validation-for="FullName"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <input type="email" asp-for="Email" class="form-control" placeholder="E-mail *">
-                                <span style="font-size:12px;" class="text-danger" asp-validation-for="Email"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <input type="text" asp-for="WebAddress" class="form-control" placeholder="Web-Address">
-                                <span style="font-size:12px;" class="text-danger" asp-validation-for="WebAddress"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <textarea asp-for="Body" class="form-control" placeholder="Body *" rows="8"></textarea>
-                                <span style="font-size:12px;" class="text-danger" asp-validation-for="Body"></span>
-                            </div>
-                        </div>
-                        <div id="hcaptcha-wrapper" class="col-md-4">
-                            <input id="submit-button" onclick="submitContact();" type="button" class="w-100 btn btn-lg btn-primary" value="Send Request" disabled>
-                        </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="contact-wrapper">
+            <h3>Get In Touch With Us</h3>
+        </div> <!-- /.contact-wrapper -->
+    </div> <!-- /.col-md-12 -->
+    <div class="col-md-12">
+        <form id="contact-form" asp-controller="Home" asp-action="ContactUs" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="text" asp-for="FullName" class="form-control" placeholder="Full Name *">
+                        <span style="font-size:12px;" class="text-danger" asp-validation-for="FullName"></span>
                     </div>
-                </form>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="email" asp-for="Email" class="form-control" placeholder="E-mail *">
+                        <span style="font-size:12px;" class="text-danger" asp-validation-for="Email"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="text" asp-for="WebAddress" class="form-control" placeholder="Web-Address">
+                        <span style="font-size:12px;" class="text-danger" asp-validation-for="WebAddress"></span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <textarea asp-for="Body" class="form-control" placeholder="Body *" rows="8"></textarea>
+                        <span style="font-size:12px;" class="text-danger" asp-validation-for="Body"></span>
+                    </div>
+                </div>
+                <div id="hcaptcha-wrapper" class="col-md-4">
+                    <input id="submit-button" onclick="submitContact();" type="button" class="w-100 btn btn-lg btn-primary" value="Send Request" disabled>
+                </div>
             </div>
-        </div>
+        </form>
+    </div>
+</div>
 
 @section Scripts
 {
