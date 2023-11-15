@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<section class="module-sm module-divider-bottom">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<select class="form-control m-t-10 m-b-10">
+					<option>Default Sorting</option>
+					<option>Popular</option>
+					<option>Latest</option>
+					<option>Average Price</option>
+					<option>High Price</option>
+					<option>Low Price</option>
+				</select>
+			</div>
+			<div class="col-md-4">
+				<select class="form-control m-t-10 m-b-10">
+					<option>Woman</option>
+					<option>Man</option>
+				</select>
+			</div>
+			<div class="col-md-4">
+				<select class="form-control m-t-10 m-b-10">
+					<option>All</option>
+					<option>Coats</option>
+					<option>Jackets</option>
+					<option>Dresses</option>
+					<option>Jumpsuits</option>
+					<option>Tops</option>
+				</select>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- Shop Grid-->
+<section class="module">
+	<div class="container">
+		<div class="row">
+			@for (int counter = 1; counter < 9; counter++)
+			{
+				<div class="col-md-3">
+					<div class="shop-grid-item">
+						<div class="shop-item-thumb">
+							<a href="#"><img src="~/front-office/images/default-images/default-shop-image.jpg" alt=""></a>
+							<div class="shop-item-hidden"><a class="btn btn-block btn-dark" href="#">Add to cart</a></div>
+						</div>
+						<div class="shop-item-captions">
+							<h6 class="shop-item-title">Mandarin collar shirt</h6>
+							<h6 class="shop-item-price">$20.00</h6>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</section>
+<!-- Shop Grid end-->
+<!-- Pagination-->
+<section class="module-sm module-gray">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<nav>
+					<ul class="pagination h4">
+						<li class="page-item next"><a class="page-link" href="#"><span class="arrows arrows-arrows-slim-right"></span></a></li>
+						<li class="page-item active"><a class="page-link" href="#">1</a></li>
+						<li class="page-item"><a class="page-link" href="#">2</a></li>
+						<li class="page-item"><a class="page-link" href="#">3</a></li>
+						<li class="page-item"><a class="page-link" href="#">4</a></li>
+						<li class="page-item"><a class="page-link" href="#">5</a></li>
+						<li class="page-item prev"><a class="page-link" href="#"><span class="arrows arrows-arrows-slim-left"></span></a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- Pagination end-->

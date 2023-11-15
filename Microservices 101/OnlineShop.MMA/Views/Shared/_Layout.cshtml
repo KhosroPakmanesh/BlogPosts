@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<title>@ViewData["Title"] - Order Example</title>
+	<!-- Web Fonts-->
+	<link href="~/front-office/css/css.css" rel="stylesheet">
+	<!-- Bootstrap core CSS-->
+	<link href="~/front-office/bootstrap/css/bootstrap.min.css" rel="stylesheet">	
+	<!-- Plugins and Icon Fonts-->
+	<link href="~/front-office/css/plugins.min.css" rel="stylesheet">
+	<!-- Template core CSS-->
+	<link href="~/front-office/css/template.min.css" rel="stylesheet">
+	@RenderSection("Styles", required: false)
+</head>
+<body>
+	<!-- Layout-->
+	<div class="layout">
+		<!-- Header-->
+		<header class="header header-center undefined">
+			<div class="container-fluid">
+				<!-- Navigation-->
+				<div class="inner-navigation collapse">
+					<div class="inner-navigation-inline">
+						<div class="inner-nav">
+							<ul>
+								<!-- Home-->
+								<li>
+									<a asp-area="" asp-controller="Home" asp-action="Index">Cart (5)</a>
+								</li>
+								<li>
+									<a asp-area="" asp-controller="Home" asp-action="Index">Orders (2)</a>
+								</li>
+								<!-- Home end-->
+								<!-- Admin-->
+ 								<partial name="_AdminPartial" />
+								<partial name="_LoginPartial" />
+								<!-- Admin end-->
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+		<!-- Header end-->
+		<!-- Wrapper-->
+		<div class="wrapper">
+			<!-- Page Main Contenct-->
+			@RenderBody()
+			<!-- Page Main Contenct-->
+		</div>
+		<!-- Wrapper end-->
+	</div>
+	<!-- Layout end-->
+	<!-- Scripts-->
+	<script src="~/front-office/js/jquery-3.5.1.min.js"></script>
+	<script src="~/front-office/bootstrap/js/bootstrap.min.js"></script>	
+	<script src="~/front-office/js/plugins.min.js"></script>
+	<script src="~/front-office/js/custom.min.js"></script>
+	<script>
+		function logout() {
+			$('form#logoutForm').submit();
+		}
+	</script>
+	@RenderSection("Scripts", required: false)
+</body>
+</html>

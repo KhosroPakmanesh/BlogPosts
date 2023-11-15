@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+.laptop-placeholder {
+    position: relative;
+}
+
+.laptop-image {
+    position: absolute;
+    z-index: 999;
+    aspect-ratio: 1.625;
+    width: 72% !important;
+    left: 14%;
+    top: 8.5%;
+}
+

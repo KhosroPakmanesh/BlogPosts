@@ -1,0 +1,20 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <li>
+        <a href="#" onclick="logout()" id="logoutLink">Logout</a>
+        <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            @Html.AntiForgeryToken()
+        </form>   
+    </li>
+}
+else
+{
+    <li>
+        <a asp-area="Identity" asp-page="/Account/Login">Login</a>
+    </li>
+}
+

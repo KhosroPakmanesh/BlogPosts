@@ -1,0 +1,47 @@
+﻿@model Website.Presentation.Areas.Admin.Models.Contact.DetailModel
+@{
+    ViewData["Title"] = "Contact Detail";
+}
+
+<main class="content">
+    <div class="container-fluid p-0">
+        <h1 class="h3 mb-3">Contact Detail</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title"></h5>
+                        <h5 class="card-subtitle text-muted">The details of the contact is as follows</h5>
+                    </div>                   
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label asp-for="FullName">Full Name</label>
+                                <input asp-for="FullName" type="text" class="form-control" disabled="disabled">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="Email">Email</label>
+                                <input asp-for="Email" type="text" class="form-control" disabled="disabled">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="WebAddress">Web Address</label>
+                                <input asp-for="WebAddress" type="text" class="form-control" disabled="disabled">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="CreationDateTime">Creation DateTime</label>
+                                <input asp-for="CreationDateTime" type="text" class="form-control" disabled="disabled">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Body">Body</label>
+                            <textarea asp-for="Body" type="text" class="form-control" style="height: 200px" disabled="disabled"></textarea>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-area="Admin" asp-controller="Contact" asp-action="Index" class="btn btn-primary">Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

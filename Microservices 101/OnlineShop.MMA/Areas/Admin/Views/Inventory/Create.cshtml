@@ -1,0 +1,172 @@
+﻿@model Website.Presentation.Areas.Admin.Models.Post.CreateModel
+@{
+    ViewData["Title"] = "Post Create";
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/back-office/css/font-awesome.css">
+}
+
+<main class="content">
+    <div class="container-fluid p-0">
+        <h1 class="h3 mb-3">Post Create</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <form asp-controller="Post" asp-action="Create" method="post" class="form-horizontal" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="card-header">
+                            <h5 class="card-title"></h5>
+                            <h5 class="card-subtitle text-muted">The details of the post is as follows</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label asp-for="Title">Title</label>
+                                    <input asp-for="Title" type="text" placeholder="Title" class="form-control" pf-validation-for="Title" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
+                                    <div pf-validation-for="Title" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Categories</label>
+                                    <select asp-for="CategoryIds" class="form-control select2"
+                                            multiple="multiple"
+                                            pf-validation-for="CategoryIds" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false
+                                            asp-items="@Model.CategorySelectListItems">
+                                    </select>
+                                    <div pf-validation-for="CategoryIds" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Tags</label>
+                                    <select asp-for="TagIds" class="form-control select2"
+                                            multiple="multiple"
+                                            pf-validation-for="TagIds" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false
+                                            asp-items="@Model.TagSelectListItems">                                        
+                                    </select>
+                                    <div pf-validation-for="TagIds" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label asp-for="IsPublishable">Is Publishable</label>
+                                    <div class="custom-control custom-switch">
+                                        <input asp-for="IsPublishable" type="checkbox" class="custom-control-input" pf-validation-for="IsPublishable" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
+                                        <label class="custom-control-label" for="IsPublishable">Toggle this to switch the status</label>
+                                    </div>
+                                    <div pf-validation-for="IsPublishable" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-label w-100">Photo</label>
+                                    <input asp-for="Image" type="file" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Body">Body</label>
+                                <div class="clearfix">
+                                    <div id="quill-toolbar">
+                                        <span class="ql-formats">
+                                            <select class="ql-font"></select>
+                                            <select class="ql-size"></select>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-bold"></button>
+                                            <button class="ql-italic"></button>
+                                            <button class="ql-underline"></button>
+                                            <button class="ql-strike"></button>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <select class="ql-color"></select>
+                                            <select class="ql-background"></select>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-script" value="sub"></button>
+                                            <button class="ql-script" value="super"></button>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-header" value="1"></button>
+                                            <button class="ql-header" value="2"></button>
+                                            <button class="ql-blockquote"></button>
+                                            <button class="ql-code-block"></button>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-list" value="ordered"></button>
+                                            <button class="ql-list" value="bullet"></button>
+                                            <button class="ql-indent" value="-1"></button>
+                                            <button class="ql-indent" value="+1"></button>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-direction" value="rtl"></button>
+                                            <select class="ql-align"></select>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-link"></button>
+                                            <button class="ql-image"></button>
+                                            <button class="ql-video"></button>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-clean"></button>
+                                        </span>
+                                    </div>
+                                    <div id="quill-editor"></div>
+                                </div>
+                                <input asp-for="Body" id="quill-html" class="form-control" type="hidden" pf-validation-for="Body" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false />
+                                <div pf-validation-for="Body" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Introduction">Introduction</label>
+                                <textarea asp-for="Introduction" type="text" placeholder="Introduction" class="form-control" style="height: 200px" pf-validation-for="Introduction" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false></textarea>
+                                <div pf-validation-for="Introduction" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a asp-area="Admin" asp-controller="Post" asp-action="Index" class="btn btn-primary">Back</a>
+                            <button type="submit" class="btn btn-primary">
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts
+{
+    <script src="~/back-office/js/quill.htmlEditButton.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            if (!window.Quill) {
+                return $('#quill-editor,#quill-toolbar,#quill-bubble-editor,#quill-bubble-toolbar').remove();
+            }
+
+            Quill.register("modules/htmlEditButton", htmlEditButton);
+            Quill.prototype.getHTML = function () {
+                return this.container.querySelector('.ql-editor').innerHTML;
+            };
+
+            var editor = new Quill('#quill-editor', {
+                modules: {
+                    toolbar: '#quill-toolbar',
+                    htmlEditButton: {}
+                },
+                placeholder: 'Type something',
+                theme: 'snow',
+            });
+
+            editor.on('text-change', function (delta, oldDelta, source) {
+                var html = editor.getHTML();
+                if (html == '<p><br></p>') {
+                    $('#quill-html').val('');
+                }
+                else {
+                    $('#quill-html').val(html);
+                }
+            });
+        });
+
+        $(".select2").select2({
+            placeholder: 'Select items',
+        }).change(function () {
+            $(this).valid();
+        });
+    </script>
+}

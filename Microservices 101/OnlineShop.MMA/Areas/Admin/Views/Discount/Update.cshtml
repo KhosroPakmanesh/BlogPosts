@@ -1,0 +1,45 @@
+﻿@model             UpdateModel
+@{
+    ViewData["Title"] = "Category Update";
+}
+
+<main class="content">
+    <div class="container-fluid p-0">
+        <h1 class="h3 mb-3">Category Update</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <form asp-controller="Category" asp-action="Update" method="post" class="form-horizontal" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+                        <input asp-for="IdCategory" type="hidden" />
+                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="card-header">
+                            <h5 class="card-title"></h5>
+                            <h5 class="card-subtitle text-muted">The details of the category is as follows</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label asp-for="Title">Title</label>
+                                    <input asp-for="Title" type="text" placeholder="Title" class="form-control" pf-validation-for="Title" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
+                                    <div pf-validation-for="Title" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label asp-for="Description">Description</label>
+                                    <input asp-for="Description" type="text" placeholder="Description" class="form-control" pf-validation-for="Description" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
+                                    <div pf-validation-for="Description" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="btn btn-primary">Back</a>
+                            <button type="submit" class="btn btn-primary">
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

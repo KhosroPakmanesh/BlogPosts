@@ -1,0 +1,42 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    @if (User.IsInRole("admin"))
+    {
+		<li class="menu-item-has-children">
+			<a asp-area="Admin" asp-controller="Home" asp-action="Index">Admin Panel</a>
+			<ul class="sub-menu">
+				<li class="menu-item-has-children">					
+					<a asp-area="Admin" asp-controller="Post" asp-action="Index">Blog</a>
+					<ul class="sub-menu">
+						<li>
+							<a asp-area="Admin" asp-controller="Post" asp-action="Index">Posts</a>
+						</li>
+						<li>
+							<a asp-area="Admin" asp-controller="Comment" asp-action="Index">Comments</a>
+						</li>
+						<li>							
+							<a asp-area="Admin" asp-controller="Category" asp-action="Index">Categories</a>
+						</li>
+						<li>
+							<a asp-area="Admin" asp-controller="Tag" asp-action="Index">Tags</a>
+						</li>
+					</ul>
+				</li>
+				<li class="menu-item-has-children">
+					<a asp-area="Admin" asp-controller="Service" asp-action="Index">Services</a>
+					<ul class="sub-menu">
+						<li>
+							<a asp-area="Admin" asp-controller="Service" asp-action="Index">Services</a>
+						</li>
+						<li>
+							<a asp-area="Admin" asp-controller="Contact" asp-action="Index">Contacts</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+    }
+}

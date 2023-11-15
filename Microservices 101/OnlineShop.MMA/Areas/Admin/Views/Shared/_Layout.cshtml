@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>@ViewData["Title"] - Order Example</title>
+	<link href="~/back-office/css/app.css" rel="stylesheet">
+	@RenderSection("Styles", required: false)
+</head>
+<body>
+	<div class="wrapper">
+        @await Component.InvokeAsync("SideBar")
+
+		<div class="main">
+			<nav class="navbar navbar-expand navbar-light bg-white sticky-top">
+				<a class="sidebar-toggle d-flex mr-3">
+					<i class="align-self-center" data-feather="menu"></i>
+				</a>
+
+				<div class="navbar-collapse collapse">
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item dropdown">
+							<a class="nav-icon dropdown-toggle ml-2 d-inline-block d-sm-none" href="#" id="userDropdown" data-toggle="dropdown">
+								<div class="position-relative">
+									<i class="align-middle mt-n1" data-feather="settings"></i>
+								</div>
+							</a>
+							<a class="nav-link nav-link-user dropdown-toggle d-none d-sm-inline-block" href="#" id="userDropdown" data-toggle="dropdown">
+								<img src="~/uploads/avatars/lg-khosro-avatar.webp" class="avatar img-fluid rounded mr-1" alt="Khosro Pakmanesh" /> <span class="text-dark">Khosro Pakmanesh</span>
+							</a>
+							<partial name="_LoginPartial" />
+						</li>
+						@*@await Component.InvokeAsync("ContactMessageNotification")
+                        @await Component.InvokeAsync("CommentNotification") *@
+					</ul>
+				</div>
+			</nav>
+
+			@RenderBody()
+
+			<footer class="footer">
+				<div class="container-fluid">
+					<div class="row text-muted">
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+	<script src="~/back-office/js/app.js"></script>
+	<script>
+		function logout() {
+			$('form#logoutForm').submit();
+		}
+	</script>
+	@RenderSection("Scripts", required: false)
+</body>
+</html>

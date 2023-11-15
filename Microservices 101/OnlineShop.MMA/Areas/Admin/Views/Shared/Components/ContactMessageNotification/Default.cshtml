@@ -1,0 +1,49 @@
+﻿@model Website.Presentation.Areas.Admin.Models.Components.ContactMessageNotificationModel
+
+
+<li class="nav-item dropdown">
+    <a class="nav-icon dropdown-toggle ml-2" href="#" id="messagesDropdown" data-toggle="dropdown">
+        <div class="position-relative">
+            <i class="align-middle" data-feather="message-square"></i>
+            @if (Model.UnreadContactMessageCount>0)
+            {
+                <span class="indicator">@Model.UnreadContactMessageCount</span>
+            }            
+        </div>
+    </a>
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right py-0" aria-labelledby="messagesDropdown">
+        <div class="dropdown-menu-header">
+            <div class="position-relative">
+                @if (Model.UnreadContactMessageCount == 0)
+                {
+                    <div>No New Contact Message</div>
+                }
+                else if (Model.UnreadContactMessageCount == 1)
+                {
+                    <div>@Model.UnreadContactMessageCount New Contact Message</div>
+                }
+                else if (Model.UnreadContactMessageCount > 1)
+                {
+                    <div>@Model.UnreadContactMessageCount New Contact Messages</div>
+                }
+            </div>
+        </div>
+        @foreach (var nameMessagePair in Model.NameMessagePairs)
+        {
+            <div class="list-group">
+                <a asp-area="Admin" asp-controller="Contact" asp-action="Detail" asp-route-id="@nameMessagePair.IdContact" class="list-group-item">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-10 pl-2">
+                            <div class="text-dark">@nameMessagePair.Name</div>
+                            <div class="text-muted small mt-1">@nameMessagePair.Message</div>
+                            <div class="text-muted small mt-1">@nameMessagePair.CreateDateTime</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+        <div class="dropdown-menu-footer">
+            <a asp-area="Admin" asp-controller="Contact" asp-action="Index" class="text-muted">Show all contact messages</a>
+        </div>
+    </div>
+</li>

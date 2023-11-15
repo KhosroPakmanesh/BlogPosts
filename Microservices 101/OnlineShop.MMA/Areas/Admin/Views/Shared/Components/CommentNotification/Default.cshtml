@@ -1,0 +1,46 @@
+﻿@model Website.Presentation.Areas.Admin.Models.Components.CommentNotificationModel
+
+<li class="nav-item dropdown">
+    <a class="nav-icon dropdown-toggle ml-2" href="#" id="alertsDropdown" data-toggle="dropdown">
+        <div class="position-relative">
+            <i class="align-middle" data-feather="message-square"></i>
+            @if (Model.UnreadCommentCount > 0)
+            {
+                <span class="indicator">@Model.UnreadCommentCount</span>
+            }
+        </div>
+    </a>
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right py-0" aria-labelledby="alertsDropdown">
+        <div class="dropdown-menu-header">
+            @if (Model.UnreadCommentCount == 0)
+            {
+                <div>No New Comment Message</div>
+            }
+            else if (Model.UnreadCommentCount == 1)
+            {
+                <div>@Model.UnreadCommentCount New Comment Message</div>
+            }
+            else if (Model.UnreadCommentCount > 1)
+            {
+                <div>@Model.UnreadCommentCount New Comment Messages</div>
+            }
+        </div>
+        @foreach (var nameMessagePair in Model.NameMessagePairs)
+        {
+            <div class="list-group">
+                <a asp-area="Admin" asp-controller="Post" asp-action="Update" asp-route-id="@nameMessagePair.PostId" class="list-group-item">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-10">
+                            <div class="text-dark">@nameMessagePair.Name</div>
+                            <div class="text-muted small mt-1">@nameMessagePair.Message</div>
+                            <div class="text-muted small mt-1">@nameMessagePair.CreateDateTime</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+        <div class="dropdown-menu-footer">
+            <a asp-area="Admin" asp-controller="Comment" asp-action="Index" class="text-muted">Show all comment messages</a>
+        </div>
+    </div>
+</li>
