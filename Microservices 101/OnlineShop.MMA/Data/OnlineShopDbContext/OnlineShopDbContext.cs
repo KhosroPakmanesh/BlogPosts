@@ -97,10 +97,6 @@ public partial class OnlineShopDbContext : DbContext
                         j.ToTable("AspNetUserRoles");
                         j.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
                     });
-
-            entity.HasOne(a => a.UserExtraInfo)
-                .WithOne(b => b.AspNetUser)
-                .HasForeignKey<UserExtraInfo>(e => e.UserId);
         });
 
         modelBuilder.Entity<AspNetUserClaim>(entity =>
