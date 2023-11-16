@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.MMA.Data;
+using OnlineShop.MMA.Data.OnlineShopDbContext;
 
 namespace OnlineShop.MMA
 {
@@ -13,15 +15,24 @@ namespace OnlineShop.MMA
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? 
                 throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+            builder.Services.AddDbContext<OnlineShopDbContext>(options =>
+                options.UseSqlServer(connectionString));
 
             builder.Services.AddDefaultIdentity<IdentityUser>
                 (options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation(); ;
+
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add
+                (new AutoValidateAntiforgeryTokenAttribute());
+            }).AddRazorRuntimeCompilation();
 
             var app = builder.Build();
 

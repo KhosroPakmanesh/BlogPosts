@@ -7,7 +7,7 @@ namespace Website.Presentation.Areas.Admin.Controllers.Components
     [ViewComponent]
     public class SideBar : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync()
+        public IViewComponentResult Invoke()
         {
             var sidebarModel = new SidebarModel
             {

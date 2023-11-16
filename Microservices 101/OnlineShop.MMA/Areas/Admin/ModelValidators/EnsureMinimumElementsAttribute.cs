@@ -15,7 +15,7 @@ namespace Website.Presentation.Areas.Admin.ModelValidators
             _minElements = minElements;
         }
 
-        public override bool IsValid(object value)
+        public override bool IsValid(object? value)
         {
             if (value is IList list)
             {

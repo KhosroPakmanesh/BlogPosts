@@ -19,9 +19,13 @@
                         <div class="card-body">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label asp-for="Title">Title</label>
-                                    <input asp-for="Title" type="text" placeholder="Title" class="form-control" pf-validation-for="Title" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
-                                    <div pf-validation-for="Title" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
+                                    <label>Buyers</label>
+                                    <select asp-for="BuyerIds" class="form-control select2"
+                                            multiple="multiple"
+                                            pf-validation-for="BuyerIds" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false
+                                            asp-items="@Model.BuyerSelectListItems">
+                                    </select>
+                                    <div pf-validation-for="BuyerIds" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label asp-for="Voucher">Voucher</label>
@@ -29,15 +33,18 @@
                                     <div pf-validation-for="Voucher" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label asp-for="Description">Description</label>
-                                    <input asp-for="Description" type="text" placeholder="Description" class="form-control" pf-validation-for="Description" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
-                                    <div pf-validation-for="Description" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
+                                    <label asp-for="ReductionPercentage">Reduction Percentage</label>
+                                    <input asp-for="ReductionPercentage" type="text" placeholder="ReductionPercentage" class="form-control" pf-validation-for="ReductionPercentage" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
+                                    <div pf-validation-for="ReductionPercentage" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label asp-for="Description">Description</label>
-                                    <input asp-for="Description" type="text" placeholder="Description" class="form-control" pf-validation-for="Description" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
-                                    <div pf-validation-for="Description" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
-                                </div>
+                                @* <div class="form-group col-md-6">
+                                    <label asp-for="IsUsed">Is Used</label>
+                                    <div class="custom-control custom-switch">
+                                        <input asp-for="IsUsed" type="checkbox" class="custom-control-input" pf-validation-for="IsUsed" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
+                                        <label class="custom-control-label" for="IsUsed">Toggle this to switch the status</label>
+                                    </div>
+                                    <div pf-validation-for="IsUsed" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
+                                </div> *@
                             </div>
                         </div>
                         <div class="card-footer">
@@ -52,3 +59,14 @@
         </div>
     </div>
 </main>
+
+@section Scripts
+{
+    <script>
+        $(".select2").select2({
+            placeholder: 'Select items',
+        }).change(function () {
+            $(this).valid();
+        });
+    </script>
+}

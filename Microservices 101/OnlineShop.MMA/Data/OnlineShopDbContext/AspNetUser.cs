@@ -37,19 +37,17 @@ public partial class AspNetUser
 
     public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; } = new List<AspNetUserClaim>();
 
+
     public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; } = new List<AspNetUserLogin>();
 
     public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; } = new List<AspNetUserToken>();
 
-    public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
+    public virtual ICollection<BuyerDiscount> BuyerDiscounts { get; set; } = new List<BuyerDiscount>();
 
-    public virtual ICollection<Discount> Discounts { get; set; } = new List<Discount>();
+    public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 
     public virtual ICollection<PaymentLog> PaymentLogs { get; set; } = new List<PaymentLog>();
 
-    public virtual ICollection<PersonalInfo> PersonalInfos { get; set; } = new List<PersonalInfo>();
-
     public virtual ICollection<AspNetRole> Roles { get; set; } = new List<AspNetRole>();
-
-    public UserExtraInfo UserExtraInfo { get; set; } = null!;
+    public AspNetUserExtraInfo AspNetUserExtraInfo { get; set; } = null!;
 }

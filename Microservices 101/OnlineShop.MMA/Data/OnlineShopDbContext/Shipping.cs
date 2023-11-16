@@ -9,7 +9,9 @@ public partial class Shipping
 
     public int OrderId { get; set; }
 
-    public string ShippingAddress { get; set; } = null!;
+    public bool IsShipped { get; set; }
 
     public virtual Order Order { get; set; } = null!;
+
+    public virtual ICollection<ShippingLeg> ShippingLegs { get; set; } = new List<ShippingLeg>();
 }

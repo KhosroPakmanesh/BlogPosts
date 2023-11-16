@@ -6,6 +6,7 @@ using System.Linq.Dynamic.Core;
 using OnlineShop.MMA.Data.OnlineShopDbContext;
 using OnlineShop.MMA.Areas.Admin.Models.Discount;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Hosting;
 
 namespace Website.Presentation.Areas.Admin.Controllers
 {
@@ -13,497 +14,300 @@ namespace Website.Presentation.Areas.Admin.Controllers
     [Authorize(Roles = "admin")]
     public class DiscountController : Controller
     {
-        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly OnlineShopDbContext _onlineShopDbContext;
 
-        public DiscountController(IWebHostEnvironment webHostEnvironment,
-            OnlineShopDbContext onlineShopDbContext)
+        public DiscountController(OnlineShopDbContext onlineShopDbContext)
         {
-            _webHostEnvironment = webHostEnvironment;
             _onlineShopDbContext = onlineShopDbContext;
         }
 
-        //[HttpGet]
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-        //[HttpPost]
-        //public async Task<IActionResult> GetDiscounts()
-        //{
-        //    try
-        //    {
-        //        var draw = Request.Form["draw"].FirstOrDefault();
-        //        var start = Request.Form["start"].FirstOrDefault();
-        //        var length = Request.Form["length"].FirstOrDefault();
-        //        var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-        //        var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
-        //        var searchValue = Request.Form["search[value]"].FirstOrDefault();
-        //        int pageSize = length != null ? Convert.ToInt32(length) : 0;
-        //        int skip = start != null ? Convert.ToInt32(start) : 0;
-        //        int recordsTotal = 0;
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> GetDiscounts()
+        {
+            var draw = Request.Form["draw"].FirstOrDefault();
+            var start = Request.Form["start"].FirstOrDefault();
+            var length = Request.Form["length"].FirstOrDefault();
+            var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"]
+                .FirstOrDefault() + "][name]"].FirstOrDefault();
+            var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
+            var searchValue = Request.Form["search[value]"].FirstOrDefault();
+            int pageSize = length != null ? Convert.ToInt32(length) : 0;
+            int skip = start != null ? Convert.ToInt32(start) : 0;
+            int recordsTotal = 0;
 
-        //        var expectedDiscounts = _onlineShopDbContext.Discounts.AsQueryable();
+            var expectedDiscounts = _onlineShopDbContext.Discounts
+                .AsQueryable();
 
-        //        if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
-        //        {
-        //            expectedDiscounts = expectedDiscounts.OrderBy(sortColumn + " " + sortColumnDirection);
-        //        }
+            if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
+            {
+                expectedDiscounts = expectedDiscounts.OrderBy(sortColumn + " " + sortColumnDirection);
+            }
 
-        //        if (!string.IsNullOrEmpty(searchValue))
-        //        {
-        //            expectedDiscounts = expectedDiscounts.Where(
-        //                m => m.Voucher.Contains(searchValue) ||
-        //                m.ReductionPercentage.ToString() == searchValue ||
-        //                m.IsUsed.ToString() == searchValue);
-        //        }
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                expectedDiscounts = expectedDiscounts.Where(
+                    m => m.Voucher.Contains(searchValue));
+            }
 
-        //        recordsTotal = await expectedDiscounts.CountAsync();
-        //        var retrievedPosts = await expectedDiscounts
-        //            .Skip(skip).Take(pageSize)
-        //            .Select(t =>
-        //            new
-        //            {
-        //                t.IdDiscount,
-        //                t.Buyer.UserExtraInfo.FullName,
-        //                t.Voucher,
-        //                t.ReductionPercentage,
-        //                t.IsUsed,
-        //            }).ToListAsync();
+            var rawDiscounts = await expectedDiscounts
+                .Skip(skip).Take(pageSize)
+                .ToListAsync();
+            recordsTotal = rawDiscounts.Count();
 
-        //        var responseObject = new
-        //        {
-        //            draw,
-        //            recordsFiltered = recordsTotal,
-        //            recordsTotal,
-        //            data = retrievedPosts
-        //        };
+            var formattedDiscounts = new List<dynamic>();
+            foreach (var rawDiscount in rawDiscounts)
+            {
+                formattedDiscounts.Add(new
+                {
+                    rawDiscount.IdDiscount,
+                    rawDiscount.Voucher,
+                    rawDiscount.ReductionPercentage,
+                });
+            }
 
-        //        return Ok(responseObject);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw;
-        //    }
-        //}
+            var responseObject = new
+            {
+                draw,
+                recordsFiltered = recordsTotal,
+                recordsTotal,
+                data = formattedDiscounts
+            };
 
-        //[HttpGet]
-        //public async Task<IActionResult> Detail(int id)
-        //{
-        //    var discount = await _onlineShopDbContext.Discounts
-        //        .Include(p => p.Buyer)                    
-        //            .ThenInclude(t => t.UserExtraInfo)
-        //        .FirstOrDefaultAsync(p => p.IdDiscount == id);
+            return Ok(responseObject);
+        }
 
-        //    if (discount == null)
-        //    {
-        //        return RedirectToAction("Index", "Discount");
-        //    }
+        [HttpGet]
+        public async Task<IActionResult> Detail(int id)
+        {
+            var discount = await _onlineShopDbContext.Discounts
+                .Include(t => t.BuyerDiscounts)
+                    .ThenInclude(t => t.Buyer)
+                .FirstOrDefaultAsync(p => p.IdDiscount == id);
 
-        //    var users = await _onlineShopDbContext.AspNetUsers.ToListAsync();
-        //    var userSelectListItems = new List<SelectListItem>();
-        //    foreach (var user in users)
-        //    {
-        //        userSelectListItems.Add(new SelectListItem
-        //        {
-        //            Value = user?.Email?.ToString(),
-        //            Text = user?.Id
-        //        });
-        //    }
+            if (discount == null)
+            {
+                return RedirectToAction("Index", "Discount");
+            }
 
-        //    return View(new DetailModel
-        //    {
-        //        IdDiscount = id,
-        //        FullName = discount.Buyer.UserExtraInfo.FullName,
-        //        Email = discount.Buyer.Email,
-        //        Voucher = discount.Voucher,
-        //        ReductionPercentage = discount.ReductionPercentage,
-        //        IsUsed = discount.IsUsed
-        //    });
-        //}
+            var buyers = await _onlineShopDbContext.AspNetUsers.ToListAsync();
+            var buyerSelectListItems = new List<SelectListItem>();
+            foreach (var buyer in buyers)
+            {
+                buyerSelectListItems.Add(new SelectListItem
+                {
+                    Value = buyer?.Id,
+                    Text = buyer?.UserName
+                });
+            }
 
-    //    [HttpGet]
-    //    public async Task<IActionResult> Create()
-    //    {
-    //        return await LoadCreateModel();
-    //    }
-    //    [HttpPost]
-    //    public async Task<IActionResult> Create(CreateModel createModel)
-    //    {
-    //        if (!ModelState.IsValid)
-    //        {
-    //            return await LoadCreateModel(createModel);
-    //        }
+            return View(new DetailModel
+            {
+                IdDiscount = id,
+                Voucher = discount.Voucher,
+                ReductionPercentage = discount.ReductionPercentage,
+                BuyerIds = discount.BuyerDiscounts.Select(t => t.BuyerId).ToList(),
+                BuyerSelectListItems = buyerSelectListItems,
+            });
+        }
 
-    //        var postCategories = new List<PostCategory>();
-    //        foreach (var categoryId in createModel.CategoryIds)
-    //        {
-    //            postCategories.Add(new PostCategory
-    //            {
-    //                CategoryId = categoryId
-    //            });
-    //        }
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            return await LoadCreateModel();
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateModel createModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return await LoadCreateModel(createModel);
+            }
 
-    //        var postTags = new List<PostTag>();
-    //        foreach (var tagId in createModel.TagIds)
-    //        {
-    //            postTags.Add(new PostTag
-    //            {
-    //                TagId = tagId
-    //            });
-    //        }
+            var buyerDiscounts = new List<BuyerDiscount>();
+            foreach (var buyerId in createModel.BuyerIds)
+            {
+                buyerDiscounts.Add(new BuyerDiscount
+                {
+                    BuyerId = buyerId,
+                    IsUsed = false
+                });
+            }
 
-    //        var uploadedImage = HttpContext.Request.Form.Files.FirstOrDefault();
-    //        var baseImageName = string.Empty;
-    //        if (uploadedImage != null)
-    //        {
-    //            baseImageName = Guid.NewGuid().ToString() + ".webp";
-    //        }
+            var discount = new Discount
+            {
+                Voucher = createModel.Voucher,
+                ReductionPercentage = createModel.ReductionPercentage,
+                BuyerDiscounts = buyerDiscounts,
+            };
 
-    //        _onlineShopDbContext.Add(new Post
-    //        {
-    //            Title = createModel.Title,
-    //            Body = createModel.Body,
-    //            Introduction = createModel.Introduction,
-    //            PublicationDateTime = DateTime.Now,
-    //            ModificationDateTime = null,
-    //            IsPublishable = createModel.IsPublishable,
-    //            ImageName = baseImageName,
-    //            PostTags = postTags,
-    //            PostCategories = postCategories,
-    //            BloggerId = User.FindFirstValue(ClaimTypes.NameIdentifier)
-    //        });
+            _onlineShopDbContext.Add(discount);
 
-    //        await _onlineShopDbContext.SaveChangesAsync();
+            await _onlineShopDbContext.SaveChangesAsync();
 
-    //        if (uploadedImage != null)
-    //        {
-    //            var uploadedPostsPath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "posts");
+            return RedirectToAction("Index", "Discount");
+        }
+        public async Task<IActionResult> LoadCreateModel
+            (CreateModel previousCreateModel = null!)
+            {
+                var buyers = await _onlineShopDbContext.AspNetUsers.ToListAsync();
+                var buyerSelectListItems = new List<SelectListItem>();
+                foreach (var buyer in buyers)
+                {
+                    buyerSelectListItems.Add(new SelectListItem
+                    {
+                        Value = buyer.Id,
+                        Text = buyer.UserName
+                    });
+                }
 
-    //            var originalImagePath = Path.Combine(uploadedPostsPath, baseImageName);
-    //            var originalBitmap = ImageHelper.ResizeImage(uploadedImage.OpenReadStream(), 800, 450);
-    //            await ImageHelper.ConvertToWebP(originalImagePath, originalBitmap);
+                var createModel = new CreateModel
+                {
+                    Voucher = previousCreateModel?.Voucher!,
+                    ReductionPercentage = previousCreateModel?.ReductionPercentage ?? 0,
+                    BuyerSelectListItems = buyerSelectListItems
+                };
 
-    //            var thumbnailImagePath = Path.Combine(uploadedPostsPath, "sm-" + baseImageName);
-    //            var thumbnailBitmap = ImageHelper.ResizeImage(uploadedImage.OpenReadStream(), 70, 39);
-    //            await ImageHelper.ConvertToWebP(thumbnailImagePath, thumbnailBitmap);
-    //        }
+                return View(createModel);
+            }
+        
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            return await LoadUpdateModel(id);
+        }
+        public async Task<IActionResult> LoadUpdateModel
+            (int id, UpdateModel previousUpdateModel = null!)
+        {
+            var discount = await _onlineShopDbContext.Discounts
+                .Include(t => t.BuyerDiscounts)
+                    .ThenInclude(t => t.Buyer)
+                .FirstOrDefaultAsync(p => p.IdDiscount == id);
 
-    //        return RedirectToAction("Index", "Post");
-    //    }
-    //    [HttpGet]
-    //    public async Task<IActionResult> Update(int id)
-    //    {
-    //        return await LoadUpdateModel(id);
-    //    }
-    //    [HttpPost]
-    //    public async Task<IActionResult> Update(UpdateModel updateModel)
-    //    {
-    //        if (!ModelState.IsValid)
-    //        {
-    //            return await LoadUpdateModel(updateModel.IdPost, updateModel);
-    //        }
+            if (discount == null)
+            {
+                return RedirectToAction("Index", "Discount");
+            }
 
-    //        var post = await _onlineShopDbContext.Posts
-    //            .Include(p => p.Comments)
-    //            .Include(p => p.PostCategories)
-    //            .Include(p => p.PostTags)
-    //            .FirstOrDefaultAsync(p => p.IdPost == updateModel.IdPost);
-    //        if (post == null)
-    //        {
-    //            return RedirectToAction("Index", "Post");
-    //        }
+            var buyers = await _onlineShopDbContext.AspNetUsers.ToListAsync();
+            var buyerSelectListItems = new List<SelectListItem>();
+            foreach (var buyer in buyers)
+            {
+                buyerSelectListItems.Add(new SelectListItem
+                {
+                    Value = buyer.Id,
+                    Text = buyer.UserName
+                });
+            }
 
-    //        var firstNotSecondCategoryIds = post.PostCategories.Select(pc => pc.CategoryId).ToList()
-    //            .Except(updateModel.CategoryIds).ToList();
-    //        var secondNotFirstCategoryIds = updateModel.CategoryIds
-    //            .Except(post.PostCategories.Select(pc => pc.CategoryId)).ToList();
-    //        if (firstNotSecondCategoryIds.Any() || secondNotFirstCategoryIds.Any())
-    //        {
-    //            var linkedPostCategories = _onlineShopDbContext.PostCategories
-    //                .Where(pc => pc.PostId == updateModel.IdPost);
-    //            _onlineShopDbContext.RemoveRange(linkedPostCategories);
-    //            var postCategories = new List<PostCategory>();
-    //            foreach (var categoryId in updateModel.CategoryIds)
-    //            {
-    //                postCategories.Add(new PostCategory
-    //                {
-    //                    PostId = post.IdPost,
-    //                    CategoryId = categoryId
-    //                });
-    //            }
-    //            _onlineShopDbContext.AddRange(postCategories);
-    //        }
+            if (previousUpdateModel != null)
+            {
 
-    //        var firstNotSecondTagIds = post.PostTags.Select(pc => pc.TagId).ToList()
-    //                .Except(updateModel.TagIds).ToList();
-    //        var secondNotFirstTagIds = updateModel.TagIds
-    //                .Except(post.PostTags.Select(pc => pc.TagId)).ToList();
-    //        if (firstNotSecondTagIds.Any() || secondNotFirstTagIds.Any())
-    //        {
-    //            var linkedPostTags = _onlineShopDbContext.PostTags
-    //                .Where(pc => pc.PostId == updateModel.IdPost);
-    //            _onlineShopDbContext.RemoveRange(linkedPostTags);
-    //            var postTags = new List<PostTag>();
-    //            foreach (var TagId in updateModel.TagIds)
-    //            {
-    //                postTags.Add(new PostTag
-    //                {
-    //                    PostId = post.IdPost,
-    //                    TagId = TagId
-    //                });
-    //            }
-    //            _onlineShopDbContext.AddRange(postTags);
-    //        }
+                var updateModel = new UpdateModel
+                {
+                    IdDiscount = previousUpdateModel.IdDiscount,
+                    Voucher = previousUpdateModel?.Voucher!,
+                    ReductionPercentage = previousUpdateModel?.ReductionPercentage ?? 0,
+                    BuyerIds = previousUpdateModel?.BuyerIds!,
+                    BuyerSelectListItems = buyerSelectListItems,
+                };
 
-    //        string previousImageName = post.ImageName;
-    //        var uploadedImage = HttpContext.Request.Form.Files.FirstOrDefault();
-    //        string baseImageName = string.Empty;
-    //        if (uploadedImage != null)
-    //        {
-    //            post.ImageName = baseImageName = Guid.NewGuid().ToString() + ".webp";
-    //        }
+                return View(updateModel);
+            }
 
-    //        post.Title = updateModel.Title;
-    //        post.Body = updateModel.Body;
-    //        post.Introduction = updateModel.Introduction;
-    //        post.IsPublishable = updateModel.IsPublishable;
-    //        post.ModificationDateTime = DateTime.Now;
+            return View(new UpdateModel
+            {
+                IdDiscount = discount.IdDiscount,
+                Voucher = discount?.Voucher!,
+                ReductionPercentage = discount?.ReductionPercentage ?? 0,
+                BuyerIds = discount?.BuyerDiscounts.Select(t => t.BuyerId).ToList()!,
+                BuyerSelectListItems = buyerSelectListItems
+            });
+        }
 
-    //        await _onlineShopDbContext.SaveChangesAsync();
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdateModel updateModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return await LoadUpdateModel(updateModel.IdDiscount, updateModel);
+            }
 
-    //        if (uploadedImage != null)
-    //        {
-    //            var uploadedPostsPath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "posts");
+            var discount = await _onlineShopDbContext.Discounts
+                .Include(t => t.BuyerDiscounts)
+                    .ThenInclude(t => t.Buyer)
+                .FirstOrDefaultAsync(p => p.IdDiscount == updateModel.IdDiscount);
+            if (discount == null)
+            {
+                return RedirectToAction("Index", "Discount");
+            }
 
-    //            var previousOriginalImagePath =
-    //                Path.Combine(uploadedPostsPath, previousImageName);
-    //            var file = new FileInfo(previousOriginalImagePath);
-    //            if (file.Exists)
-    //            {
-    //                file.Delete();
-    //            }
-    //            var originalImagePath = Path.Combine(uploadedPostsPath, baseImageName);
-    //            var originalBitmap = ImageHelper.ResizeImage(uploadedImage.OpenReadStream(), 800, 450);
-    //            await ImageHelper.ConvertToWebP(originalImagePath, originalBitmap);
+            var removedBuyerIds = discount.BuyerDiscounts
+                .Select(pc => pc.BuyerId)
+                .Except(updateModel.BuyerIds)
+                .ToList();
+            var addedBuyerIds = updateModel.BuyerIds
+                .Except(discount.BuyerDiscounts
+                .Select(pc => pc.BuyerId))
+                .ToList();
 
-    //            var previousThumbnailImagePath =
-    //                Path.Combine(uploadedPostsPath, "sm-" + previousImageName);
-    //            file = new FileInfo(previousThumbnailImagePath);
-    //            if (file.Exists)
-    //            {
-    //                file.Delete();
-    //            }
-    //            var thumbnailImagePath = Path.Combine(uploadedPostsPath, "sm-" + baseImageName);
-    //            var thumbnailBitmap = ImageHelper.ResizeImage(uploadedImage.OpenReadStream(), 70, 39);
-    //            await ImageHelper.ConvertToWebP(thumbnailImagePath, thumbnailBitmap);
-    //        }
+            var buyerDiscounts = new List<BuyerDiscount>();
+            if (removedBuyerIds.Any() || addedBuyerIds.Any())
+            {
+                foreach (var removedBuyerId in removedBuyerIds)
+                {
+                    var removedBuyerDiscount = discount.BuyerDiscounts
+                        .FirstOrDefault(t => t.BuyerId == removedBuyerId);
+                    if (removedBuyerDiscount != null)
+                    {
+                        discount.BuyerDiscounts.Remove(removedBuyerDiscount);
+                    }
+                }
 
-    //        return RedirectToAction("Index", "Post");
-    //    }
-    //    [HttpGet]
-    //    public async Task<IActionResult> Delete(int id)
-    //    {
-    //        var post = await _onlineShopDbContext.Posts
-    //           .Include(p => p.Comments)
-    //           .Include(p => p.PostCategories)
-    //           .Include(p => p.PostTags)
-    //           .FirstOrDefaultAsync(t => t.IdPost == id);
+                foreach (var buyerId in updateModel.BuyerIds)
+                {
+                    buyerDiscounts.Add(new BuyerDiscount
+                    {
+                        BuyerId = buyerId,
+                        DiscountId = discount.IdDiscount,
+                        IsUsed = false
+                    });
+                }
+            }
 
-    //        if (post == null)
-    //        {
-    //            return RedirectToAction("Index", "Post");
-    //        }
+            discount.Voucher = updateModel.Voucher;
+            discount.ReductionPercentage = updateModel.ReductionPercentage;
+            discount.BuyerDiscounts = buyerDiscounts;
 
-    //        _onlineShopDbContext.Comments.RemoveRange(post.Comments);
-    //        _onlineShopDbContext.PostCategories.RemoveRange(post.PostCategories);
-    //        _onlineShopDbContext.PostTags.RemoveRange(post.PostTags);
-    //        _onlineShopDbContext.Posts.Remove(post);
+            await _onlineShopDbContext.SaveChangesAsync();
 
-    //        await _onlineShopDbContext.SaveChangesAsync();
+            return RedirectToAction("Index", "Discount");
+        }
 
-    //        var uploadedPostsPath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "posts");
-    //        var previousOriginalImagePath =
-    //            Path.Combine(uploadedPostsPath, post.ImageName);
-    //        var file = new FileInfo(previousOriginalImagePath);
-    //        if (file.Exists)
-    //        {
-    //            file.Delete();
-    //        }
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var discount = await _onlineShopDbContext.Discounts
+                .Include(t=>t.BuyerDiscounts)
+                .FirstOrDefaultAsync(t=>t.IdDiscount==id);
 
-    //        var previousThumbnailImagePath =
-    //            Path.Combine(uploadedPostsPath, "sm-" + post.ImageName);
-    //        file = new FileInfo(previousThumbnailImagePath);
-    //        if (file.Exists)
-    //        {
-    //            file.Delete();
-    //        }
+            if (discount == null)
+            {
+                return RedirectToAction("Index", "Discount");
+            }
 
-    //        return RedirectToAction("Index", "Post");
-    //    }
-    //    public async Task<IActionResult> LoadUpdateModel
-    //        (int id, UpdateModel previousUpdateModel = null)
-    //    {
-    //        var post = await _onlineShopDbContext.Posts
-    //            .Include(p => p.Comments)
-    //                .ThenInclude(t => t.AspNetUser)
-    //                    .ThenInclude(t => t.UserExtraInfo)
-    //            .Include(p => p.PostCategories)
-    //            .Include(p => p.PostTags)
-    //            .FirstOrDefaultAsync(p => p.IdPost == id);
+            _onlineShopDbContext.BuyerDiscounts.RemoveRange(discount.BuyerDiscounts);
+            _onlineShopDbContext.Discounts.Remove(discount);
 
-    //        if (post == null)
-    //        {
-    //            return RedirectToAction("Index", "Post");
-    //        }
+            await _onlineShopDbContext.SaveChangesAsync();
 
-    //        var categories = await _onlineShopDbContext.Categories.ToListAsync();
-    //        var categorySelectListItems = new List<SelectListItem>();
-    //        foreach (var category in categories)
-    //        {
-    //            categorySelectListItems.Add(new SelectListItem
-    //            {
-    //                Value = category.IdCategory.ToString(),
-    //                Text = category.Title
-    //            });
-    //        }
-
-    //        var tags = await _onlineShopDbContext.Tags.ToListAsync();
-    //        var tagSelectListItems = new List<SelectListItem>();
-    //        foreach (var tag in tags)
-    //        {
-    //            tagSelectListItems.Add(new SelectListItem
-    //            {
-    //                Value = tag.IdTag.ToString(),
-    //                Text = tag.Title
-    //            });
-    //        }
-
-    //        Dictionary<Guid, List<CommentModel>> branchCommentModels =
-    //            new Dictionary<Guid, List<CommentModel>>();
-    //        IEnumerable<IGrouping<Guid, Comment>> commentBranchs =
-    //            post.Comments.GroupBy(t => t.CommentBranchId);
-
-    //        foreach (var commentBranch in commentBranchs)
-    //        {
-    //            var branchHeadComment = commentBranch.OrderBy
-    //                (t => t.CreationDateTime).FirstOrDefault();
-
-    //            var commentModels = new List<CommentModel>();
-    //            foreach (var comment in commentBranch.ToList())
-    //            {
-    //                commentModels.Add(
-    //                    new CommentModel
-    //                    {
-    //                        IdComment = comment.IdComment,
-    //                        IsBranchHead = comment.IdComment == branchHeadComment.IdComment ? true : false,
-    //                        CommentBranchId = comment.CommentBranchId,
-    //                        FullName = comment.CommenterId == null ?
-    //                            comment.FullName :
-    //                            comment.AspNetUser.UserExtraInfo.FullName,
-    //                        Body = comment.Body,
-    //                        CreationDateTime = comment.CreationDateTime,
-    //                        AvatarName = comment.CommenterId == null ?
-    //                            string.Empty :
-    //                            comment.AspNetUser.UserExtraInfo.AvatarName,
-    //                        PostId = comment.PostId,
-    //                        IsPublishable = comment.IsPublishable,
-    //                        IsReviewed = comment.IsReviewed
-    //                    }
-    //                );
-    //            }
-    //            branchCommentModels.Add
-    //            (
-    //                commentBranch.Key,
-    //                commentModels
-    //            );
-    //        }
-
-    //        int lastCommentId = default;
-    //        if (branchCommentModels.Any())
-    //        {
-    //            var lastBranchComment = branchCommentModels.LastOrDefault();
-    //            lastCommentId = lastBranchComment.Value.LastOrDefault().IdComment;
-    //        }
-
-    //        if (previousUpdateModel != null)
-    //        {
-    //            var updateModel = new UpdateModel
-    //            {
-    //                IdPost = previousUpdateModel.IdPost,
-    //                Title = previousUpdateModel?.Title,
-    //                Body = previousUpdateModel?.Body,
-    //                Introduction = previousUpdateModel.Introduction,
-    //                CategoryIds = previousUpdateModel?.CategoryIds,
-    //                TagIds = previousUpdateModel?.TagIds,
-    //                Image = previousUpdateModel?.Image,
-    //                IsPublishable = previousUpdateModel == null ?
-    //                    false : previousUpdateModel.IsPublishable,
-    //                CategorySelectListItems = categorySelectListItems,
-    //                TagSelectListItems = tagSelectListItems,
-    //                ImageName = post.ImageName,
-    //                BranchComments = branchCommentModels,
-    //                LastCommentId = lastCommentId,
-    //            };
-
-    //            return View(updateModel);
-    //        }
-    //        return View(new UpdateModel
-    //        {
-    //            IdPost = id,
-    //            Title = post.Title,
-    //            Body = post.Body,
-    //            Introduction = post.Introduction,
-    //            CategoryIds = post.Categories.Select(t => t.IdCategory).ToList(),
-    //            TagIds = post.Tags.Select(t => t.IdTag).ToList(),
-    //            IsPublishable = post.IsPublishable,
-    //            CategorySelectListItems = categorySelectListItems,
-    //            TagSelectListItems = tagSelectListItems,
-    //            ImageName = post.ImageName,
-    //            BranchComments = branchCommentModels,
-    //            LastCommentId = lastCommentId,
-    //        });
-    //    }
-    //    public async Task<IActionResult> LoadCreateModel
-    //        (CreateModel previousCreateModel = null)
-    //    {
-    //        var categories = await _onlineShopDbContext.Categories.ToListAsync();
-    //        var categorySelectListItems = new List<SelectListItem>();
-    //        foreach (var category in categories)
-    //        {
-    //            categorySelectListItems.Add(new SelectListItem
-    //            {
-    //                Value = category.IdCategory.ToString(),
-    //                Text = category.Title
-    //            });
-    //        }
-
-    //        var tags = await _onlineShopDbContext.Tags.ToListAsync();
-    //        var tagSelectListItems = new List<SelectListItem>();
-    //        foreach (var tag in tags)
-    //        {
-    //            tagSelectListItems.Add(new SelectListItem
-    //            {
-    //                Value = tag.IdTag.ToString(),
-    //                Text = tag.Title
-    //            });
-    //        }
-
-    //        var createModel = new CreateModel
-    //        {
-    //            Title = previousCreateModel?.Title,
-    //            Body = previousCreateModel?.Body,
-    //            Introduction = previousCreateModel?.Introduction,
-    //            CategoryIds = previousCreateModel?.CategoryIds,
-    //            TagIds = previousCreateModel?.TagIds,
-    //            Image = previousCreateModel?.Image,
-    //            IsPublishable = previousCreateModel == null ?
-    //                false : previousCreateModel.IsPublishable,
-    //            CategorySelectListItems = categorySelectListItems,
-    //            TagSelectListItems = tagSelectListItems,
-    //        };
-
-    //        return View(createModel);
-    //    }
+            return RedirectToAction("Index", "Discount");
+        }
     }
 }

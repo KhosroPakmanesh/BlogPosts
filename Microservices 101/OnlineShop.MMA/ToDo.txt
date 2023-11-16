@@ -1,0 +1,9 @@
+-Fix login page issue
+-Address warnings
+-Fix Admin sidebar
+-Fix Landing page menu
+-Remove Persoanl infos from db context and db itself
+-Check datatable searchs
+-Reverse engineer db context after all tasks are finished
+-Add Validations
+-Fix search filters for datatables

@@ -23,9 +23,13 @@ public partial class OnlineShopDbContext : DbContext
 
     public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
 
+    public virtual DbSet<AspNetUserExtraInfo> AspNetUserExtraInfos { get; set; }
+
     public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
 
     public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
+
+    public virtual DbSet<BuyerDiscount> BuyerDiscounts { get; set; }
 
     public virtual DbSet<Cart> Carts { get; set; }
 
@@ -43,13 +47,13 @@ public partial class OnlineShopDbContext : DbContext
 
     public virtual DbSet<PaymentLog> PaymentLogs { get; set; }
 
-    public virtual DbSet<PersonalInfo> PersonalInfos { get; set; }
-
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<ProductType> ProductTypes { get; set; }
 
     public virtual DbSet<Shipping> Shippings { get; set; }
+
+    public virtual DbSet<ShippingLeg> ShippingLegs { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Data Source=127.0.0.1;Initial Catalog=OnlineShop.MMA.SharedDb;TrustServerCertificate=True;User Id=sa;Password=123456789ABC;");
@@ -97,6 +101,10 @@ public partial class OnlineShopDbContext : DbContext
                         j.ToTable("AspNetUserRoles");
                         j.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
                     });
+
+            entity.HasOne(a => a.AspNetUserExtraInfo)
+              .WithOne(b => b.User)
+              .HasForeignKey<AspNetUserExtraInfo>(e => e.UserId);
         });
 
         modelBuilder.Entity<AspNetUserClaim>(entity =>
@@ -104,6 +112,23 @@ public partial class OnlineShopDbContext : DbContext
             entity.HasIndex(e => e.UserId, "IX_AspNetUserClaims_UserId");
 
             entity.HasOne(d => d.User).WithMany(p => p.AspNetUserClaims).HasForeignKey(d => d.UserId);
+        });
+
+        modelBuilder.Entity<AspNetUserExtraInfo>(entity =>
+        {
+            entity.HasKey(e => e.IdUserExtraInfo).HasName("PK_UserExtraInfo");
+
+            entity.Property(e => e.Address).HasMaxLength(500);
+            entity.Property(e => e.BankAccountNumber).HasMaxLength(100);
+            entity.Property(e => e.FirstName).HasMaxLength(100);
+            entity.Property(e => e.LastName).HasMaxLength(100);
+            entity.Property(e => e.MobileNumber).HasMaxLength(50);
+            entity.Property(e => e.UserId).HasMaxLength(450);
+
+            //entity.HasOne(d => d.User).WithMany(p => p.AspNetUserExtraInfos)
+            //    .HasForeignKey(d => d.UserId)
+            //    .OnDelete(DeleteBehavior.ClientSetNull)
+            //    .HasConstraintName("FK_UserExtraInfo_AspNetUsers");
         });
 
         modelBuilder.Entity<AspNetUserLogin>(entity =>
@@ -128,22 +153,21 @@ public partial class OnlineShopDbContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.AspNetUserTokens).HasForeignKey(d => d.UserId);
         });
 
-
-        modelBuilder.Entity<UserExtraInfo>(entity =>
+        modelBuilder.Entity<BuyerDiscount>(entity =>
         {
-            entity.HasKey(e => e.IdUserExtraInfo);
+            entity.HasKey(e => new { e.BuyerId, e.DiscountId });
 
-            entity.Property(e => e.FirstName)
-            .HasMaxLength(100);
+            entity.ToTable("BuyerDiscounts", "discount");
 
-            entity.Property(e => e.LastName)
-                .HasMaxLength(100);
+            entity.HasOne(d => d.Buyer).WithMany(p => p.BuyerDiscounts)
+                .HasForeignKey(d => d.BuyerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_BuyerDiscounts_AspNetUsers");
 
-            entity.Property(e => e.MobileNumber)
-                .HasMaxLength(50);
-
-            entity.Property(e => e.Address)
-                .HasMaxLength(500);
+            entity.HasOne(d => d.Discount).WithMany(p => p.BuyerDiscounts)
+                .HasForeignKey(d => d.DiscountId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_BuyerDiscounts_Discounts");
         });
 
         modelBuilder.Entity<Cart>(entity =>
@@ -186,13 +210,7 @@ public partial class OnlineShopDbContext : DbContext
 
             entity.ToTable("Discounts", "discount");
 
-            entity.Property(e => e.BuyerId).HasMaxLength(450);
             entity.Property(e => e.Voucher).HasMaxLength(100);
-
-            entity.HasOne(d => d.Buyer).WithMany(p => p.Discounts)
-                .HasForeignKey(d => d.BuyerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Discounts_AspNetUsers");
         });
 
         modelBuilder.Entity<Inventory>(entity =>
@@ -254,7 +272,7 @@ public partial class OnlineShopDbContext : DbContext
 
             entity.ToTable("PaymentLogs", "payment");
 
-            entity.Property(e => e.BandAccountNumber).HasMaxLength(50);
+            entity.Property(e => e.BankAccountNumber).HasMaxLength(50);
             entity.Property(e => e.BuyerId).HasMaxLength(450);
             entity.Property(e => e.PaymentDateTime).HasColumnType("smalldatetime");
             entity.Property(e => e.PaymentValue).HasColumnType("decimal(18, 0)");
@@ -263,22 +281,6 @@ public partial class OnlineShopDbContext : DbContext
                 .HasForeignKey(d => d.BuyerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PaymentLogs_AspNetUsers");
-        });
-
-        modelBuilder.Entity<PersonalInfo>(entity =>
-        {
-            entity.HasKey(e => e.IdPersonalInfo);
-
-            entity.ToTable("PersonalInfos", "identity");
-
-            entity.Property(e => e.Address).HasMaxLength(1000);
-            entity.Property(e => e.BankAccountNumber).HasMaxLength(100);
-            entity.Property(e => e.UserId).HasMaxLength(450);
-
-            entity.HasOne(d => d.User).WithMany(p => p.PersonalInfos)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PersonalInfos_AspNetUsers");
         });
 
         modelBuilder.Entity<Product>(entity =>
@@ -312,12 +314,24 @@ public partial class OnlineShopDbContext : DbContext
 
             entity.ToTable("Shippings", "shipping");
 
-            entity.Property(e => e.ShippingAddress).HasMaxLength(1000);
-
             entity.HasOne(d => d.Order).WithMany(p => p.Shippings)
                 .HasForeignKey(d => d.OrderId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Shippings_Orders");
+        });
+
+        modelBuilder.Entity<ShippingLeg>(entity =>
+        {
+            entity.HasKey(e => e.IdShippingLeg);
+
+            entity.ToTable("ShippingLegs", "shipping");
+
+            entity.Property(e => e.Address).HasMaxLength(1000);
+
+            entity.HasOne(d => d.Shipping).WithMany(p => p.ShippingLegs)
+                .HasForeignKey(d => d.ShippingId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ShippingLegs_Shippings");
         });
 
         OnModelCreatingPartial(modelBuilder);

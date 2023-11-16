@@ -1,19 +1,19 @@
 ﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @{
-    ViewData["Title"] = "Categories";
+    ViewData["Title"] = "Discounts";
     var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
 }
 <input id="RequestVerificationToken" type="hidden" value="@requestToken" />
 
 <main class="content">
 	<div class="container-fluid p-0">
-	    <h1 class="h3 mb-3">Categories</h1>
+	    <h1 class="h3 mb-3">Discounts</h1>
 	    <div class="row">
 		    <div class="col-12">
 			    <div class="card">
 				    <div class="card-header">
 					    <span class="float-end">
-                            <a asp-area="Admin" asp-controller="Category" asp-action="Create" class="btn btn-primary btn-md text-white">Create</a>
+                            <a asp-area="Admin" asp-controller="Discount" asp-action="Create" class="btn btn-primary btn-md text-white">Create</a>
                         </span>
 				    </div>
 				    <div class="card-body">
@@ -21,11 +21,9 @@
 						    <thead>
 							    <tr>
                                     <th>Id</th>
-                                    <th>FullName</th>
-                                    <th>Email</th>
                                     <th>Voucher</th>
                                     <th>Reduction Percentage</th>
-                                    <th data-orderable="false">Is Used</th>
+                                    <th data-orderable="false">Operations</th>
 							    </tr>
 						    </thead>
 					    </table>
@@ -41,7 +39,7 @@
                     "serverSide": true,
                     "filter": true,
                     "ajax": {
-                        "url": "/Admin/Category/GetDiscounts",
+                        "url": "/Admin/Discount/GetDiscounts",
                         "type": "POST",
                         "datatype": "json",
                         'beforeSend': function (request) {
@@ -56,10 +54,8 @@
                     }],
                     "columns": [
                         { "data": "idDiscount", "name": "idDiscount", "autoWidth": true },
-                        { "data": "fullName", "name": "FullName", "autoWidth": true },
-                        { "data": "email", "name": "Email", "autoWidth": true },
                         { "data": "voucher", "name": "Voucher", "autoWidth": true },
-                        { "data": "ReductionPercentage", "name": "reductionPercentage", "autoWidth": true },
+                        { "data": "reductionPercentage", "name": "ReductionPercentage", "autoWidth": true },
                         {
                             "render": function (data, type, row) {
                                 return `<a href='discount/detail/${row.idDiscount}'>
@@ -70,9 +66,6 @@
                                         </a>
                                         <a href = 'discount/delete/${row.idDiscount}'>
                                             <i class='align-middle mr-2 far fa-fw fa-trash-alt'></i>
-                                        </a>
-                                        <a href = '/blog/magazine/byCategory/${row.idDiscount}'>
-                                            <i class='align-middle mr-2 fas fa-fw fa-arrow-right'></i>
                                         </a>`
                             }
                         },
