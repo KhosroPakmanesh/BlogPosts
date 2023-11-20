@@ -1,57 +1,39 @@
-﻿@model Website.Presentation.Areas.Admin.Models.Comment.DetailModel
+﻿@model OnlineShop.MMA.Areas.Admin.Models.Shipping.DetailModel
 @{
-    ViewData["Title"] = "Comment Detail";
+    ViewData["Title"] = "Shipping Detail";
 }
 
 <main class="content">
     <div class="container-fluid p-0">
-        <h1 class="h3 mb-3">Comment Detail</h1>
+        <h1 class="h3 mb-3">Shipping Detail</h1>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title"></h5>
-                        <h5 class="card-subtitle text-muted">The details of the comment is as follows</h5>
+                        <h5 class="card-subtitle text-muted">The details of the shipping is as follows</h5>
                     </div>
                     <div class="card-body">
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label asp-for="Email">Email</label>
-                                <input asp-for="Email" type="text" class="form-control" disabled="disabled">
+                                <label asp-for="OrderId">Order Id</label>
+                                <input asp-for="OrderId" type="text" class="form-control" disabled="disabled">
                             </div>
                             <div class="form-group col-md-6">
-                                <label asp-for="WebAddress">Web Address</label>
-                                <input asp-for="WebAddress" type="text" class="form-control" disabled="disabled">
+                                <label asp-for="BuyerUserName">Buyer User Name</label>
+                                <input asp-for="BuyerUserName" type="text" class="form-control" disabled="disabled">
                             </div>
                             <div class="form-group col-md-6">
-                                <label asp-for="CreationDateTime">Creation DateTime</label>
-                                <input asp-for="CreationDateTime" type="text" class="form-control" disabled="disabled">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Body">Body</label>
-                            <textarea asp-for="Body" type="text" class="form-control" style="height: 200px" disabled="disabled"></textarea>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label asp-for="IsPublishable">Is Publishable</label>
+                                <label asp-for="IsShipped">Is Shipped</label>
                                 <div class="custom-control custom-switch">
-                                    <input asp-for="IsPublishable" type="checkbox" class="custom-control-input" disabled="disabled">
-                                    <label class="custom-control-label" for="IsPublishable"></label>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label asp-for="IsReviewed">Is Reviewed</label>
-                                <div class="custom-control custom-switch">
-                                    <input asp-for="IsReviewed" type="checkbox" class="custom-control-input" disabled="disabled">
-                                    <label class="custom-control-label" for="IsReviewed"></label>
+                                    <input asp-for="IsShipped" type="checkbox" class="custom-control-input" disabled="disabled">
+                                    <label class="custom-control-label" for="IsShipped">Toggle this to switch the status</label>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-footer">                        
-                        <a asp-area="Admin" asp-controller="Post" asp-action="Update" asp-route-id="@Model.PostId" class="btn btn-primary">Back To Update</a>
-                        <a asp-area="Admin" asp-controller="Comment" asp-action="Index" asp-route-id="@Model.PostId" class="btn btn-primary">Back To Comment Index</a>
+                        <a asp-area="Admin" asp-controller="Shipping" asp-action="Index" class="btn btn-primary">Back</a>
                     </div>
                 </div>
             </div>

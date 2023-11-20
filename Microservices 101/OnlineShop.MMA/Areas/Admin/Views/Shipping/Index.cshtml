@@ -1,6 +1,6 @@
 ﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @{
-    ViewData["Title"] = "Comments";
+    ViewData["Title"] = "Shippings";
     var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
 }
 <input id="RequestVerificationToken" type="hidden" value="@requestToken" />
@@ -8,7 +8,7 @@
 <main class="content">
 	<div class="container-fluid p-0">
 
-		<h1 class="h3 mb-3">Comments</h1>
+		<h1 class="h3 mb-3">Shippings</h1>
 		<div class="row">
 			<div class="col-12">
 				<div class="card">
@@ -16,15 +16,10 @@
                         <table id="datatables-basic" class="table table-striped table-bordered" style="width:100%">
 							<thead>
 								<tr>
-                                    <th>Id Comment</th>
-                                    <th>Post Id</th>
-                                    <th>Fullname</th>
-                                    <th>Email</th>
-                                    <th>WebAddress</th>
-                                    <th data-orderable="false">Body</th>
-                                    <th>Creation DateTime</th>
-                                    <th>Is Publishable</th>
-                                    <th>Is Reviewed</th>
+                                    <th>Id Shipping</th>
+                                    <th>Order Id</th>
+                                    <th>Buyer User Name</th>
+                                    <th>Is Shipped</th>
                                     <th data-orderable="false">Operations</th>
 								</tr>
 							</thead>
@@ -42,7 +37,7 @@
                     "serverSide": true,
                     "filter": true,
                     "ajax": {
-                        "url": "/Admin/Comment/GetComments",
+                        "url": "/Admin/Shipping/GetShippings",
                         "type": "POST",
                         "datatype": "json",
                         'beforeSend': function (request) {
@@ -63,28 +58,17 @@
                     }],
                     "order": [[0, 'desc']],
                     "columns": [
-                        { "data": "idComment", "name": "IdComment", "autoWidth": true },
-                        { "data": "postId", "name": "PostId", "autoWidth": true },
-                        { "data": "fullname", "name": "Fullname", "autoWidth": true },
-                        { "data": "email", "name": "Email", "autoWidth": true },
-                        { "data": "webAddress", "name": "WebAddress", "autoWidth": true },
-                        { "data": "body", "name": "Body", "autoWidth": true },
-                        { "data": "creationDateTime", "name": "CreationDateTime", "autoWidth": true },
-                        { "data": "isPublishable", "name": "IsPublishable", "autoWidth": true },
-                        { "data": "isReviewed", "name": "IsReviewed", "autoWidth": true },
+                        { "data": "idShipping", "name": "IdShipping", "autoWidth": true },
+                        { "data": "orderId", "name": "OrderId", "autoWidth": true },
+                        { "data": "buyerUserName", "name": "BuyerUserName", "autoWidth": true },
+                        { "data": "isShipped", "name": "IsShipped", "autoWidth": true },
                         {
                             "render": function (data, type, row) {
-                                return `<a href="/Admin/Post/${row.postId}/Comment/Detail/${row.idComment}">
+                                return `<a href="/Admin/Shipping/Detail/${row.idShipping}">
                                             <i class='align-middle mr-2 far fa-fw fa-list-alt'> </i>
                                         </a>
-                                        <a href="/Admin/Post/${row.postId}/Comment/Update/${row.idComment}">
+                                        <a href="/Admin/Shipping/Update/${row.idShipping}">
                                             <i class='align-middle mr-2 far fa-fw fa-edit'> </i>
-                                        </a>
-                                        <a href="/Admin/Post/${row.postId}/Comment/Delete/${row.idComment}">
-                                            <i class='align-middle mr-2 far fa-fw fa-trash-alt'> </i>
-                                        </a>
-                                        <a href = '/blog/post/index/${row.postId}'>
-                                            <i class='align-middle mr-2 fas fa-fw fa-arrow-right'></i>
                                         </a>`
                             }
                         },
@@ -94,7 +78,3 @@
         </script>
 	</div>
 </main>
-
-@*@section Scripts
-{
-}*@

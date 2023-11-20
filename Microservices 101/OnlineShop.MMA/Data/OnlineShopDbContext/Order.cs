@@ -18,4 +18,6 @@ public partial class Order
     public virtual ICollection<OrderLog> OrderLogs { get; set; } = new List<OrderLog>();
 
     public virtual ICollection<Shipping> Shippings { get; set; } = new List<Shipping>();
+
+    public AspNetUser Buyer { get; set; } = null!;
 }

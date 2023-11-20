@@ -1,51 +1,46 @@
-﻿@model Website.Presentation.Areas.Admin.Models.Comment.UpdateModel
+﻿@model OnlineShop.MMA.Areas.Admin.Models.Shipping.UpdateModel
 @{
-    ViewData["Title"] = "Comment Update";
+    ViewData["Title"] = "Shipping Update";
 }
 
 <main class="content">
     <div class="container-fluid p-0">
-        <h1 class="h3 mb-3">Comment Update</h1>
+        <h1 class="h3 mb-3">Shipping Update</h1>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <form asp-area="Admin" asp-controller="Comment" asp-action="Update" method="post" class="form-horizontal" enctype="multipart/form-data">
+                    <form asp-area="Admin" asp-controller="Shipping" asp-action="Update" method="post" class="form-horizontal" enctype="multipart/form-data">
                         @Html.AntiForgeryToken()
                         <div class="text-danger" asp-validation-summary="ModelOnly"></div>
-                        <input asp-for="PostId" type="hidden" />
-                        <input asp-for="IdComment" type="hidden" />
+                        <input asp-for="IdShipping" type="hidden" />
+                        <input asp-for="OrderId" type="hidden" />
+                        <input asp-for="BuyerUserName" type="hidden" />
                         <div class="card-header">
                             <h5 class="card-title"></h5>
-                            <h5 class="card-subtitle text-muted">The details of the comment is as follows</h5>
+                            <h5 class="card-subtitle text-muted">The details of the shipping is as follows</h5>
                         </div>
                         <div class="card-body">
-                            <div class="form-group">
-                                <label asp-for="Body">Body</label>
-                                <textarea asp-for="Body" type="text" placeholder="Body" class="form-control" style="height: 200px" pf-validation-for="Body" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false></textarea>
-                                <div pf-validation-for="Body" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
-                            </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label asp-for="IsPublishable">Is Publishable</label>
-                                    <div class="custom-control custom-switch">
-                                        <input asp-for="IsPublishable" type="checkbox" class="custom-control-input" pf-validation-for="IsPublishable" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
-                                        <label class="custom-control-label" for="IsPublishable">Toggle this to switch the status</label>
-                                    </div>
-                                    <div pf-validation-for="IsPublishable" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
+                                    <label asp-for="OrderId">Order Id</label>
+                                    <input asp-for="OrderId" type="text" class="form-control" disabled="disabled">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label asp-for="IsReviewed">Is Reviewed</label>
+                                    <label asp-for="BuyerUserName">Buyer User Name</label>
+                                    <input asp-for="BuyerUserName" type="text" class="form-control" disabled="disabled">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label asp-for="IsShipped">Is Shipped</label>
                                     <div class="custom-control custom-switch">
-                                        <input asp-for="IsReviewed" type="checkbox" class="custom-control-input" pf-validation-for="IsReviewed" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
-                                        <label class="custom-control-label" for="IsReviewed">Toggle this to switch the status</label>
+                                        <input asp-for="IsShipped" type="checkbox" class="custom-control-input" pf-validation-for="IsShipped" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
+                                        <label class="custom-control-label" for="IsShipped">Toggle this to switch the status</label>
                                     </div>
-                                    <div pf-validation-for="IsReviewed" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
+                                    <div pf-validation-for="IsShipped" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a asp-area="Admin" asp-controller="Post" asp-action="Update" asp-route-id="@Model.PostId" class="btn btn-primary">Back To Update</a>
-                            <a asp-area="Admin" asp-controller="Comment" asp-action="Index" asp-route-id="@Model.PostId" class="btn btn-primary">Back To Comment Index</a>
+                            <a asp-area="Admin" asp-controller="Shipping" asp-action="Index" asp-route-id="@Model.IdShipping" class="btn btn-primary">Back</a>
                             <button type="submit" class="btn btn-primary">
                                 Submit
                             </button>
