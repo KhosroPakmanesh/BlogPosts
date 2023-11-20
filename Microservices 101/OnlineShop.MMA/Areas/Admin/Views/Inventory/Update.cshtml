@@ -1,6 +1,6 @@
-﻿@model Website.Presentation.Areas.Admin.Models.Post.UpdateModel
+﻿@model OnlineShop.MMA.Areas.Admin.Models.Inventory.UpdateModel
 @{
-    ViewData["Title"] = "Post Update";
+    ViewData["Title"] = "Inventory Update";
 }
 
 @section Styles{
@@ -9,205 +9,37 @@
 
 <main class="content">
     <div class="container-fluid p-0">
-        <h1 class="h3 mb-3">Post Update</h1>
+        <h1 class="h3 mb-3">Inventory Update</h1>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <form asp-controller="Post" asp-action="Update" method="post" class="form-horizontal" enctype="multipart/form-data">
+                    <form asp-controller="Inventory" asp-action="Update" method="post" class="form-horizontal" enctype="multipart/form-data">
                         @Html.AntiForgeryToken()
-                        <input asp-for="IdPost" type="hidden" />
-                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <input asp-for="IdInventory" type="hidden" />
                         <div class="card-header">
                             <h5 class="card-title"></h5>
-                            <h5 class="card-subtitle text-muted">The details of the post is as follows</h5>
+                            <h5 class="card-subtitle text-muted">The details of the inventory is as follows</h5>
                         </div>
                         <div class="card-body">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label asp-for="Title">Title</label>
-                                    <input asp-for="Title" type="text" placeholder="Title" class="form-control" pf-validation-for="Title" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
-                                    <div pf-validation-for="Title" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
-                                </div>
-                                <div class="form-group col-md-6">
                                     <label>Categories</label>
-                                    <select asp-for="CategoryIds" class="form-control select2"
-                                            multiple="multiple"
+                                    <select asp-for="ProductId" class="form-control select2"
                                             pf-validation-for="CategoryIds" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false
-                                            asp-items="@Model.CategorySelectListItems">
+                                            asp-items="@Model.ProductSelectListItems">
                                     </select>
-                                    <div pf-validation-for="CategoryIds" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
+                                    <div pf-validation-for="ProductId" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>Tags</label>
-                                    <select asp-for="TagIds" class="form-control select2"
-                                            multiple="multiple"
-                                            pf-validation-for="TagIds" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false
-                                            asp-items="@Model.TagSelectListItems">
-                                    </select>
-                                    <div pf-validation-for="TagIds" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label asp-for="IsPublishable">Is Publishable</label>
-                                    <div class="custom-control custom-switch">
-                                        <input asp-for="IsPublishable" type="checkbox" class="custom-control-input" pf-validation-for="IsPublishable" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
-                                        <label class="custom-control-label" for="IsPublishable">Toggle this to switch the status</label>
-                                    </div>
-                                    <div pf-validation-for="IsPublishable" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="form-label w-100">Photo</label>
-                                    <input asp-for="Image" type="file" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Body">Body</label>
-                                <div class="clearfix">
-                                    <div id="quill-toolbar">
-                                        <span class="ql-formats">
-                                            <select class="ql-font"></select>
-                                            <select class="ql-size"></select>
-                                        </span>
-                                        <span class="ql-formats">
-                                            <button class="ql-bold"></button>
-                                            <button class="ql-italic"></button>
-                                            <button class="ql-underline"></button>
-                                            <button class="ql-strike"></button>
-                                        </span>
-                                        <span class="ql-formats">
-                                            <select class="ql-color"></select>
-                                            <select class="ql-background"></select>
-                                        </span>
-                                        <span class="ql-formats">
-                                            <button class="ql-script" value="sub"></button>
-                                            <button class="ql-script" value="super"></button>
-                                        </span>
-                                        <span class="ql-formats">
-                                            <button class="ql-header" value="1"></button>
-                                            <button class="ql-header" value="2"></button>
-                                            <button class="ql-blockquote"></button>
-                                            <button class="ql-code-block"></button>
-                                        </span>
-                                        <span class="ql-formats">
-                                            <button class="ql-list" value="ordered"></button>
-                                            <button class="ql-list" value="bullet"></button>
-                                            <button class="ql-indent" value="-1"></button>
-                                            <button class="ql-indent" value="+1"></button>
-                                        </span>
-                                        <span class="ql-formats">
-                                            <button class="ql-direction" value="rtl"></button>
-                                            <select class="ql-align"></select>
-                                        </span>
-                                        <span class="ql-formats">
-                                            <button class="ql-link"></button>
-                                            <button class="ql-image"></button>
-                                            <button class="ql-video"></button>
-                                        </span>
-                                        <span class="ql-formats">
-                                            <button class="ql-clean"></button>
-                                        </span>
-                                    </div>
-                                    <div id="quill-editor"></div>
-                                </div>
-                                <input asp-for="Body" id="quill-html" class="form-control" type="hidden" pf-validation-for="Body" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false />
-                                <div pf-validation-for="Body" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Introduction">Introduction</label>
-                                <textarea asp-for="Introduction" type="text" placeholder="Introduction" class="form-control" style="height: 200px" pf-validation-for="Introduction" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false></textarea>
-                                <div pf-validation-for="Introduction" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-md-6">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5 class="card-title"></h5>
-                                            <h5 class="card-subtitle text-muted">Comments</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            @foreach (var branchComment in Model.BranchComments)
-                                            {
-                                                @foreach (var comment in branchComment.Value)
-                                                {
-                                                    <div class="media" pf-classapplying-condition="@comment.IsBranchHead" pf-classapplying-class="bg-light border rounded">
-                                                        @if (!string.IsNullOrEmpty(comment.AvatarName))
-                                                        {
-                                                            <div class="comment-author">
-                                                                <img src="~/uploads/avatars/@comment.AvatarName" width="36" height="36" class="rounded-circle mr-2" alt="@comment.FullName">
-                                                            </div>
-                                                        }
-                                                        else
-                                                        {
-                                                            <div class="comment-author">
-                                                                <img src="~/back-office/images/default-images/default-avatar.jpg" width="36" height="36" class="rounded-circle mr-2" alt="@comment.FullName">
-                                                            </div>
-                                                        }
-                                                        <div class="media-body">
-                                                            <small class="float-right text-navy">
-                                                                @if (comment.IsPublishable)
-                                                                {                                                                    
-                                                                    <i class='align-middle mr-2 fas fa-fw fa-upload'></i>                                                                    
-                                                                }
-                                                                else
-                                                                {                                                                   
-                                                                    <i class='align-middle mr-2 fas fa-fw fa-download'></i>                                                                    
-                                                                }
-                                                                @if (comment.IsReviewed)
-                                                                {                                                                  
-                                                                    <i class='align-middle mr-2 fas fa-fw fa-eye'></i>                                                                    
-                                                                }
-                                                                else
-                                                                {                                                                   
-                                                                    <i class='align-middle mr-2 fas fa-fw fa-eye-slash'></i>                                                                    
-                                                                }
-                                                                <a href="#">|</a>
-                                                                <a href="/Admin/Post/@comment.PostId/Comment/Detail/@comment.IdComment">
-                                                                    <i class='align-middle mr-2 far fa-fw fa-list-alt'></i>
-                                                                </a>
-                                                                <a href="/Admin/Post/@comment.PostId/Comment/Update/@comment.IdComment">
-                                                                    <i class='align-middle mr-2 far fa-fw fa-edit'></i>
-                                                                </a>
-                                                                <a href="/Admin/Post/@comment.PostId/Comment/Delete/@comment.IdComment">
-                                                                    <i class='align-middle mr-2 far fa-fw fa-trash-alt'></i>
-                                                                </a>                                                                
-                                                                @if (comment.IsBranchHead)
-                                                                {
-                                                                    <a href="#">|</a>
-                                                                    <a href="/Admin/Post/@comment.PostId/Comment/Create/@comment.CommentBranchId">
-                                                                        <i class='align-middle mr-2 fas fa-fw fa-reply'></i>
-                                                                    </a>
-                                                                }
-                                                            </small>
-                                                            <strong>@comment.FullName</strong><br />
-                                                            <small class="text-muted">@comment.CreationDateTime</small>
-                                                            <div class="border text-sm text-muted p-2 mt-1">
-                                                                @comment.Body
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    @if (comment.IdComment != Model.LastCommentId)
-                                                    {
-                                                        <hr />
-                                                    }
-                                                }
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label>Photo</label>
-                                    @if (!string.IsNullOrEmpty(Model.ImageName))
-                                    {
-                                        <img class="form-control" style="max-width:760; height:auto;" src="~/uploads/posts/@Model.IdPost/@Model.ImageName">
-                                    }
-                                    else
-                                    {
-                                        <img class="form-control" style="max-width:760; height:auto;" src="~/back-office/images/default-images/default-post.jpg">
-                                    }
+                                    <label asp-for="Quantity">Quantity</label>
+                                    <input asp-for="Quantity" type="text" placeholder="Quantity" class="form-control" pf-validation-for="Title" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
+                                    <div pf-validation-for="Quantity" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
                                 </div>
                             </div>
                         </div>
+                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
                         <div class="card-footer">
-                            <a asp-area="Admin" asp-controller="Post" asp-action="Index" class="btn btn-primary">Back</a>
+                            <a asp-area="Admin" asp-controller="Inventory" asp-action="Index" class="btn btn-primary">Back</a>
                             <button type="submit" class="btn btn-primary">
                                 Submit
                             </button>
@@ -221,44 +53,7 @@
 
 @section Scripts
 {
-    <script src="~/back-office/js/quill.htmlEditButton.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function (event) {
-            if (!window.Quill) {
-                return $('#quill-editor,#quill-toolbar,#quill-bubble-editor,#quill-bubble-toolbar').remove();
-            }
-
-            Quill.register("modules/htmlEditButton", htmlEditButton);
-            Quill.prototype.getHTML = function () {
-                return this.container.querySelector('.ql-editor').innerHTML;
-            };
-            Quill.prototype.setHTML = function (html) {
-                this.container.querySelector('.ql-editor').innerHTML = html;
-            };
-
-            var editor = new Quill('#quill-editor', {
-                modules: {
-                    toolbar: '#quill-toolbar',
-                    htmlEditButton: {}
-                },
-                placeholder: 'Type something',
-                theme: 'snow',
-            });
-
-            editor.on('text-change', function (delta, oldDelta, source) {
-                var html = editor.getHTML();
-                if (html == '<p><br></p>') {
-                    $('#quill-html').val('');
-                }
-                else {
-                    $('#quill-html').val(html);
-                }
-            });
-
-            var storedHtml = $('#quill-html').val();
-            editor.setHTML(storedHtml);
-        });
-
         $(".select2").select2({
             placeholder: 'Select items',
         }).change(function () {

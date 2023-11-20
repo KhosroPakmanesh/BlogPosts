@@ -1,19 +1,19 @@
 ﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @{
-    ViewData["Title"] = "Posts";
+    ViewData["Title"] = "Inventories";
     var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
 }
 <input id="RequestVerificationToken" type="hidden" value="@requestToken" />
 
 <main class="content">
 	<div class="container-fluid p-0">
-		<h1 class="h3 mb-3">Posts</h1>
+		<h1 class="h3 mb-3">Inventories</h1>
 		<div class="row">
 			<div class="col-12">
 				<div class="card">
 					<div class="card-header">
 						<span class="float-end">
-                            <a asp-area="Admin" asp-controller="Post" asp-action="Create" class="btn btn-primary btn-md text-white">Create</a>
+                            <a asp-area="Admin" asp-controller="Inventory" asp-action="Create" class="btn btn-primary btn-md text-white">Create</a>
                         </span>
 					</div>
 					<div class="card-body">
@@ -21,10 +21,8 @@
 							<thead>
 								<tr>
                                     <th>Id</th>
-                                    <th>Title</th>
-                                    <th>Publication date</th>
-                                    <th data-orderable="false">Modification Date</th>
-                                    <th data-orderable="false">Is Publishable</th>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
                                     <th data-orderable="false">Operations</th>
 								</tr>
 							</thead>
@@ -42,7 +40,7 @@
                     "serverSide": true,
                     "filter": true,
                     "ajax": {
-                        "url": "/Admin/Post/GetPosts",
+                        "url": "/Admin/Inventory/GetInventories",
                         "type": "POST",
                         "datatype": "json",
                         'beforeSend': function (request) {
@@ -57,23 +55,21 @@
                     }],
                     "order": [[0, "desc"]],
                     "columns": [
-                        { "data": "idPost", "name": "IdPost", "autoWidth": true },
-                        { "data": "title", "name": "Title", "autoWidth": true },
-                        { "data": "publicationDateTime", "name": "PublicationDateTime", "autoWidth": true },
-                        { "data": "modificationDateTime", "name": "ModificationDateTime", "autoWidth": true },
-                        { "data": "isPublishable", "name": "IsPublishable", "autoWidth": true },
+                        { "data": "idInventory", "name": "IdInventory", "autoWidth": true },
+                        { "data": "productName", "name": "ProductName", "autoWidth": true },
+                        { "data": "quantity", "name": "Quantity", "autoWidth": true },
                         {
                              "render": function (data, type, row) {
-                                return `<a href='post/detail/${row.idPost}'>
+                                return `<a href='inventory/detail/${row.idInventory}'>
                                             <i class='align-middle mr-2 far fa-fw fa-list-alt'></i>
                                         </a>
-                                        <a href = 'post/update/${row.idPost}'>
+                                        <a href = 'inventory/update/${row.idInventory}'>
                                             <i class='align-middle mr-2 far fa-fw fa-edit'></i>
                                         </a>
-                                        <a href = 'post/delete/${row.idPost}'>
+                                        <a href = 'inventory/delete/${row.idInventory}'>
                                             <i class='align-middle mr-2 far fa-fw fa-trash-alt'></i>
                                         </a>
-                                        <a href = '/blog/post/index/${row.idPost}'>
+                                        <a href = '/product/detail/${row.productId}'>
                                             <i class='align-middle mr-2 fas fa-fw fa-arrow-right'></i>
                                         </a>`
                             }

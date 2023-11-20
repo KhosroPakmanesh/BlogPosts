@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 using Microsoft.AspNetCore.Authorization;
 using System.Linq.Dynamic.Core;
 using OnlineShop.MMA.Data.OnlineShopDbContext;
 using OnlineShop.MMA.Areas.Admin.Models.Discount;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Hosting;
 
 namespace Website.Presentation.Areas.Admin.Controllers
 {
@@ -41,33 +39,33 @@ namespace Website.Presentation.Areas.Admin.Controllers
             int skip = start != null ? Convert.ToInt32(start) : 0;
             int recordsTotal = 0;
 
-            var expectedDiscounts = _onlineShopDbContext.Discounts
+            var queryableDiscounts = _onlineShopDbContext.Discounts
                 .AsQueryable();
 
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
             {
-                expectedDiscounts = expectedDiscounts.OrderBy(sortColumn + " " + sortColumnDirection);
+                queryableDiscounts = queryableDiscounts.OrderBy(sortColumn + " " + sortColumnDirection);
             }
 
             if (!string.IsNullOrEmpty(searchValue))
             {
-                expectedDiscounts = expectedDiscounts.Where(
+                queryableDiscounts = queryableDiscounts.Where(
                     m => m.Voucher.Contains(searchValue));
             }
 
-            var rawDiscounts = await expectedDiscounts
+            var rawDiscounts = await queryableDiscounts
                 .Skip(skip).Take(pageSize)
                 .ToListAsync();
             recordsTotal = rawDiscounts.Count();
 
-            var formattedDiscounts = new List<dynamic>();
+            var formattedDiscounts = new List<DiscountModel>();
             foreach (var rawDiscount in rawDiscounts)
             {
-                formattedDiscounts.Add(new
+                formattedDiscounts.Add(new DiscountModel
                 {
-                    rawDiscount.IdDiscount,
-                    rawDiscount.Voucher,
-                    rawDiscount.ReductionPercentage,
+                    IdDiscount= rawDiscount.IdDiscount,
+                    Voucher=rawDiscount.Voucher,
+                    ReductionPercentage=rawDiscount.ReductionPercentage,
                 });
             }
 
@@ -108,7 +106,7 @@ namespace Website.Presentation.Areas.Admin.Controllers
 
             return View(new DetailModel
             {
-                IdDiscount = id,
+                //IdDiscount = id,
                 Voucher = discount.Voucher,
                 ReductionPercentage = discount.ReductionPercentage,
                 BuyerIds = discount.BuyerDiscounts.Select(t => t.BuyerId).ToList(),
@@ -140,14 +138,12 @@ namespace Website.Presentation.Areas.Admin.Controllers
                 });
             }
 
-            var discount = new Discount
+            _onlineShopDbContext.Discounts.Add(new Discount
             {
                 Voucher = createModel.Voucher,
                 ReductionPercentage = createModel.ReductionPercentage,
                 BuyerDiscounts = buyerDiscounts,
-            };
-
-            _onlineShopDbContext.Add(discount);
+            });
 
             await _onlineShopDbContext.SaveChangesAsync();
 

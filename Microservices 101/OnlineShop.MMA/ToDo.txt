@@ -7,3 +7,5 @@
 -Reverse engineer db context after all tasks are finished
 -Add Validations
 -Fix search filters for datatables
+-Check all load updates
+-Validation messages do not appear in forms
