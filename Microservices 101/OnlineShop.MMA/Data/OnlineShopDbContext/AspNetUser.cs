@@ -46,7 +46,7 @@ public partial class AspNetUser
 
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 
-    public virtual ICollection<PaymentLog> PaymentLogs { get; set; } = new List<PaymentLog>();
+    public virtual ICollection<PaymentHistory> PaymentHistories { get; set; } = new List<PaymentHistory>();
 
     public virtual ICollection<AspNetRole> Roles { get; set; } = new List<AspNetRole>();
     public AspNetUserExtraInfo AspNetUserExtraInfo { get; set; } = null!;

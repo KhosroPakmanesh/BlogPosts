@@ -15,7 +15,7 @@ public partial class Order
 
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
-    public virtual ICollection<OrderLog> OrderLogs { get; set; } = new List<OrderLog>();
+    public virtual ICollection<OrderHistory> OrderHistories { get; set; } = new List<OrderHistory>();
 
     public virtual ICollection<Shipping> Shippings { get; set; } = new List<Shipping>();
 

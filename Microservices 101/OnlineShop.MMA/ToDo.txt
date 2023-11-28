@@ -9,3 +9,12 @@
 -Fix search filters for datatables
 -Check all load updates
 -Validation messages do not appear in forms
+-Remove unnecessary default values
+-Study that all post methods return data in case of model state error
+-Study accordion admin menus that they dont open and close together.
+-Updating Incorrect namespaces
+-Updating project name
+-Break ValidationClassTagHelper into to two helpers
+-Unobtrusive does not work, serverside works
+-Use foreach or select for all datatable get methods
+-Prevent deleting principal entities like discount without deleting dependants and showing them with a message

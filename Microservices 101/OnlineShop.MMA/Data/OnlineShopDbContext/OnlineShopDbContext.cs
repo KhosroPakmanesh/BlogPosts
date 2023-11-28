@@ -43,9 +43,9 @@ public partial class OnlineShopDbContext : DbContext
 
     public virtual DbSet<OrderItem> OrderItems { get; set; }
 
-    public virtual DbSet<OrderLog> OrderLogs { get; set; }
+    public virtual DbSet<OrderHistory> OrderHistory { get; set; }
 
-    public virtual DbSet<PaymentLog> PaymentLogs { get; set; }
+    public virtual DbSet<PaymentHistory> PaymentHistories { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
 
@@ -183,6 +183,11 @@ public partial class OnlineShopDbContext : DbContext
                 .HasForeignKey(d => d.BuyerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Carts_AspNetUsers");
+
+            entity.HasOne(d => d.Discount).WithMany(p => p.Carts)
+                .HasForeignKey(d => d.DiscountId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Carts_Discounts");
         });
 
         modelBuilder.Entity<CartItem>(entity =>
@@ -254,33 +259,33 @@ public partial class OnlineShopDbContext : DbContext
                 .HasConstraintName("FK_OrderItems_Products");
         });
 
-        modelBuilder.Entity<OrderLog>(entity =>
+        modelBuilder.Entity<OrderHistory>(entity =>
         {
-            entity.HasKey(e => e.IdOrderLog);
+            entity.HasKey(e => e.IdOrderHistory);
 
-            entity.ToTable("OrderLogs", "order");
+            entity.ToTable("OrderHistories", "order");
 
-            entity.HasOne(d => d.Order).WithMany(p => p.OrderLogs)
+            entity.HasOne(d => d.Order).WithMany(p => p.OrderHistories)
                 .HasForeignKey(d => d.OrderId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_OrderLogs_Orders");
+                .HasConstraintName("FK_OrderHistories_Orders");
         });
 
-        modelBuilder.Entity<PaymentLog>(entity =>
+        modelBuilder.Entity<PaymentHistory>(entity =>
         {
-            entity.HasKey(e => e.IdPayment);
+            entity.HasKey(e => e.IdPaymentHistory);
 
-            entity.ToTable("PaymentLogs", "payment");
+            entity.ToTable("PaymentHistories", "payment");
 
             entity.Property(e => e.BankAccountNumber).HasMaxLength(50);
             entity.Property(e => e.BuyerId).HasMaxLength(450);
             entity.Property(e => e.PaymentDateTime).HasColumnType("smalldatetime");
             entity.Property(e => e.PaymentValue).HasColumnType("decimal(18, 0)");
 
-            entity.HasOne(d => d.Buyer).WithMany(p => p.PaymentLogs)
+            entity.HasOne(d => d.Buyer).WithMany(p => p.PaymentHistories)
                 .HasForeignKey(d => d.BuyerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PaymentLogs_AspNetUsers");
+                .HasConstraintName("FK_PaymentHistories_AspNetUsers");
         });
 
         modelBuilder.Entity<Product>(entity =>
@@ -306,6 +311,7 @@ public partial class OnlineShopDbContext : DbContext
             entity.ToTable("ProductTypes", "product");
 
             entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.Description).HasMaxLength(1000);
         });
 
         modelBuilder.Entity<Shipping>(entity =>

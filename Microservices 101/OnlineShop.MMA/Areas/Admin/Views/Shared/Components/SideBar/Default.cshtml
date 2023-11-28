@@ -13,6 +13,32 @@
                 </a>
             </li>
             <li class="sidebar-item">
+                <a href="#blog" data-toggle="collapse" class="font-weight-bold sidebar-link">
+                    <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Help Desk</span>
+                </a>
+                <ul id="blog" class="sidebar-dropdown list-unstyled collapse show">
+                    <li class="sidebar-item" pf-classapplying-condition="Model.IsPostMenuSelected" pf-classapplying-class="active">
+                        <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="sidebar-link">Order</a>
+                    </li>
+                    <li class="sidebar-item" pf-classapplying-condition="Model.IsPostMenuSelected" pf-classapplying-class="active">
+                        <a asp-area="Admin" asp-controller="Cart" asp-action="Index" class="sidebar-link">Cart</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="sidebar-item">
+                <a href="#blog" data-toggle="collapse" class="font-weight-bold sidebar-link">
+                    <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Asset</span>
+                </a>
+                <ul id="blog" class="sidebar-dropdown list-unstyled collapse show">
+                    <li class="sidebar-item" pf-classapplying-condition="Model.IsPostMenuSelected" pf-classapplying-class="active">
+                        <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="sidebar-link">Product</a>
+                    </li>
+                    <li class="sidebar-item" pf-classapplying-condition="Model.IsPostMenuSelected" pf-classapplying-class="active">
+                        <a asp-area="Admin" asp-controller="ProductType" asp-action="Index" class="sidebar-link">Product Type</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="sidebar-item">
 				<a href="#blog" data-toggle="collapse" class="font-weight-bold sidebar-link">
                     <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Management</span>
 				</a>

@@ -1,180 +1,43 @@
-﻿@model Website.Presentation.Areas.Admin.Models.Service.DetailModel
+﻿@model OnlineShop.MMA.Areas.Admin.Models.PaymentHistory.DetailModel
 @{
-    ViewData["Title"] = "Service Detail";
+    ViewData["Title"] = "Payment History Detail";
 }
 
 <main class="content">
-	<div class="container-fluid p-0">
-		<h1 class="h3 mb-3">Service Detail</h1>
-		<div class="row">
-			<div class="col-md-12">
-				<div class="card">
-					<div class="card-header">
-						<h5 class="card-title"></h5>
-						<h5 class="card-subtitle text-muted">The details of the service is as follows</h5>
-					</div>                   
+    <div class="container-fluid p-0">
+        <h1 class="h3 mb-3">Payment History Detail</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title"></h5>
+                        <h5 class="card-subtitle text-muted">The details of the payment history is as follows</h5>
+                    </div>
                     <div class="card-body">
                         <div class="form-row">
-							<div class="form-group col-md-6">
-								<label asp-for="Title">Title</label>												
-                                <input asp-for="Title" type="text" class="form-control" disabled="disabled">
-							</div>
                             <div class="form-group col-md-6">
-                                <label>Categories</label>
-                                <select multiple="multiple" asp-for="CategoryIds" class="form-control select2"
-                                        asp-items="@Model.CategorySelectListItems" disabled="disabled">
-                                </select>
+                                <label asp-for="BuyerUserName">Buyer UserName</label>
+                                <input asp-for="BuyerUserName" type="text" class="form-control" disabled="disabled">
                             </div>
                             <div class="form-group col-md-6">
-                                <label>Tags</label>
-                                <select multiple="multiple" asp-for="TagIds" class="form-control select2"
-                                        asp-items="@Model.TagSelectListItems" disabled="disabled">
-                                </select>
+                                <label asp-for="BankAccountNumber">BankAccount Number</label>
+                                <input asp-for="BankAccountNumber" type="text" class="form-control" disabled="disabled">
                             </div>
                             <div class="form-group col-md-6">
-                                <label asp-for="TenCharacterSummary">Ten-character Summary</label>
-                                <input asp-for="TenCharacterSummary" type="text" class="form-control" disabled="disabled">
+                                <label asp-for="PaymentDateTime">Payment DateTime</label>
+                                <input asp-for="PaymentDateTime" type="text" class="form-control" disabled="disabled">
                             </div>
                             <div class="form-group col-md-6">
-                                <label asp-for="ImportanceOrder">Importance Order</label>
-                                <input asp-for="ImportanceOrder" type="text" class="form-control" disabled="disabled">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label asp-for="IsPublishable">Is Publishable</label>
-                                <div class="custom-control custom-switch">
-                                    <input asp-for="IsPublishable" type="checkbox" class="custom-control-input" disabled="disabled">
-                                    <label class="custom-control-label" for="IsPublishable"></label>
-                                </div>
-                            </div>
-						</div>
-						<div class="form-group">
-							<label asp-for="Body">Body</label>
-                            <div class="clearfix">
-                                <div id="quill-toolbar">
-                                    <span class="ql-formats">
-                                        <select class="ql-font"></select>
-                                        <select class="ql-size"></select>
-                                    </span>
-                                    <span class="ql-formats">
-                                        <button class="ql-bold"></button>
-                                        <button class="ql-italic"></button>
-                                        <button class="ql-underline"></button>
-                                        <button class="ql-strike"></button>
-                                    </span>
-                                    <span class="ql-formats">
-                                        <select class="ql-color"></select>
-                                        <select class="ql-background"></select>
-                                    </span>
-                                    <span class="ql-formats">
-                                        <button class="ql-script" value="sub"></button>
-                                        <button class="ql-script" value="super"></button>
-                                    </span>
-                                    <span class="ql-formats">
-                                        <button class="ql-header" value="1"></button>
-                                        <button class="ql-header" value="2"></button>
-                                        <button class="ql-blockquote"></button>
-                                        <button class="ql-code-block"></button>
-                                    </span>
-                                    <span class="ql-formats">
-                                        <button class="ql-list" value="ordered"></button>
-                                        <button class="ql-list" value="bullet"></button>
-                                        <button class="ql-indent" value="-1"></button>
-                                        <button class="ql-indent" value="+1"></button>
-                                    </span>
-                                    <span class="ql-formats">
-                                        <button class="ql-direction" value="rtl"></button>
-                                        <select class="ql-align"></select>
-                                    </span>
-                                    <span class="ql-formats">
-                                        <button class="ql-link"></button>
-                                        <button class="ql-image"></button>
-                                        <button class="ql-video"></button>
-                                    </span>
-                                    <span class="ql-formats">
-                                        <button class="ql-clean"></button>
-                                    </span>
-                                </div>
-                                <div id="quill-editor"></div>
-                            </div>
-                            <input asp-for="Body" id="quill-html" type="hidden" />
-                        </div>                                               
-                        <div class="form-group">
-                            <label asp-for="ThreeBulletPoints">Three-bullet Points</label>
-                            <textarea asp-for="ThreeBulletPoints" type="text" class="form-control" style="height: 200px" ></textarea>
-                        </div>
-                        <div class="form-row">   
-                            <div class="col-md-6">
-                                <label>Photo</label>
-                                @if (!string.IsNullOrWhiteSpace(Model.ImageName))
-                                {
-                                    <img class="form-control" style="max-width:760; height:auto;" src="~/uploads/services/@Model.IdService/@Model.ImageName">
-                                }
-                                else
-                                {
-                                    <img class="form-control" style="max-width:760; height:auto;" src="~/back-office/images/default-images/default-service.jpg">
-                                }                                
+                                <label asp-for="PaymentValue">Payment Value</label>
+                                <input asp-for="PaymentValue" type="text" class="form-control" disabled="disabled">
                             </div>
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a asp-area="Admin" asp-controller="Service" asp-action="Index" class="btn btn-primary">Back</a>
+                        <a asp-area="Admin" asp-controller="PaymentHistory" asp-action="Index" class="btn btn-primary">Back</a>
                     </div>
                 </div>
-			</div>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
 </main>
-
-@section Scripts
-    {
-    <script src="~/back-office/js/quill.htmlEditButton.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function (event) {
-            if (!window.Quill) {
-                return $('#quill-editor,#quill-toolbar,#quill-bubble-editor,#quill-bubble-toolbar').remove();
-            }
-
-            Quill.register("modules/htmlEditButton", htmlEditButton);
-            Quill.prototype.getHTML = function () {
-                return this.container.querySelector('.ql-editor').innerHTML;
-            };
-            Quill.prototype.setHTML = function (html) {
-                this.container.querySelector('.ql-editor').innerHTML = html;
-            };
-
-            var editor = new Quill('#quill-editor', {
-                modules: {
-                    toolbar: '#quill-toolbar',
-                    htmlEditButton: {}
-                },
-                placeholder: '',
-                theme: 'snow',
-                readOnly: true
-            });
-
-            editor.on('text-change', function (delta, oldDelta, source) {
-                var html = editor.getHTML();
-                if (html == '<p><br></p>') {
-                    $('#quill-html').val('');
-                }
-                else {
-                    $('#quill-html').val(html);
-                }
-            });
-
-            var storedHtml = $('#quill-html').val();
-            editor.setHTML(storedHtml);
-            var quillEditorTextArea = $("#quill-editor").find('.ql-editor');
-            quillEditorTextArea.css("background-color", "rgb(233,236,239)");
-        });
-
-        $('.select2').each(function () {
-            $(this)
-                .wrap('<div class="position-relative"></div>')
-                .select2({
-                    placeholder: 'Select value',
-                    dropdownParent: $(this).parent()
-                });
-        })
-    </script>
-}

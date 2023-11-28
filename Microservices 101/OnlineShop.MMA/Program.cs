@@ -32,7 +32,7 @@ namespace OnlineShop.MMA
             {
                 options.Filters.Add
                 (new AutoValidateAntiforgeryTokenAttribute());
-            }).AddRazorRuntimeCompilation();
+            })/*.AddRazorRuntimeCompilation()*/;
 
             var app = builder.Build();
 

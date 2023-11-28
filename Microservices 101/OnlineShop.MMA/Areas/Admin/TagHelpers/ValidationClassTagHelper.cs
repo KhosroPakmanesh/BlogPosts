@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Website.Presentation.Areas.Admin.TagHelpers
+namespace OnlineShop.MMA.Areas.Admin.TagHelpers
 {
     [HtmlTargetElement("*", Attributes = ValidationForAttributeName + "," + ValidationErrorClassName + "," + AddErrorMessageFlag)]
     public class ValidationClassTagHelper : TagHelper

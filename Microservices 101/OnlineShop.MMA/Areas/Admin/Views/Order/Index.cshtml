@@ -1,13 +1,13 @@
 ﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @{
-    ViewData["Title"] = "Order History";
+    ViewData["Title"] = "Orders";
     var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
 }
 <input id="RequestVerificationToken" type="hidden" value="@requestToken" />
 
 <main class="content">
     <div class="container-fluid p-0">
-        <h1 class="h3 mb-3">Order History</h1>
+        <h1 class="h3 mb-3">Orders</h1>
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -16,6 +16,8 @@
                             <thead>
                                 <tr>
                                     <th>Id</th>
+                                    <th>Buyer UserName</th>
+                                    <th>Order DateTime</th>
                                     <th>Order Status</th>
                                     <th data-orderable="false">Operations</th>
                                 </tr>
@@ -25,7 +27,6 @@
                 </div>
             </div>
         </div>
-
         <script>
             document.addEventListener("DOMContentLoaded", function (event) {
                 $("#datatables-basic").DataTable({
@@ -34,7 +35,7 @@
                     "serverSide": true,
                     "filter": true,
                     "ajax": {
-                        "url": "/Admin/OrderHistory/GetOrderHistories",
+                        "url": "/Admin/Order/GetOrders",
                         "type": "POST",
                         "datatype": "json",
                         'beforeSend': function (request) {
@@ -47,15 +48,22 @@
                         "visible": false,
                         "searchable": false,
                     }],
-                    "order": [[0, "desc"]],
                     "columns": [
-                        { "data": "idOrderHistory", "name": "IdOrderHistory", "autoWidth": true },
+                        { "data": "idOrder", "name": "IdOrder", "autoWidth": true },
+                        { "data": "buyerUserName", "name": "BuyerUserName", "autoWidth": true },
+                        { "data": "orderDateTime", "name": "OrderDateTime", "autoWidth": true },
                         { "data": "orderStatus", "name": "OrderStatus", "autoWidth": true },
                         {
                             "render": function (data, type, row) {
-                                return `<a href='OrderHistory/detail/${row.idOrderHistory}'>
-                                            <i class='align-middle mr-2 far fa-fw fa-list-alt'></i>
-                                        </a>`
+                                return `<a href='Order/detail/${row.idOrder}'>
+                                        <i class='align-middle mr-2 far fa-fw fa-list-alt'></i>
+                                    </a>
+                                    <a href = 'Order/update/${row.idOrder}'>
+                                        <i class='align-middle mr-2 far fa-fw fa-edit'></i>
+                                    </a>
+                                    <a href = 'Order/delete/${row.idOrder}'>
+                                        <i class='align-middle mr-2 far fa-fw fa-trash-alt'></i>
+                                    </a>`
                             }
                         },
                     ]

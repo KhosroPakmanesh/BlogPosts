@@ -1,31 +1,25 @@
 ﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @{
-    ViewData["Title"] = "Contacts";
+    ViewData["Title"] = "Payment History";
     var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
 }
 <input id="RequestVerificationToken" type="hidden" value="@requestToken" />
 
 <main class="content">
     <div class="container-fluid p-0">
-        <h1 class="h3 mb-3">Contacts</h1>
+        <h1 class="h3 mb-3">Payment History</h1>
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
-                        <span class="float-end">
-                            <a asp-area="Admin" asp-controller="Contact" asp-action="Create" class="btn btn-primary btn-md text-white">Create</a>
-                        </span>
-                    </div>
                     <div class="card-body">
                         <table id="datatables-basic" class="table table-striped table-bordered" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Id</th>
-                                    <th>Full Name</th>
-                                    <th>Email</th>
-                                    <th>Web Address</th>
-                                    <th data-orderable="false">Body</th>
-                                    <th>Creation DateTime</th>
+                                    <th>Buyer UserName</th>
+                                    <th>BankAccount Number</th>
+                                    <th>Payment DateTime</th>
+                                    <th>Payment Value</th>
                                     <th data-orderable="false">Operations</th>
                                 </tr>
                             </thead>
@@ -43,7 +37,7 @@
                     "serverSide": true,
                     "filter": true,
                     "ajax": {
-                        "url": "/Admin/Contact/GetContacts",
+                        "url": "/Admin/PaymentHistory/GetPaymentHistories",
                         "type": "POST",
                         "datatype": "json",
                         'beforeSend': function (request) {
@@ -58,15 +52,16 @@
                     }],
                     "order": [[0, "desc"]],
                     "columns": [
-                        { "data": "idContact", "name": "IdContact", "autoWidth": true },
-                        { "data": "fullName", "name": "FullName", "autoWidth": true },
-                        { "data": "email", "name": "Email", "autoWidth": true },
-                        { "data": "webAddress", "name": "WebAddress", "autoWidth": true },
-                        { "data": "body", "name": "Body", "autoWidth": true },
-                        { "data": "creationDateTime", "name": "CreationDateTime", "autoWidth": true },                            
+                        { "data": "idPaymentHistory", "name": "IdPaymentHistory", "autoWidth": true },
+                        { "data": "buyerUserName", "name": "BuyerUserName", "autoWidth": true },
+                        { "data": "bankAccountNumber", "name": "BankAccountNumber", "autoWidth": true },
+                        { "data": "paymentDateTime", "name": "PaymentDateTime", "autoWidth": true },
+                        { "data": "paymentValue", "name": "PaymentValue", "autoWidth": true },
                         {
                             "render": function (data, type, row) {
-                                return `<a href='contact/detail/${row.idContact}'><i class='align-middle mr-2 far fa-fw fa-list-alt'></i></a>`
+                                return `<a href='PaymentHistory/detail/${row.idPaymentHistory}'>
+                                            <i class='align-middle mr-2 far fa-fw fa-list-alt'></i>
+                                        </a>`
                             }
                         },
                     ]

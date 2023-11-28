@@ -1,4 +1,5 @@
-﻿@model OnlineShop.MMA.Areas.Admin.Models.Inventory.CreateModel
+﻿
+@model OnlineShop.MMA.Areas.Admin.Models.Inventory.CreateModel
 @{
     ViewData["Title"] = "Inventory Create";
 }
@@ -22,16 +23,16 @@
                         <div class="card-body">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label>Categories</label>
+                                    <label>Product</label>
                                     <select asp-for="ProductId" class="form-control select2"
-                                            pf-validation-for="CategoryIds" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false
+                                            pf-validation-for="ProductId" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false
                                             asp-items="@Model.ProductSelectListItems">
                                     </select>
                                     <div pf-validation-for="ProductId" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label asp-for="Quantity">Quantity</label>
-                                    <input asp-for="Quantity" type="text" placeholder="Quantity" class="form-control" pf-validation-for="Title" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
+                                    <input asp-for="Quantity" type="text" placeholder="Quantity" class="form-control" pf-validation-for="Quantity" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
                                     <div pf-validation-for="Quantity" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
                                 </div>
                             </div>

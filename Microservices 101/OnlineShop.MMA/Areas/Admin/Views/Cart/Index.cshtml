@@ -1,13 +1,13 @@
 ﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @{
-    ViewData["Title"] = "Order History";
+    ViewData["Title"] = "Carts";
     var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
 }
 <input id="RequestVerificationToken" type="hidden" value="@requestToken" />
 
 <main class="content">
     <div class="container-fluid p-0">
-        <h1 class="h3 mb-3">Order History</h1>
+        <h1 class="h3 mb-3">Carts</h1>
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -16,7 +16,8 @@
                             <thead>
                                 <tr>
                                     <th>Id</th>
-                                    <th>Order Status</th>
+                                    <th>Buyer UserName</th>
+                                    <th>Discount Voucher</th>
                                     <th data-orderable="false">Operations</th>
                                 </tr>
                             </thead>
@@ -25,7 +26,6 @@
                 </div>
             </div>
         </div>
-
         <script>
             document.addEventListener("DOMContentLoaded", function (event) {
                 $("#datatables-basic").DataTable({
@@ -34,7 +34,7 @@
                     "serverSide": true,
                     "filter": true,
                     "ajax": {
-                        "url": "/Admin/OrderHistory/GetOrderHistories",
+                        "url": "/Admin/Cart/GetCarts",
                         "type": "POST",
                         "datatype": "json",
                         'beforeSend': function (request) {
@@ -47,15 +47,21 @@
                         "visible": false,
                         "searchable": false,
                     }],
-                    "order": [[0, "desc"]],
                     "columns": [
-                        { "data": "idOrderHistory", "name": "IdOrderHistory", "autoWidth": true },
-                        { "data": "orderStatus", "name": "OrderStatus", "autoWidth": true },
+                        { "data": "idCart", "name": "IdCart", "autoWidth": true },
+                        { "data": "buyerUserName", "name": "BuyerUserName", "autoWidth": true },
+                        { "data": "discountVoucher", "name": "DiscountVoucher", "autoWidth": true },
                         {
                             "render": function (data, type, row) {
-                                return `<a href='OrderHistory/detail/${row.idOrderHistory}'>
-                                            <i class='align-middle mr-2 far fa-fw fa-list-alt'></i>
-                                        </a>`
+                                return `<a href='Cart/detail/${row.idCart}'>
+                                        <i class='align-middle mr-2 far fa-fw fa-list-alt'></i>
+                                    </a>
+                                    <a href = 'Cart/update/${row.idCart}'>
+                                        <i class='align-middle mr-2 far fa-fw fa-edit'></i>
+                                    </a>
+                                    <a href = 'Cart/delete/${row.idCart}'>
+                                        <i class='align-middle mr-2 far fa-fw fa-trash-alt'></i>
+                                    </a>`
                             }
                         },
                     ]

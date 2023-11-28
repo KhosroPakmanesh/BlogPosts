@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace OnlineShop.MMA.Data.OnlineShopDbContext;
 
-public partial class PaymentLog
+public partial class PaymentHistory
 {
-    public int IdPayment { get; set; }
+    public int IdPaymentHistory { get; set; }
 
     public string BuyerId { get; set; } = null!;
 

@@ -1,0 +1,47 @@
+﻿@model OnlineShop.MMA.Areas.Admin.Models.Product.DetailModel
+@{
+    ViewData["Title"] = "Product Detail";
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/back-office/css/font-awesome.css">
+}
+
+<main class="content">
+	<div class="container-fluid p-0">
+		<h1 class="h3 mb-3">Product Detail</h1>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<h5 class="card-title"></h5>
+						<h5 class="card-subtitle text-muted">The details of the product is as follows</h5>
+					</div>                   
+                    <div class="card-body">
+                        <div class="form-row">
+							<div class="form-group col-md-6">
+                                <label asp-for="ProductTypeName">Product Type Name</label>
+								<input asp-for="ProductTypeName" type="text" class="form-control" disabled="disabled">
+							</div>
+							<div class="form-group col-md-6">
+								<label asp-for="Name">Name</label>
+								<input asp-for="Name" type="text" class="form-control" disabled="disabled">
+							</div>
+							<div class="form-group col-md-6">
+								<label asp-for="Price">Price</label>
+								<input asp-for="Price" type="text" class="form-control" disabled="disabled">
+							</div>
+							<div class="form-group col-md-6">
+								<label asp-for="Description">Description</label>
+								<input asp-for="Description" type="text" class="form-control" disabled="disabled">
+							</div>
+						</div>
+                    </div>
+                    <div class="card-footer">
+						<a asp-area="Admin" asp-controller="Product" asp-action="Index" class="btn btn-primary">Back</a>
+                    </div>
+                </div>
+			</div>
+		</div>
+	</div>
+</main>

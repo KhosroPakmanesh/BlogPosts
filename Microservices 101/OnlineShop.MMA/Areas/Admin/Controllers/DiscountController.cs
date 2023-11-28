@@ -298,6 +298,13 @@ namespace Website.Presentation.Areas.Admin.Controllers
                 return RedirectToAction("Index", "Discount");
             }
 
+            if (discount.Carts.Any())
+            {
+                ModelState.AddModelError("Error", "There are some carts associated with this discount. " +
+                    "You can delete a discount when there is no carts associated with it.");
+                return RedirectToAction("Index", "Discount");
+            }
+
             _onlineShopDbContext.BuyerDiscounts.RemoveRange(discount.BuyerDiscounts);
             _onlineShopDbContext.Discounts.Remove(discount);
 
