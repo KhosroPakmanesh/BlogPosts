@@ -18,3 +18,4 @@
 -Unobtrusive does not work, serverside works
 -Use foreach or select for all datatable get methods
 -Prevent deleting principal entities like discount without deleting dependants and showing them with a message
+-Decide columns for sorting in datatables

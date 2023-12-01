@@ -1,7 +1,10 @@
-﻿@model OnlineShop.MMA.Areas.Admin.Models.Shipping.DetailModel
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@model OnlineShop.MMA.Areas.Admin.Models.Shipping.DetailModel
 @{
     ViewData["Title"] = "Shipping Detail";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
 }
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
 
 <main class="content">
     <div class="container-fluid p-0">
@@ -32,11 +35,75 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer">                        
+                    <div class="card-footer">
+                        <h5 class="card-title"></h5>
+                        <h5 class="card-subtitle text-muted">Shipping legs are as follows</h5>
+                    </div>
+                    <div class="card-footer">
+                        <table id="datatables-basic" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Id ShippingLeg</th>
+                                    <th>shipping Id</th>
+                                    <th>address</th>
+                                    <th>Is Shipped</th>
+                                    <th data-orderable="false">Operations</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="card-footer">
                         <a asp-area="Admin" asp-controller="Shipping" asp-action="Index" class="btn btn-primary">Back</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            $("#datatables-basic").DataTable({
+                "responsive": true,
+                "processing": true,
+                "serverSide": true,
+                "filter": true,
+                "ajax": {
+                    "url": "/Admin/ShippingLeg/GetShippingLegs",
+                    "type": "POST",
+                    "datatype": "json",
+                    'beforeSend': function (request) {
+                        request.setRequestHeader("RequestVerificationToken",
+                            document.getElementById("RequestVerificationToken").value);
+                    },
+                    'data': {
+                        parentId: '@Model.IdShipping'
+                    }
+                },
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false,
+                    },
+                    {
+                        "targets": [1],
+                        "visible": false,
+                        "searchable": false,
+                    }],
+                "order": [[0, 'desc']],
+                "columns": [
+                    { "data": "idShippingLeg", "name": "idShippingLeg", "autoWidth": true },
+                    { "data": "shippingId", "name": "ShippingId", "autoWidth": true },
+                    { "data": "address", "name": "Address", "autoWidth": true },
+                    { "data": "isShipped", "name": "IsShipped", "autoWidth": true },
+                    {
+                        "render": function (data, type, row) {
+                            return `<a href="/Admin/Shipping/${row.shippingId}/ShippingLeg/Detail/${row.idShippingLeg}?previousPage=detail">
+                                    <i class='align-middle mr-2 far fa-fw fa-list-alt'> </i>
+                                </a>`
+                        }
+                    },
+                ]
+            });
+        });
+    </script>
 </main>

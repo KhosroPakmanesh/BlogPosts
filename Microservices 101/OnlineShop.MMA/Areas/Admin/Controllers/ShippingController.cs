@@ -97,6 +97,7 @@ namespace Website.Presentation.Areas.Admin.Controllers
 
             return View(new DetailModel
             {
+                IdShipping=shipping.IdShipping,
                 OrderId = shipping.OrderId,
                 BuyerUserName = shipping?.Order?.Buyer?.UserName!,
                 IsShipped = shipping?.IsShipped ?? false
