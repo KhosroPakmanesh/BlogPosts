@@ -11,7 +11,7 @@ public partial class Discount
 
     public byte ReductionPercentage { get; set; }
 
-    public virtual ICollection<BuyerDiscount> BuyerDiscounts { get; set; } = new List<BuyerDiscount>();
+    public virtual ICollection<DiscountBuyer> DiscountBuyers { get; set; } = new List<DiscountBuyer>();
 
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 }

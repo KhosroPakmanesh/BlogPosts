@@ -29,7 +29,7 @@ public partial class OnlineShopDbContext : DbContext
 
     public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
 
-    public virtual DbSet<BuyerDiscount> BuyerDiscounts { get; set; }
+    public virtual DbSet<DiscountBuyer> DiscountBuyers { get; set; }
 
     public virtual DbSet<Cart> Carts { get; set; }
 
@@ -153,21 +153,21 @@ public partial class OnlineShopDbContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.AspNetUserTokens).HasForeignKey(d => d.UserId);
         });
 
-        modelBuilder.Entity<BuyerDiscount>(entity =>
+        modelBuilder.Entity<DiscountBuyer>(entity =>
         {
             entity.HasKey(e => new { e.BuyerId, e.DiscountId });
 
-            entity.ToTable("BuyerDiscounts", "discount");
+            entity.ToTable("DiscountBuyers", "discount");
 
-            entity.HasOne(d => d.Buyer).WithMany(p => p.BuyerDiscounts)
+            entity.HasOne(d => d.Buyer).WithMany(p => p.DiscountBuyers)
                 .HasForeignKey(d => d.BuyerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_BuyerDiscounts_AspNetUsers");
+                .HasConstraintName("FK_DiscountBuyers_AspNetUsers");
 
-            entity.HasOne(d => d.Discount).WithMany(p => p.BuyerDiscounts)
+            entity.HasOne(d => d.Discount).WithMany(p => p.DiscountBuyers)
                 .HasForeignKey(d => d.DiscountId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_BuyerDiscounts_Discounts");
+                .HasConstraintName("FK_DiscountBuyers_Discounts");
         });
 
         modelBuilder.Entity<Cart>(entity =>

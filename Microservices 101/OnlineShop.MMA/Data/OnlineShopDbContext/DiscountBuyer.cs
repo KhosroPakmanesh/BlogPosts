@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace OnlineShop.MMA.Data.OnlineShopDbContext;
 
-public partial class BuyerDiscount
+public partial class DiscountBuyer
 {
     public string BuyerId { get; set; } = null!;
 

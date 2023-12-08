@@ -1,24 +1,29 @@
-﻿@model OnlineShop.MMA.Areas.Admin.Models.Discount.CreateModel
+﻿@model OnlineShop.MMA.Areas.Admin.Models.DiscountBuyer.CreateModel
 @{
-    ViewData["Title"] = "Discount Create";
+    ViewData["Title"] = "Buyers with their discount Create";
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/back-office/css/font-awesome.css">
 }
 
 <main class="content">
     <div class="container-fluid p-0">
-        <h1 class="h3 mb-3">Discount Create</h1>
+        <h1 class="h3 mb-3">Buyers with their discount Create</h1>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <form asp-controller="Discount" asp-action="Create" method="post" class="form-horizontal" enctype="multipart/form-data">
+                    <form asp-controller="DiscountBuyer" asp-action="Create" method="post" class="form-horizontal" enctype="multipart/form-data">
                         @Html.AntiForgeryToken()
+                        <input asp-for="DiscountId" type="hidden" />
                         <div class="text-danger" asp-validation-summary="ModelOnly"></div>
                         <div class="card-header">
                             <h5 class="card-title"></h5>
-                            <h5 class="card-subtitle text-muted">The details of the discount is as follows</h5>
+                            <h5 class="card-subtitle text-muted">The details of the buyer with his discount is as follows</h5>
                         </div>
                         <div class="card-body">
                             <div class="form-row">
-                                @*<div class="form-group col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>Buyers</label>
                                     <select asp-for="BuyerIds" class="form-control select2"
                                             multiple="multiple"
@@ -26,29 +31,19 @@
                                             asp-items="@Model.BuyerSelectListItems">
                                     </select>
                                     <div pf-validation-for="BuyerIds" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
-                                </div>*@
-                                <div class="form-group col-md-6">
-                                    <label asp-for="Voucher">Voucher</label>
-                                    <input asp-for="Voucher" type="text" placeholder="Voucher" class="form-control" pf-validation-for="Voucher" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
-                                    <div pf-validation-for="Voucher" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label asp-for="ReductionPercentage">Reduction Percentage</label>
-                                    <input asp-for="ReductionPercentage" type="text" placeholder="ReductionPercentage" class="form-control" pf-validation-for="ReductionPercentage" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
-                                    <div pf-validation-for="ReductionPercentage" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
-                                </div>
-                                @* <div class="form-group col-md-6">
                                     <label asp-for="IsUsed">Is Used</label>
                                     <div class="custom-control custom-switch">
                                         <input asp-for="IsUsed" type="checkbox" class="custom-control-input" pf-validation-for="IsUsed" pf-validationerror-class="is-invalid" pf-adderrormessage-flag=false>
                                         <label class="custom-control-label" for="IsUsed">Toggle this to switch the status</label>
                                     </div>
                                     <div pf-validation-for="IsUsed" pf-validationerror-class="invalid-feedback" pf-adderrormessage-flag=true></div>
-                                </div> *@
+                                </div>
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a asp-area="Admin" asp-controller="Discount" asp-action="Index" class="btn btn-primary">Back</a>
+                            <a asp-area="Admin" asp-controller="Discount" asp-action="Create" asp-route-id="@Model.DiscountId" class="btn btn-primary">Back</a>
                             <button type="submit" class="btn btn-primary">
                                 Submit
                             </button>
@@ -59,3 +54,14 @@
         </div>
     </div>
 </main>
+
+@section Scripts
+{
+    <script>
+        $(".select2").select2({
+            placeholder: 'Select items',
+        }).change(function () {
+            $(this).valid();
+        });
+    </script>
+}

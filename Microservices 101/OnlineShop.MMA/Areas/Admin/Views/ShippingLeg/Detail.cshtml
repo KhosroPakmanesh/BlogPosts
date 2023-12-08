@@ -1,10 +1,7 @@
-﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
-@model OnlineShop.MMA.Areas.Admin.Models.ShippingLeg.DetailModel
+﻿@model OnlineShop.MMA.Areas.Admin.Models.ShippingLeg.DetailModel
 @{
     ViewData["Title"] = "Shipping Leg Detail";
-    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
 }
-<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
 
 <main class="content">
     <div class="container-fluid p-0">

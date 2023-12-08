@@ -42,7 +42,7 @@ public partial class AspNetUser
 
     public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; } = new List<AspNetUserToken>();
 
-    public virtual ICollection<BuyerDiscount> BuyerDiscounts { get; set; } = new List<BuyerDiscount>();
+    public virtual ICollection<DiscountBuyer> DiscountBuyers { get; set; } = new List<DiscountBuyer>();
 
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 

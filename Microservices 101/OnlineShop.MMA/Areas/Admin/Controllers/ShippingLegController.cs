@@ -89,11 +89,13 @@ namespace Website.Presentation.Areas.Admin.Controllers
             [FromQuery(Name = "previousPage")] string previousPage)
         {
             var shippingLeg = await _onlineShopDbContext.ShippingLegs
-                .FirstOrDefaultAsync(p => p.IdShippingLeg == idshippingLeg);
+                .Where(t=>t.ShippingId == shippingId)
+                .Where(t => t.IdShippingLeg == idshippingLeg)
+                .FirstOrDefaultAsync();
 
             if (shippingLeg == null)
             {
-                return RedirectToAction("Index", "Shipping", new { id = shippingId});
+                return RedirectToAction("Index", "Shipping");
             }
 
             return View(new DetailModel
@@ -220,12 +222,13 @@ namespace Website.Presentation.Areas.Admin.Controllers
         public async Task<IActionResult> Delete(int shippingId, int idshippingLeg)
         {
             var shippingLeg = await _onlineShopDbContext.ShippingLegs
-                .FirstOrDefaultAsync(t => t.IdShippingLeg == idshippingLeg);
+                .Where(t => t.ShippingId == shippingId)
+                .Where(t => t.IdShippingLeg == idshippingLeg)
+                .FirstOrDefaultAsync();
 
             if (shippingLeg == null)
             {
-                return RedirectToAction("Update", "Shipping",
-                    new { id = shippingId });
+                return RedirectToAction("Index", "Shipping");
             }
 
             _onlineShopDbContext.ShippingLegs.Remove(shippingLeg);

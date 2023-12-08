@@ -84,7 +84,7 @@ namespace Website.Presentation.Areas.Admin.Controllers
         public async Task<IActionResult> Detail(int id)
         {
             var discount = await _onlineShopDbContext.Discounts
-                .Include(t => t.BuyerDiscounts)
+                .Include(t => t.DiscountBuyers)
                     .ThenInclude(t => t.Buyer)
                 .FirstOrDefaultAsync(p => p.IdDiscount == id);
 
@@ -93,24 +93,24 @@ namespace Website.Presentation.Areas.Admin.Controllers
                 return RedirectToAction("Index", "Discount");
             }
 
-            var buyers = await _onlineShopDbContext.AspNetUsers.ToListAsync();
-            var buyerSelectListItems = new List<SelectListItem>();
-            foreach (var buyer in buyers)
-            {
-                buyerSelectListItems.Add(new SelectListItem
-                {
-                    Value = buyer?.Id,
-                    Text = buyer?.UserName
-                });
-            }
+            //var buyers = await _onlineShopDbContext.AspNetUsers.ToListAsync();
+            //var buyerSelectListItems = new List<SelectListItem>();
+            //foreach (var buyer in buyers)
+            //{
+            //    buyerSelectListItems.Add(new SelectListItem
+            //    {
+            //        Value = buyer?.Id,
+            //        Text = buyer?.UserName
+            //    });
+            //}
 
             return View(new DetailModel
             {
-                //IdDiscount = id,
+                IdDiscount = id,
                 Voucher = discount.Voucher,
                 ReductionPercentage = discount.ReductionPercentage,
-                BuyerIds = discount.BuyerDiscounts.Select(t => t.BuyerId).ToList(),
-                BuyerSelectListItems = buyerSelectListItems,
+                //BuyerIds = discount.DiscountBuyers.Select(t => t.BuyerId).ToList(),
+                //BuyerSelectListItems = buyerSelectListItems,
             });
         }
 
@@ -128,21 +128,21 @@ namespace Website.Presentation.Areas.Admin.Controllers
                 return await LoadCreateModel(createModel);
             }
 
-            var buyerDiscounts = new List<BuyerDiscount>();
-            foreach (var buyerId in createModel.BuyerIds)
-            {
-                buyerDiscounts.Add(new BuyerDiscount
-                {
-                    BuyerId = buyerId,
-                    IsUsed = false
-                });
-            }
+            //var discountBuyers = new List<DiscountBuyer>();
+            //foreach (var buyerId in createModel.BuyerIds)
+            //{
+            //    discountBuyers.Add(new DiscountBuyer
+            //    {
+            //        BuyerId = buyerId,
+            //        IsUsed = false
+            //    });
+            //}
 
             _onlineShopDbContext.Discounts.Add(new Discount
             {
                 Voucher = createModel.Voucher,
                 ReductionPercentage = createModel.ReductionPercentage,
-                BuyerDiscounts = buyerDiscounts,
+                //DiscountBuyers = discountBuyers,
             });
 
             await _onlineShopDbContext.SaveChangesAsync();
@@ -152,22 +152,22 @@ namespace Website.Presentation.Areas.Admin.Controllers
         public async Task<IActionResult> LoadCreateModel
             (CreateModel previousCreateModel = null!)
             {
-                var buyers = await _onlineShopDbContext.AspNetUsers.ToListAsync();
-                var buyerSelectListItems = new List<SelectListItem>();
-                foreach (var buyer in buyers)
-                {
-                    buyerSelectListItems.Add(new SelectListItem
-                    {
-                        Value = buyer.Id,
-                        Text = buyer.UserName
-                    });
-                }
+                //var buyers = await _onlineShopDbContext.AspNetUsers.ToListAsync();
+                //var buyerSelectListItems = new List<SelectListItem>();
+                //foreach (var buyer in buyers)
+                //{
+                //    buyerSelectListItems.Add(new SelectListItem
+                //    {
+                //        Value = buyer.Id,
+                //        Text = buyer.UserName
+                //    });
+                //}
 
                 var createModel = new CreateModel
                 {
                     Voucher = previousCreateModel?.Voucher!,
                     ReductionPercentage = previousCreateModel?.ReductionPercentage ?? 0,
-                    BuyerSelectListItems = buyerSelectListItems
+                    //BuyerSelectListItems = buyerSelectListItems
                 };
 
                 return View(createModel);
@@ -182,7 +182,7 @@ namespace Website.Presentation.Areas.Admin.Controllers
             (int id, UpdateModel previousUpdateModel = null!)
         {
             var discount = await _onlineShopDbContext.Discounts
-                .Include(t => t.BuyerDiscounts)
+                .Include(t => t.DiscountBuyers)
                     .ThenInclude(t => t.Buyer)
                 .FirstOrDefaultAsync(p => p.IdDiscount == id);
 
@@ -191,16 +191,16 @@ namespace Website.Presentation.Areas.Admin.Controllers
                 return RedirectToAction("Index", "Discount");
             }
 
-            var buyers = await _onlineShopDbContext.AspNetUsers.ToListAsync();
-            var buyerSelectListItems = new List<SelectListItem>();
-            foreach (var buyer in buyers)
-            {
-                buyerSelectListItems.Add(new SelectListItem
-                {
-                    Value = buyer.Id,
-                    Text = buyer.UserName
-                });
-            }
+            //var buyers = await _onlineShopDbContext.AspNetUsers.ToListAsync();
+            //var buyerSelectListItems = new List<SelectListItem>();
+            //foreach (var buyer in buyers)
+            //{
+            //    buyerSelectListItems.Add(new SelectListItem
+            //    {
+            //        Value = buyer.Id,
+            //        Text = buyer.UserName
+            //    });
+            //}
 
             if (previousUpdateModel != null)
             {
@@ -210,8 +210,8 @@ namespace Website.Presentation.Areas.Admin.Controllers
                     IdDiscount = previousUpdateModel.IdDiscount,
                     Voucher = previousUpdateModel?.Voucher!,
                     ReductionPercentage = previousUpdateModel?.ReductionPercentage ?? 0,
-                    BuyerIds = previousUpdateModel?.BuyerIds!,
-                    BuyerSelectListItems = buyerSelectListItems,
+                    //BuyerIds = previousUpdateModel?.BuyerIds!,
+                    //BuyerSelectListItems = buyerSelectListItems,
                 };
 
                 return View(updateModel);
@@ -222,8 +222,8 @@ namespace Website.Presentation.Areas.Admin.Controllers
                 IdDiscount = discount.IdDiscount,
                 Voucher = discount?.Voucher!,
                 ReductionPercentage = discount?.ReductionPercentage ?? 0,
-                BuyerIds = discount?.BuyerDiscounts.Select(t => t.BuyerId).ToList()!,
-                BuyerSelectListItems = buyerSelectListItems
+                //BuyerIds = discount?.DiscountBuyers.Select(t => t.BuyerId).ToList()!,
+                //BuyerSelectListItems = buyerSelectListItems
             });
         }
 
@@ -236,7 +236,7 @@ namespace Website.Presentation.Areas.Admin.Controllers
             }
 
             var discount = await _onlineShopDbContext.Discounts
-                .Include(t => t.BuyerDiscounts)
+                .Include(t => t.DiscountBuyers)
                     .ThenInclude(t => t.Buyer)
                 .FirstOrDefaultAsync(p => p.IdDiscount == updateModel.IdDiscount);
             if (discount == null)
@@ -244,42 +244,42 @@ namespace Website.Presentation.Areas.Admin.Controllers
                 return RedirectToAction("Index", "Discount");
             }
 
-            var removedBuyerIds = discount.BuyerDiscounts
-                .Select(pc => pc.BuyerId)
-                .Except(updateModel.BuyerIds)
-                .ToList();
-            var addedBuyerIds = updateModel.BuyerIds
-                .Except(discount.BuyerDiscounts
-                .Select(pc => pc.BuyerId))
-                .ToList();
+            //var removedBuyerIds = discount.DiscountBuyers
+            //    .Select(pc => pc.BuyerId)
+            //    .Except(updateModel.BuyerIds)
+            //    .ToList();
+            //var addedBuyerIds = updateModel.BuyerIds
+            //    .Except(discount.DiscountBuyers
+            //    .Select(pc => pc.BuyerId))
+            //    .ToList();
 
-            var buyerDiscounts = new List<BuyerDiscount>();
-            if (removedBuyerIds.Any() || addedBuyerIds.Any())
-            {
-                foreach (var removedBuyerId in removedBuyerIds)
-                {
-                    var removedBuyerDiscount = discount.BuyerDiscounts
-                        .FirstOrDefault(t => t.BuyerId == removedBuyerId);
-                    if (removedBuyerDiscount != null)
-                    {
-                        discount.BuyerDiscounts.Remove(removedBuyerDiscount);
-                    }
-                }
+            //var discountBuyers = new List<DiscountBuyer>();
+            //if (removedBuyerIds.Any() || addedBuyerIds.Any())
+            //{
+            //    foreach (var removedBuyerId in removedBuyerIds)
+            //    {
+            //        var removedDiscountBuyer = discount.DiscountBuyers
+            //            .FirstOrDefault(t => t.BuyerId == removedBuyerId);
+            //        if (removedDiscountBuyer != null)
+            //        {
+            //            discount.DiscountBuyers.Remove(removedDiscountBuyer);
+            //        }
+            //    }
 
-                foreach (var buyerId in updateModel.BuyerIds)
-                {
-                    buyerDiscounts.Add(new BuyerDiscount
-                    {
-                        BuyerId = buyerId,
-                        DiscountId = discount.IdDiscount,
-                        IsUsed = false
-                    });
-                }
-            }
+            //    foreach (var buyerId in updateModel.BuyerIds)
+            //    {
+            //        discountBuyers.Add(new DiscountBuyer
+            //        {
+            //            BuyerId = buyerId,
+            //            DiscountId = discount.IdDiscount,
+            //            IsUsed = false
+            //        });
+            //    }
+            //}
 
             discount.Voucher = updateModel.Voucher;
             discount.ReductionPercentage = updateModel.ReductionPercentage;
-            discount.BuyerDiscounts = buyerDiscounts;
+            //discount.DiscountBuyers = discountBuyers;
 
             await _onlineShopDbContext.SaveChangesAsync();
 
@@ -290,7 +290,8 @@ namespace Website.Presentation.Areas.Admin.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var discount = await _onlineShopDbContext.Discounts
-                .Include(t=>t.BuyerDiscounts)
+                .Include(t=>t.Carts)
+                .Include(t=>t.DiscountBuyers)
                 .FirstOrDefaultAsync(t=>t.IdDiscount==id);
 
             if (discount == null)
@@ -305,7 +306,7 @@ namespace Website.Presentation.Areas.Admin.Controllers
                 return RedirectToAction("Index", "Discount");
             }
 
-            _onlineShopDbContext.BuyerDiscounts.RemoveRange(discount.BuyerDiscounts);
+            _onlineShopDbContext.DiscountBuyers.RemoveRange(discount.DiscountBuyers);
             _onlineShopDbContext.Discounts.Remove(discount);
 
             await _onlineShopDbContext.SaveChangesAsync();
