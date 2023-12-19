@@ -55,15 +55,15 @@ namespace Website.Presentation.Areas.Admin.Controllers
             //        m => m.Name.Contains(searchValue));
             //}
 
-            recordsTotal = await queryableCarts.CountAsync();
             var retrievedCarts = await queryableCarts.Skip(skip).Take(pageSize).
                 Select(t =>
                 new CartModel
                 {
                     IdCart=t.IdCart,
                     BuyerUserName=t.Buyer.UserName!,
-                    DiscountVoucher = t.Discount.Voucher
+                    DiscountVoucher = t.Discount != null ? t.Discount.Voucher : string.Empty
                 }).ToListAsync();
+            recordsTotal = retrievedCarts.Count();
 
             var responseObject = new
             {
@@ -89,81 +89,9 @@ namespace Website.Presentation.Areas.Admin.Controllers
 
             return View(new DetailModel
             {
+                IdCart=cart.IdCart,
                 BuyerUserName = cart.Buyer.UserName!,
-                DiscountVoucher = cart.Discount.Voucher
-            });
-        }
-
-
-        [HttpGet]
-        public async Task<IActionResult> Update(int id)
-        {
-            return await LoadUpdateModel(id);
-        }
-        [HttpPost]
-        public async Task<IActionResult> Update(UpdateModel updateModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return await LoadUpdateModel(updateModel.IdCart, updateModel);
-            }
-
-            var cart = await _onlineShopDbContext.Carts
-                .FirstOrDefaultAsync(t => t.IdCart == updateModel.IdCart);
-
-            if (cart == null)
-            {
-                return RedirectToAction("Index", "Cart");
-            }
-
-            cart.DiscountId = updateModel.DiscountId;
-            _onlineShopDbContext.Carts.Update(cart);
-
-            await _onlineShopDbContext.SaveChangesAsync();
-
-            return RedirectToAction("Index", "Cart");
-        }
-        public async Task<IActionResult> 
-            LoadUpdateModel(int cartId, UpdateModel previousUpdateModel= null)
-        {
-            var cart =await _onlineShopDbContext.Carts
-                .Include(t=>t.Buyer)
-                .FirstOrDefaultAsync(t => t.IdCart == cartId);
-
-            if (cart == null)
-            {
-                return RedirectToAction("Index", "Cart");
-            }
-
-            var buyers = await _onlineShopDbContext.AspNetUsers.ToListAsync();
-
-            var discounts = await _onlineShopDbContext.Discounts.ToListAsync();
-            var discountTypesSelectListItems = new List<SelectListItem>();
-            foreach (var discount in discounts)
-            {
-                discountTypesSelectListItems.Add(new SelectListItem
-                {
-                    Value = discount.IdDiscount.ToString(),
-                    Text = discount?.Voucher
-                });
-            }
-
-            if (previousUpdateModel != null)
-            {
-                return View(new UpdateModel
-                {
-                    IdCart = previousUpdateModel.IdCart,
-                    BuyerUserName = previousUpdateModel.BuyerUserName,
-                    DiscountId = previousUpdateModel.DiscountId
-                });
-            }
-
-            return View(new UpdateModel
-            {
-                IdCart = cartId,
-                BuyerUserName = cart.Buyer.UserName!,
-                DiscountId = cart.DiscountId!,
-                DiscountSelectListItems=discountTypesSelectListItems
+                DiscountVoucher = cart.Discount?.Voucher ?? string.Empty
             });
         }
 

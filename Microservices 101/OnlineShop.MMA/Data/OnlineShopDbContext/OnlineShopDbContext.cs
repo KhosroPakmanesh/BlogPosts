@@ -177,7 +177,6 @@ public partial class OnlineShopDbContext : DbContext
             entity.ToTable("Carts", "cart");
 
             entity.Property(e => e.BuyerId).HasMaxLength(450);
-            entity.Property(e => e.DiscountVoucher).HasMaxLength(100);
 
             entity.HasOne(d => d.Buyer).WithMany(p => p.Carts)
                 .HasForeignKey(d => d.BuyerId)
@@ -186,7 +185,6 @@ public partial class OnlineShopDbContext : DbContext
 
             entity.HasOne(d => d.Discount).WithMany(p => p.Carts)
                 .HasForeignKey(d => d.DiscountId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Carts_Discounts");
         });
 

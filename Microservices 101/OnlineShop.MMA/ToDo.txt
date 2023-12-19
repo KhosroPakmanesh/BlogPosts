@@ -21,3 +21,4 @@
 -Decide columns for sorting in datatables
 -In post updates do not load data twice with loadupdatemodel and then in update action.
 -Inspect redirect uris when the entity is not found.
+-Don't make two calls for index paegs, one for data and one for count.

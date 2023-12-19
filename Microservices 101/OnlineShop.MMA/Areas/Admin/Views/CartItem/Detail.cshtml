@@ -1,0 +1,39 @@
+﻿@model OnlineShop.MMA.Areas.Admin.Models.CartItem.DetailModel
+@{
+    ViewData["Title"] = "Cart Item Detail";
+}
+
+<main class="content">
+    <div class="container-fluid p-0">
+        <h1 class="h3 mb-3">Cart Item Detail</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title"></h5>
+                        <h5 class="card-subtitle text-muted">The details of the cart item is as follows</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label asp-for="ProductName">Product Name</label>
+                                <input asp-for="ProductName" type="text" class="form-control" disabled="disabled">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="Quantity">Quantity</label>
+                                <input asp-for="Quantity" type="text" class="form-control" disabled="disabled">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="Price">Price</label>
+                                <input asp-for="Price" type="text" class="form-control" disabled="disabled">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-area="Admin" asp-controller="Cart" asp-action="Detail" asp-route-id="@Model.CartId" class="btn btn-primary">Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

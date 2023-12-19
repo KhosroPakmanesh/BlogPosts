@@ -12,7 +12,7 @@ namespace OnlineShop.MMA.Areas.Admin.Models.Cart
         public string BuyerUserName { get; set; } = string.Empty;
 
         [Required]
-        public int DiscountId { get; set; }
+        public int? DiscountId { get; set; }
 
         public List<SelectListItem> DiscountSelectListItems { get; set; } = new List<SelectListItem>();
     }
