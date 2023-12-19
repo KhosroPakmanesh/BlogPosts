@@ -87,67 +87,9 @@ namespace Website.Presentation.Areas.Admin.Controllers
 
             return View(new DetailModel
             {
+                IdOrder=order.IdOrder,
                 BuyerUserName = order.Buyer.UserName!,
                 OrderDateTime = order.OrderDateTime,
-                OrderStatus = order.OrderStatus
-            });
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Update(int id)
-        {
-            return await LoadUpdateModel(id);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Update(UpdateModel updateModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return await LoadUpdateModel(updateModel.IdOrder, updateModel);
-            }
-
-            var order = await _onlineShopDbContext.Orders
-                .FirstOrDefaultAsync(t => t.IdOrder == updateModel.IdOrder);
-
-            if (order == null)
-            {
-                return RedirectToAction("Index", "Order");
-            }
-
-            order.OrderStatus = updateModel.OrderStatus;
-            _onlineShopDbContext.Orders.Update(order);
-
-            await _onlineShopDbContext.SaveChangesAsync();
-
-            return RedirectToAction("Index", "Order");
-        }
-        public async Task<IActionResult> 
-            LoadUpdateModel(int orderId, UpdateModel previousUpdateModel= null)
-        {
-            var order =await _onlineShopDbContext.Orders
-                .Include(t=>t.Buyer.UserName)
-                .FirstOrDefaultAsync(t => t.IdOrder == orderId);
-
-            if (order == null)
-            {
-                return RedirectToAction("Index", "Order");
-            }
-
-            if (previousUpdateModel != null)
-            {
-                return View(new UpdateModel
-                {
-                    IdOrder = previousUpdateModel.IdOrder,
-                    BuyerUserName = previousUpdateModel.BuyerUserName,
-                    OrderStatus = previousUpdateModel.OrderStatus
-                });
-            }
-
-            return View(new UpdateModel
-            {
-                IdOrder = orderId,
-                BuyerUserName = order.Buyer.UserName!,
                 OrderStatus = order.OrderStatus
             });
         }

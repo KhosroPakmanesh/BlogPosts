@@ -1,7 +1,10 @@
-﻿@model OnlineShop.MMA.Areas.Admin.Models.Order.DetailModel
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@model OnlineShop.MMA.Areas.Admin.Models.Order.DetailModel
 @{
     ViewData["Title"] = "Order Detail";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
 }
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
 
 <main class="content">
     <div class="container-fluid p-0">
@@ -36,4 +39,81 @@
             </div>
         </div>
     </div>
+
+    <div class="container-fluid p-0">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title"></h5>
+                        <h5 class="card-subtitle text-muted">Shipping legs are as follows</h5>
+                    </div>
+                    <div class="card-body">
+                        <table id="datatables-basic" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Id OrderItem</th>
+                                    <th>Order Id</th>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th data-orderable="false">Operations</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            $("#datatables-basic").DataTable({
+                "responsive": true,
+                "processing": true,
+                "serverSide": true,
+                "filter": true,
+                "ajax": {
+                    "url": "/Admin/OrderItem/GetOrderItems",
+                    "type": "POST",
+                    "datatype": "json",
+                    'beforeSend': function (request) {
+                        request.setRequestHeader("RequestVerificationToken",
+                            document.getElementById("RequestVerificationToken").value);
+                    },
+                    'data': {
+                        parentId: '@Model.IdOrder'
+                    }
+                },
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false,
+                    },
+                    {
+                        "targets": [1],
+                        "visible": false,
+                        "searchable": false,
+                    }],
+                "order": [[0, 'desc']],
+                "columns": [
+                    { "data": "idOrderItem", "name": "IdOrderItem", "autoWidth": true },
+                    { "data": "orderId", "name": "OrderId", "autoWidth": true },
+                    { "data": "productName", "name": "ProductName", "autoWidth": true },
+                    { "data": "quantity", "name": "Quantity", "autoWidth": true },
+                    { "data": "price", "name": "Price", "autoWidth": true },
+                    {
+                        "render": function (data, type, row) {
+                            return `<a href="/Admin/Order/${row.orderId}/OrderItem/Detail/${row.idOrderItem}">
+                                        <i class='align-middle mr-2 far fa-fw fa-list-alt'> </i>
+                                    </a>`
+                        }
+                    },
+                ]
+            });
+        });
+    </script>
+
 </main>
