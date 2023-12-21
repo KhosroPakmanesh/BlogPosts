@@ -38,7 +38,7 @@ namespace Website.Presentation.Areas.Admin.Controllers
             int recordsTotal = 0;
 
             var queryableOrders = _onlineShopDbContext.Orders
-                .Include(t=>t.Buyer)
+                .Include(t => t.Buyer)
                 .AsQueryable();
 
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
@@ -57,10 +57,10 @@ namespace Website.Presentation.Areas.Admin.Controllers
                 Select(t =>
                 new OrderModel
                 {
-                    IdOrder=t.IdOrder,
-                    BuyerUserName=t.Buyer.UserName!,
-                    OrderDateTime=t.OrderDateTime,
-                    OrderStatus=t.OrderStatus
+                    IdOrder = t.IdOrder,
+                    BuyerUserName = t.Buyer.UserName!,
+                    OrderDateTime = t.OrderDateTime,
+                    OrderStatus = t.OrderStatus
                 }).ToListAsync();
 
             var responseObject = new
@@ -78,6 +78,7 @@ namespace Website.Presentation.Areas.Admin.Controllers
         {
             var order = await _onlineShopDbContext.Orders
                 .Include(t => t.Buyer)
+                .Include(t=>t.Payment)
                 .FirstOrDefaultAsync(t => t.IdOrder == id);
 
             if (order == null)
@@ -90,7 +91,10 @@ namespace Website.Presentation.Areas.Admin.Controllers
                 IdOrder=order.IdOrder,
                 BuyerUserName = order.Buyer.UserName!,
                 OrderDateTime = order.OrderDateTime,
-                OrderStatus = order.OrderStatus
+                OrderStatus = order.OrderStatus,
+                BankAccountNumber= order.Payment.BankAccountNumber,
+                PaymentDateTime = order.Payment.PaymentDateTime,
+                PaymentValue = order.Payment.PaymentValue
             });
         }
 

@@ -1,4 +1,4 @@
-﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+﻿@* @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @{
     ViewData["Title"] = "Payment History";
     var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
@@ -70,3 +70,4 @@
         </script>
     </div>
 </main>
+ *@

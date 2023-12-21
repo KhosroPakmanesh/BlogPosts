@@ -43,9 +43,7 @@ public partial class OnlineShopDbContext : DbContext
 
     public virtual DbSet<OrderItem> OrderItems { get; set; }
 
-    public virtual DbSet<OrderHistory> OrderHistory { get; set; }
-
-    public virtual DbSet<PaymentHistory> PaymentHistories { get; set; }
+    public virtual DbSet<Payment> Payments { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
 
@@ -236,6 +234,10 @@ public partial class OnlineShopDbContext : DbContext
 
             entity.Property(e => e.BuyerId).HasMaxLength(450);
             entity.Property(e => e.OrderDateTime).HasColumnType("smalldatetime");
+
+            entity.HasOne(a => a.Payment)
+                .WithOne(b => b.Order)
+                .HasForeignKey<Payment>(e => e.OrderId);
         });
 
         modelBuilder.Entity<OrderItem>(entity =>
@@ -257,33 +259,15 @@ public partial class OnlineShopDbContext : DbContext
                 .HasConstraintName("FK_OrderItems_Products");
         });
 
-        modelBuilder.Entity<OrderHistory>(entity =>
+        modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.IdOrderHistory);
+            entity.HasKey(e => e.IdPayment);
 
-            entity.ToTable("OrderHistories", "order");
-
-            entity.HasOne(d => d.Order).WithMany(p => p.OrderHistories)
-                .HasForeignKey(d => d.OrderId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_OrderHistories_Orders");
-        });
-
-        modelBuilder.Entity<PaymentHistory>(entity =>
-        {
-            entity.HasKey(e => e.IdPaymentHistory);
-
-            entity.ToTable("PaymentHistories", "payment");
+            entity.ToTable("Payments", "payment");
 
             entity.Property(e => e.BankAccountNumber).HasMaxLength(50);
-            entity.Property(e => e.BuyerId).HasMaxLength(450);
             entity.Property(e => e.PaymentDateTime).HasColumnType("smalldatetime");
             entity.Property(e => e.PaymentValue).HasColumnType("decimal(18, 0)");
-
-            entity.HasOne(d => d.Buyer).WithMany(p => p.PaymentHistories)
-                .HasForeignKey(d => d.BuyerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PaymentHistories_AspNetUsers");
         });
 
         modelBuilder.Entity<Product>(entity =>

@@ -6,5 +6,9 @@
         public string BuyerUserName { get; set; } = string.Empty;
         public DateTime OrderDateTime { get; set; }
         public byte OrderStatus { get; set; }
+
+        public string BankAccountNumber { get; set; } = null!;
+        public DateTime PaymentDateTime { get; set; }
+        public decimal PaymentValue { get; set; }
     }
 }
