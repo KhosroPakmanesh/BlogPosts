@@ -1,6 +1,6 @@
 -Fix login page issue
 -Address warnings
--Fix Admin sidebar
+-Fix Admin sidebar [X]
 -Fix Landing page menu
 -Remove Persoanl infos from db context and db itself
 -Check datatable searchs

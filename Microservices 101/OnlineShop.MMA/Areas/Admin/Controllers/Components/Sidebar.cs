@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Website.Presentation.Areas.Admin.Models.Components;
+using OnlineShop.MMA.Areas.Admin.Models.Components;
 
 namespace Website.Presentation.Areas.Admin.Controllers.Components
 {
@@ -9,15 +8,25 @@ namespace Website.Presentation.Areas.Admin.Controllers.Components
     {
         public IViewComponentResult Invoke()
         {
+            var currentController = (string) ViewContext.RouteData.Values["Controller"]!;
+
             var sidebarModel = new SidebarModel
             {
-                IsPostMenuSelected = (string)ViewContext.RouteData.Values["Controller"] == "Post",
-                IsCommentMenuSelected = (string)ViewContext.RouteData.Values["Controller"] == "Comment",
-                IsCategoryMenuSelected = (string)ViewContext.RouteData.Values["Controller"] == "Category",
-                IsTagMenuSelected = (string)ViewContext.RouteData.Values["Controller"] == "Tag",
-                IsContactsMenuSelected = (string)ViewContext.RouteData.Values["Controller"] == "Contact",
-                IsCVMenuSelected = (string)ViewContext.RouteData.Values["Controller"] == "CV",
-                IsServiceMenuSelected = (string)ViewContext.RouteData.Values["Controller"] == "Service"
+                IsOrderMenuSelected = 
+                    currentController == "Order" ||
+                    currentController == "OrderItem",
+                IsCartMenuSelected = 
+                    currentController == "Cart" ||
+                    currentController == "CartItem",
+                IsProductMenuSelected = currentController == "Product",
+                IsProductTypeMenuSelected = currentController == "ProductType",
+                IsInventoryMenuSelected = currentController == "Inventory",
+                IsShippingMenuSelected = 
+                    currentController == "Shipping" ||
+                    currentController == "ShippingLeg",
+                IsDiscountMenuSelected = 
+                    currentController == "Discount" ||
+                    currentController == "DiscountBuyer",
             };
 
             return View(sidebarModel);
