@@ -7,7 +7,7 @@ public partial class AspNetUser
 {
     public string Id { get; set; } = null!;
 
-    public string? UserName { get; set; }
+    public string UserName { get; set; } = string.Empty;
 
     public string? NormalizedUserName { get; set; }
 

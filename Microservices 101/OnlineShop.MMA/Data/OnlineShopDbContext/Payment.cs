@@ -10,9 +10,9 @@ public partial class Payment
 
     public string BankAccountNumber { get; set; } = null!;
 
-    public DateTime PaymentDateTime { get; set; }
+    public DateTime DateTime { get; set; }
 
-    public decimal PaymentValue { get; set; }
+    public decimal Value { get; set; }
     
     public int OrderId { get; set; }
     public virtual Order Order { get; set; } = null!;

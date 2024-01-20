@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Linq.Dynamic.Core;
 using OnlineShop.MMA.Data.OnlineShopDbContext;
 using OnlineShop.MMA.Areas.Admin.Models.Order;
+using OnlineShop.MMA.Areas.Admin.Controllers.Extensions;
 
 namespace Website.Presentation.Areas.Admin.Controllers
 {
@@ -35,40 +36,62 @@ namespace Website.Presentation.Areas.Admin.Controllers
             var searchValue = Request.Form["search[value]"].FirstOrDefault();
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
+            List<OrderModel> retrievedOrders = new();
             int recordsTotal = 0;
 
             var queryableOrders = _onlineShopDbContext.Orders
                 .Include(t => t.Buyer)
                 .AsQueryable();
 
-            if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
+            if (!(string.IsNullOrEmpty(sortColumn) && 
+                string.IsNullOrEmpty(sortColumnDirection)))
             {
-                queryableOrders = queryableOrders.OrderBy(sortColumn + " " + sortColumnDirection);
+                queryableOrders = queryableOrders
+                    .OrderBy(sortColumn + " " + sortColumnDirection);
             }
 
-            //if (!string.IsNullOrEmpty(searchValue))
-            //{
-            //    queryableOrders = queryableOrders.Where(
-            //        m => m.Name.Contains(searchValue));
-            //}
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                queryableOrders = queryableOrders
+                    .Search(order => new
+                    { 
+                        order.Buyer.UserName,
+                        OrderDateTime= order.DateTime,
+                        order.Status,
+                        order.Payment.Value,
+                        PaymentDateTime=order.Payment.DateTime
+                    },
+                    searchValue);            
+            }
 
-            recordsTotal = await queryableOrders.CountAsync();
-            var retrievedProductTypes = await queryableOrders.Skip(skip).Take(pageSize).
-                Select(t =>
-                new OrderModel
-                {
-                    IdOrder = t.IdOrder,
-                    BuyerUserName = t.Buyer.UserName!,
-                    OrderDateTime = t.OrderDateTime,
-                    OrderStatus = t.OrderStatus
-                }).ToListAsync();
+            try
+            {
+                retrievedOrders = await queryableOrders
+                .Include(t => t.Buyer)
+                .Include(t => t.Payment)
+                .Skip(skip)
+                .Take(pageSize)
+                .Select(order =>
+                    new OrderModel
+                    {
+                        IdOrder = order.IdOrder,
+                        BuyerUserName = order.Buyer.UserName!,
+                        OrderDateTime = order.DateTime.ToString("yyyy/MM/dd HH:mm:ss"),
+                        OrderStatus = order.Status,
+                        PaymentDateTime = order.Payment.DateTime.ToString("yyyy/MM/dd HH:mm:ss"),
+                        PaymentValue = order.Payment.Value
+                    })
+                .ToListAsync();
+                recordsTotal = retrievedOrders.Count();
+            }
+            catch{}
 
             var responseObject = new
             {
                 draw,
                 recordsFiltered = recordsTotal,
                 recordsTotal,
-                data = retrievedProductTypes
+                data = retrievedOrders
             };
 
             return Ok(responseObject);
@@ -90,11 +113,11 @@ namespace Website.Presentation.Areas.Admin.Controllers
             {
                 IdOrder=order.IdOrder,
                 BuyerUserName = order.Buyer.UserName!,
-                OrderDateTime = order.OrderDateTime,
-                OrderStatus = order.OrderStatus,
+                OrderDateTime = order.DateTime,
+                OrderStatus = order.Status,
                 BankAccountNumber= order.Payment.BankAccountNumber,
-                PaymentDateTime = order.Payment.PaymentDateTime,
-                PaymentValue = order.Payment.PaymentValue
+                PaymentDateTime = order.Payment.DateTime,
+                PaymentValue = order.Payment.Value
             });
         }
 

@@ -1,24 +1,28 @@
--Fix login page issue
--Address warnings
--Fix Admin sidebar [X]
--Fix Landing page menu
--Remove Persoanl infos from db context and db itself
--Check datatable searchs
--Reverse engineer db context after all tasks are finished
--Add Validations
--Fix search filters for datatables
--Check all load updates
--Validation messages do not appear in forms
--Remove unnecessary default values
--Study that all post methods return data in case of model state error
--Study accordion admin menus that they dont open and close together.
--Updating Incorrect namespaces
--Updating project name
--Break ValidationClassTagHelper into to two helpers
--Unobtrusive does not work, serverside works
--Use foreach or select for all datatable get methods
--Prevent deleting principal entities like discount without deleting dependants and showing them with a message
--Decide columns for sorting in datatables
--In post updates do not load data twice with loadupdatemodel and then in update action.
--Inspect redirect uris when the entity is not found.
--Don't make two calls for index paegs, one for data and one for count.
+Landing Page:
+	-Fix login page issue
+	-Fix Landing page menu
+	-Add Validations
+
+Admin:
+Datatable actions:
+	-Check datatable searchs
+	-Decide columns for sorting in datatables
+	-Use foreach or select for all datatable get methods
+	-Don't make two calls for index paegs, one for data and one for count.
+Non-datatable actions:
+	-In post updates do not load data twice with loadupdatemodel and then in update action.
+	-Validation messages do not appear in forms
+	-Remove unnecessary default values
+	-Add Validations
+	-Study that all post methods return data in case of model state error
+	-Prevent deleting principal entities like discount without deleting dependants and showing them with a message
+	-Inspect redirect uris when the entity is not found.
+	-Unobtrusive does not work, serverside works
+
+General issues:
+	-Address warnings
+	-Remove Persoanl infos from db context and db itself
+	-Reverse engineer db context after all tasks are finished
+	-Updating Incorrect namespaces
+	-Updating project name
+	-Break ValidationClassTagHelper into to two helpers

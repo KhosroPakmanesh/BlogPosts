@@ -19,6 +19,8 @@
                                     <th>Buyer UserName</th>
                                     <th>Order DateTime</th>
                                     <th>Order Status</th>
+                                    <th>Payment DateTime</th>
+                                    <th>Payment Value</th>
                                     <th data-orderable="false">Operations</th>
                                 </tr>
                             </thead>
@@ -50,9 +52,11 @@
                     }],
                     "columns": [
                         { "data": "idOrder", "name": "IdOrder", "autoWidth": true },
-                        { "data": "buyerUserName", "name": "BuyerUserName", "autoWidth": true },
-                        { "data": "orderDateTime", "name": "OrderDateTime", "autoWidth": true },
-                        { "data": "orderStatus", "name": "OrderStatus", "autoWidth": true },
+                        { "data": "buyerUserName", "name": "Buyer.UserName", "autoWidth": true },
+                        { "data": "orderDateTime", "name": "DateTime", "autoWidth": true },
+                        { "data": "orderStatus", "name": "Status", "autoWidth": true },
+                        { "data": "paymentDateTime", "name": "Payment.DateTime", "autoWidth": true },
+                        { "data": "paymentValue", "name": "Payment.Value", "autoWidth": true },
                         {
                             "render": function (data, type, row) {
                                 return `<a href='Order/detail/${row.idOrder}'>

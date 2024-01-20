@@ -233,7 +233,7 @@ public partial class OnlineShopDbContext : DbContext
             entity.ToTable("Orders", "order");
 
             entity.Property(e => e.BuyerId).HasMaxLength(450);
-            entity.Property(e => e.OrderDateTime).HasColumnType("smalldatetime");
+            entity.Property(e => e.DateTime).HasColumnType("smalldatetime");
 
             entity.HasOne(a => a.Payment)
                 .WithOne(b => b.Order)
@@ -266,8 +266,8 @@ public partial class OnlineShopDbContext : DbContext
             entity.ToTable("Payments", "payment");
 
             entity.Property(e => e.BankAccountNumber).HasMaxLength(50);
-            entity.Property(e => e.PaymentDateTime).HasColumnType("smalldatetime");
-            entity.Property(e => e.PaymentValue).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.DateTime).HasColumnType("smalldatetime");
+            entity.Property(e => e.Value).HasColumnType("decimal(18, 0)");
         });
 
         modelBuilder.Entity<Product>(entity =>
