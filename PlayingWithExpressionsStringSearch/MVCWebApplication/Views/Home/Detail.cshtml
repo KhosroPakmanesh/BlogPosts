@@ -1,0 +1,144 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@model MVCWebApplication.Models.Home.DetailModel
+@{
+    ViewData["Title"] = "Order Detail";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+
+<main class="content">
+    <div class="container-fluid p-0">
+        <h1 class="h3 mb-3">Order Detail</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title"></h5>
+                        <h5 class="card-subtitle text-muted">The details of the order is as follows</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label asp-for="UserUserName">User UserName</label>
+                                <input asp-for="UserUserName" type="text" class="form-control" disabled="disabled">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="UserFirstName">User FirstName</label>
+                                <input asp-for="UserFirstName" type="text" class="form-control" disabled="disabled">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="UserLastName">User LastName</label>
+                                <input asp-for="UserLastName" type="text" class="form-control" disabled="disabled">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="OrderDateTime">Order DateTime</label>
+                                <input asp-for="OrderDateTime" type="text" class="form-control" disabled="disabled">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="OrderStatus">Order Status</label>
+                                <input asp-for="OrderStatus" type="text" class="form-control" disabled="disabled">
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label asp-for="BankAccountNumber">Bank Account Number</label>
+                                <input asp-for="BankAccountNumber" type="text" class="form-control" disabled="disabled">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="PaymentValue">Payment Value</label>
+                                <input asp-for="PaymentValue" type="text" class="form-control" disabled="disabled">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="PaymentDateTime">Payment DateTime</label>
+                                <input asp-for="PaymentDateTime" type="text" class="form-control" disabled="disabled">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid p-0">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title"></h5>
+                        <h5 class="card-subtitle text-muted">Order items are as follows</h5>
+                    </div>
+                    <div class="card-body">
+                        <table id="datatables-basic" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th data-orderable="false">Id OrderItem</th>
+                                    <th data-orderable="false">Order Id</th>
+                                    <th data-orderable="false">Product Name</th>
+                                    <th data-orderable="false">Quantity</th>
+                                    <th data-orderable="false">Price</th>
+                                    <th data-orderable="false">Description</th>
+                                    <th data-orderable="false">Operations</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            $("#datatables-basic").DataTable({
+                "responsive": true,
+                "processing": true,
+                "serverSide": true,
+                "filter": true,
+                "ajax": {
+                    "url": "/OrderItem/GetOrderItems",
+                    "type": "POST",
+                    "datatype": "json",
+                    'beforeSend': function (request) {
+                        request.setRequestHeader("RequestVerificationToken",
+                            document.getElementById("RequestVerificationToken").value);
+                    },
+                    'data': {
+                        parentId: '@Model.IdOrder'
+                    }
+                },
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false,
+                    },
+                    {
+                        "targets": [1],
+                        "visible": false,
+                        "searchable": false,
+                    }],
+                "order": [[0, 'desc']],
+                "columns": [
+                    { "data": "idOrderItem", "name": "IdOrderItem", "autoWidth": true },
+                    { "data": "orderId", "name": "OrderId", "autoWidth": true },
+                    { "data": "productName", "name": "ProductName", "autoWidth": true },
+                    { "data": "quantity", "name": "Quantity", "autoWidth": true },
+                    { "data": "price", "name": "Price", "autoWidth": true },
+                    { "data": "description", "name": "Description", "autoWidth": true },
+                    {
+                        "render": function (data, type, row) {
+                            return `<a href="/Order/${row.orderId}/OrderItem/Detail/${row.idOrderItem}">See details...</a>`
+                        }
+                    },
+                ]
+            });
+        });
+    </script>
+
+</main>

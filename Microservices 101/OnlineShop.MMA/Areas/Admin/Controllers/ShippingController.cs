@@ -54,10 +54,10 @@ namespace Website.Presentation.Areas.Admin.Controllers
             //        m => m.Voucher.Contains(searchValue));
             //}
 
+            recordsTotal = await queryableShippings.CountAsync();
             var rawShippings = await queryableShippings
                 .Skip(skip).Take(pageSize)
                 .ToListAsync();
-            recordsTotal = rawShippings.Count();
 
             var formattedShippings = new List<ShippingModel>();
             foreach (var rawShipping in rawShippings)

@@ -66,6 +66,7 @@ namespace Website.Presentation.Areas.Admin.Controllers
 
             try
             {
+                recordsTotal = await queryableOrders.CountAsync();
                 retrievedOrders = await queryableOrders
                 .Include(t => t.Buyer)
                 .Include(t => t.Payment)
@@ -82,7 +83,6 @@ namespace Website.Presentation.Areas.Admin.Controllers
                         PaymentValue = order.Payment.Value
                     })
                 .ToListAsync();
-                recordsTotal = retrievedOrders.Count();
             }
             catch{}
 

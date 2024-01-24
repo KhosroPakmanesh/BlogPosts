@@ -56,10 +56,10 @@ namespace Website.Presentation.Areas.Admin.Controllers
             //        m => m.Voucher.Contains(searchValue));
             //}
 
+            recordsTotal = await queryableDiscountBuyers.CountAsync();
             var rawDiscountBuyers = await queryableDiscountBuyers
                 .Skip(skip).Take(pageSize)
                 .ToListAsync();
-            recordsTotal = rawDiscountBuyers.Count();
 
             var formattedDiscountBuyers = new List<DiscountBuyerModel>();
             foreach (var rawDiscountBuyer in rawDiscountBuyers)

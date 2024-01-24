@@ -45,11 +45,11 @@ namespace Website.Presentation.Areas.Admin.Controllers
                 queryableProductTypes = queryableProductTypes.OrderBy(sortColumn + " " + sortColumnDirection);
             }
 
-            if (!string.IsNullOrEmpty(searchValue))
-            {
-                queryableProductTypes = queryableProductTypes.Where(
-                    m => m.Name.Contains(searchValue));
-            }
+            //if (!string.IsNullOrEmpty(searchValue))
+            //{
+            //    queryableProductTypes = queryableProductTypes.Where(
+            //        m => m.Name.Contains(searchValue));
+            //}
 
             recordsTotal = await queryableProductTypes.CountAsync();
             var retrievedProductTypes = await queryableProductTypes.Skip(skip).Take(pageSize).

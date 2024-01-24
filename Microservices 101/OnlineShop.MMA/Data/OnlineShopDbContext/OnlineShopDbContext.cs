@@ -54,8 +54,9 @@ public partial class OnlineShopDbContext : DbContext
     public virtual DbSet<ShippingLeg> ShippingLegs { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Data Source=127.0.0.1;Initial Catalog=OnlineShop.MMA.SharedDb;TrustServerCertificate=True;User Id=sa;Password=123456789ABC;");
-
+    {
+        base.OnConfiguring(optionsBuilder);
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AspNetRole>(entity =>

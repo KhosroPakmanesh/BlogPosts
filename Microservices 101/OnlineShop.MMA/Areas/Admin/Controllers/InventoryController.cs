@@ -55,10 +55,10 @@ namespace Website.Presentation.Areas.Admin.Controllers
             //        m => m.Quantity.Contains(searchValue));
             //}
 
+            recordsTotal = await queryableInventories.CountAsync();
             var rawInventories = await queryableInventories
                 .Skip(skip).Take(pageSize)
                 .ToListAsync();
-            recordsTotal = rawInventories.Count();
 
             var formattedInventories = new List<InventoryModel>();
             foreach (var rawInventory in rawInventories)

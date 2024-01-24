@@ -1,0 +1,70 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    ViewData["Title"] = "Orders Index";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+
+<main class="content">
+    <div class="container-fluid p-0">
+        <h1 class="h3 mb-3">Orders</h1>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table id="datatables-basic" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th data-orderable="false">Id</th>
+                                    <th data-orderable="false">User UserName</th>
+                                    <th data-orderable="false">Order DateTime</th>
+                                    <th data-orderable="false">Order Status</th>
+                                    <th data-orderable="false">Payment DateTime</th>
+                                    <th data-orderable="false">Payment Value</th>
+                                    <th data-orderable="false">Operations</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function (event) {
+                $("#datatables-basic").DataTable({
+                    "responsive": true,
+                    "processing": true,
+                    "serverSide": true,
+                    "filter": true,
+                    "ajax": {
+                        "url": "/Home/GetOrders",
+                        "type": "POST",
+                        "datatype": "json",
+                        'beforeSend': function (request) {
+                            request.setRequestHeader("RequestVerificationToken",
+                                document.getElementById("RequestVerificationToken").value);
+                        }
+                    },
+                    "columnDefs": [{
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false,
+                    }],
+                    "columns": [
+                        { "data": "idOrder", "name": "IdOrder", "autoWidth": true },
+                        { "data": "userUserName", "name": "User.UserName", "autoWidth": true },
+                        { "data": "orderDateTime", "name": "DateTime", "autoWidth": true },
+                        { "data": "orderStatus", "name": "Status", "autoWidth": true },
+                        { "data": "paymentDateTime", "name": "Payment.DateTime", "autoWidth": true },
+                        { "data": "paymentValue", "name": "Payment.Value", "autoWidth": true },
+                        {
+                            "render": function (data, type, row) {
+                                return `<a href='Home/detail/${row.idOrder}'>See details...</a>`
+                            }
+                        }
+                    ]
+                });
+            });
+        </script>
+    </div>
+</main>

@@ -47,16 +47,16 @@ namespace Website.Presentation.Areas.Admin.Controllers
                 queryableDiscounts = queryableDiscounts.OrderBy(sortColumn + " " + sortColumnDirection);
             }
 
-            if (!string.IsNullOrEmpty(searchValue))
-            {
-                queryableDiscounts = queryableDiscounts.Where(
-                    m => m.Voucher.Contains(searchValue));
-            }
+            //if (!string.IsNullOrEmpty(searchValue))
+            //{
+            //    queryableDiscounts = queryableDiscounts.Where(
+            //        m => m.Voucher.Contains(searchValue));
+            //}
 
+            recordsTotal = await queryableDiscounts.CountAsync();
             var rawDiscounts = await queryableDiscounts
                 .Skip(skip).Take(pageSize)
                 .ToListAsync();
-            recordsTotal = rawDiscounts.Count();
 
             var formattedDiscounts = new List<DiscountModel>();
             foreach (var rawDiscount in rawDiscounts)

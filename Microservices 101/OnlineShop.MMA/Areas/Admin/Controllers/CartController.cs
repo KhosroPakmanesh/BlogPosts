@@ -55,6 +55,7 @@ namespace Website.Presentation.Areas.Admin.Controllers
             //        m => m.Name.Contains(searchValue));
             //}
 
+            recordsTotal =await queryableCarts.CountAsync();
             var retrievedCarts = await queryableCarts.Skip(skip).Take(pageSize).
                 Select(t =>
                 new CartModel
@@ -62,8 +63,7 @@ namespace Website.Presentation.Areas.Admin.Controllers
                     IdCart=t.IdCart,
                     BuyerUserName=t.Buyer.UserName!,
                     DiscountVoucher = t.Discount != null ? t.Discount.Voucher : string.Empty
-                }).ToListAsync();
-            recordsTotal = retrievedCarts.Count();
+                }).ToListAsync();;
 
             var responseObject = new
             {

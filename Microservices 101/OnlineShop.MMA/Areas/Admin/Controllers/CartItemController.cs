@@ -55,10 +55,10 @@ namespace Website.Presentation.Areas.Admin.Controllers
             //        m => m.Voucher.Contains(searchValue));
             //}
 
+            recordsTotal = await queryableCartItems.CountAsync();
             var rawCartItems = await queryableCartItems
                 .Skip(skip).Take(pageSize)
-                .ToListAsync();
-            recordsTotal = rawCartItems.Count();
+                .ToListAsync();            
 
             var formattedCartItems = new List<CartItemModel>();
             foreach (var rawCartItem in rawCartItems)
