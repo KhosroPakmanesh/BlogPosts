@@ -52,6 +52,18 @@ namespace MVCWebApplication.Controllers
                         PaymentDateTime = order.Payment.DateTime
                     },
                     searchValue);
+
+                //var enumerableOrders = DataProvider.GetEnumerableOrders();
+                //var retrievedEnumerableOrders = enumerableOrders
+                //    .Search(order => new
+                //    {
+                //        order.User.UserName,
+                //        OrderDateTime = order.DateTime,
+                //        order.Status,
+                //        order.Payment.Value,
+                //        PaymentDateTime = order.Payment.DateTime
+                //    }, searchValue)
+                //    .ToList();
             }
 
             try

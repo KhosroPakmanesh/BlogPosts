@@ -8,9 +8,8 @@ namespace QueryableExtensions.ExpressionCreators
         public List<Expression<Func<T, bool>>> CreateExpressions<T>
             (string searchValue, Expression<Func<T, object?>> keySelector)
         {
-            var dateTimeParsingResult = DateTime.TryParse
-                (searchValue, out DateTime searchedDateOnlyValue);
-            if (!dateTimeParsingResult)
+            var typedSearchValue = GetTypedSearchValue(searchValue);
+            if (typedSearchValue == null)
             {
                 return new List<Expression<Func<T, bool>>>();
             }
@@ -18,10 +17,12 @@ namespace QueryableExtensions.ExpressionCreators
             var dateTimeMemberExpressions = keySelector.Body
                 .ExtractDateTimeMemberExpressions();
 
-            var dateTimeExpressions = new List<Expression<Func<T, bool>>>();
+            var dateOnlyExpressions = new List<Expression<Func<T, bool>>>();
             foreach (var dateTimeMemberExpression in dateTimeMemberExpressions)
             {
                 var properties = dateTimeMemberExpression.GetPropertyChain();
+
+                AddTailProperty(properties, typedSearchValue);
 
                 var parameterExpression = keySelector.Parameters.Single();
 
@@ -33,8 +34,7 @@ namespace QueryableExtensions.ExpressionCreators
 
                 try
                 {
-                    var constantExpression = Expression.Constant
-                        (searchedDateOnlyValue);
+                    var constantExpression = CreateConstantExpression(typedSearchValue);
 
                     var equalityExpression = Expression.Equal
                         (expression, constantExpression);
@@ -42,12 +42,60 @@ namespace QueryableExtensions.ExpressionCreators
                     var dateOnlyExpression = Expression.Lambda<Func<T, bool>>
                         (equalityExpression, parameterExpression);
 
-                    dateTimeExpressions.Add(dateOnlyExpression);
+                    dateOnlyExpressions.Add(dateOnlyExpression);
                 }
                 catch { }
             }
 
-            return dateTimeExpressions;
+            return dateOnlyExpressions;
+        }
+        private object GetTypedSearchValue(string searchValue)
+        {
+            var dateOnlyParsingResult = DateOnly.TryParse
+                (searchValue, out DateOnly searchedDateOnlyValue);
+            if (dateOnlyParsingResult)
+            {
+                return searchedDateOnlyValue;
+            }
+
+            var timeOnlyParsingResult = TimeOnly.TryParse
+                (searchValue, out TimeOnly searchedTimeOnlyValue);
+            if (timeOnlyParsingResult)
+            {
+                return searchedTimeOnlyValue;
+            }
+
+            var dateTimeParsingResult = DateTime.TryParse
+                (searchValue, out DateTime searchedDateTimeValue);
+            if (dateTimeParsingResult)
+            {
+                return searchedDateTimeValue;
+            }
+
+            return null!;
+        }
+        private void AddTailProperty(List<string> properties, object typedSearchValue)
+        {
+            var tailProperty = typedSearchValue switch
+            {
+                DateOnly => "Date",
+                TimeOnly => "TimeOfDay",
+                _ => string.Empty
+            };
+
+            if (!string.IsNullOrWhiteSpace(tailProperty))
+            {
+                properties.Add(tailProperty);
+            }
+        }
+        private ConstantExpression CreateConstantExpression(object typedSearchValue)
+        {
+            return typedSearchValue switch
+            {
+                DateOnly => Expression.Constant(((DateOnly)typedSearchValue).ToDateTime(new TimeOnly())),
+                TimeOnly => Expression.Constant(((TimeOnly)typedSearchValue).ToTimeSpan()),
+                _ => Expression.Constant((DateTime)typedSearchValue)
+            };
         }
     }
 }

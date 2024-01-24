@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace QueryableExtensions.Extensions
 {
-    public static class QueryableExtensions
+    public static class EnumerableExtensions
     {
         private static ReadOnlyCollection<IExpressionCreator> ExpressionCreators =>
             new(new IExpressionCreator[]
@@ -14,9 +14,9 @@ namespace QueryableExtensions.Extensions
                 new StringTypesExpressionCreator()
             });
 
-        public static IQueryable<T> Search<T>
-            (this IQueryable<T> source,
-            Expression<Func<T, object?>> keySelector,
+        public static IEnumerable<T> Search<T>(
+            this IEnumerable<T> source,
+            Expression<Func<T, object>> keySelector,
             string searchValue)
         {
             if (source == null)
@@ -47,7 +47,7 @@ namespace QueryableExtensions.Extensions
             {
                 var combinedExpressions =
                     expressions.CombineExpressionsWithOr()!;
-                return source.Where(combinedExpressions);
+                return source.Where(combinedExpressions.Compile());
             }
 
             return source;

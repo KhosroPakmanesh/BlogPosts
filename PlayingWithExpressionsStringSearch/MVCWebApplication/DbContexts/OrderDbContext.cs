@@ -24,7 +24,7 @@ public partial class OrderDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        base.OnConfiguring(optionsBuilder);
+        base.OnConfiguring(optionsBuilder);        
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -45,7 +45,7 @@ public partial class OrderDbContext : DbContext
             entity.ToTable("Orders", "order");
 
             entity.Property(e => e.UserId).HasMaxLength(450);
-            entity.Property(e => e.DateTime).HasColumnType("smalldatetime");
+            entity.Property(e => e.DateTime).HasColumnType("datetime");
 
             entity.HasOne(a => a.Payment)
                 .WithOne(b => b.Order)
@@ -75,7 +75,7 @@ public partial class OrderDbContext : DbContext
             entity.ToTable("Payments", "payment");
 
             entity.Property(e => e.BankAccountNumber).HasMaxLength(50);
-            entity.Property(e => e.DateTime).HasColumnType("smalldatetime");
+            entity.Property(e => e.DateTime).HasColumnType("datetime");
             entity.Property(e => e.Value).HasColumnType("decimal(18, 0)");
         });
 

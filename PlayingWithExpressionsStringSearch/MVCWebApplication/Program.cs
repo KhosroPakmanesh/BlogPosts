@@ -15,14 +15,9 @@ namespace MVCWebApplication
 
             builder.Services.AddDbContext<OrderDbContext>(options =>
             {
-                var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
-                    throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-                options.UseSqlServer(connectionString, builder =>
-                {
-                    builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
-                });
+                options.UseInMemoryDatabase("orderDb");
             });
-
+            
             builder.Services.AddControllersWithViews(options =>
             {
                 options.Filters.Add
