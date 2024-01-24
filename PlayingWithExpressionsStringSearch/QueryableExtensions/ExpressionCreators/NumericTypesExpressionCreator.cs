@@ -6,7 +6,7 @@ namespace QueryableExtensions.ExpressionCreators
     internal sealed class NumericTypesExpressionCreator : IExpressionCreator
     {
         public List<Expression<Func<T, bool>>> CreateExpressions<T>
-            (string searchValue, Expression<Func<T, object?>> keySelector)
+            (string searchValue, Expression<Func<T, object>> keySelector)
         {
             var numericParsingResult =
                 searchValue.All(char.IsDigit);
