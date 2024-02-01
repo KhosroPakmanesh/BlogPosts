@@ -34,7 +34,7 @@ namespace OAuth2MultiClientIntegrator
                     ("IdentityServer callback data is missing.");
             }
 
-            var clientId = authenticationState.Split(',').LastOrDefault();
+            var clientId = authenticationState!.Split(',').LastOrDefault();
             var oAuth2Client = _oAuth2Clients.FirstOrDefault
                 (t => t.ClientCredentialOptions.ClientId == clientId);
             if (oAuth2Client == null)
@@ -51,7 +51,7 @@ namespace OAuth2MultiClientIntegrator
             }
 
             var authenticationCodeResponse = new AuthenticationCodeResponse
-                    (authenticationCode, oAuth2Client.AuthenticationCodeOptions
+                    (authenticationCode!, oAuth2Client.AuthenticationCodeOptions
                     .StaticExpirationValue, _dateTimeProvider.GetUTCDateTimeNow);
 
             await _oauth2ClientDataStore.SetAuthenticationCodeResponse

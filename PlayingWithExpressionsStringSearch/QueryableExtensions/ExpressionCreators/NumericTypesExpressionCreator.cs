@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Reflection;
 using QueryableExtensions.Extensions;
 
 namespace QueryableExtensions.ExpressionCreators
@@ -8,21 +9,22 @@ namespace QueryableExtensions.ExpressionCreators
         public List<Expression<Func<T, bool>>> CreateExpressions<T>
             (string searchValue, Expression<Func<T, object>> keySelector)
         {
-            var numericParsingResult =
+            bool numericParsingResult =
                 searchValue.All(char.IsDigit);
             if (!numericParsingResult)
             {
                 return new List<Expression<Func<T, bool>>>();
             }
 
-            var numericMemberExpressions = keySelector.Body.ExtractNumericMemberExpressions();
+            List<MemberExpression> numericMemberExpressions = 
+                keySelector.Body.ExtractNumericMemberExpressions();
 
             var numericExpressions = new List<Expression<Func<T, bool>>>();
             foreach (var numericMemberExpression in numericMemberExpressions)
             {
-                var properties = numericMemberExpression.GetPropertyChain();
+                List<string> properties = numericMemberExpression.GetPropertyChain();
 
-                var parameterExpression = keySelector.Parameters.Single();
+                ParameterExpression parameterExpression = keySelector.Parameters.Single();
 
                 Expression expression = parameterExpression;
                 foreach (var property in properties)
@@ -30,7 +32,7 @@ namespace QueryableExtensions.ExpressionCreators
                     expression = Expression.Property(expression, property);
                 }
 
-                var conversionResult =
+                bool conversionResult =
                     numericMemberExpression.Type.TryChangeType(
                         searchValue, out dynamic numericSearchValue);
 
@@ -39,16 +41,16 @@ namespace QueryableExtensions.ExpressionCreators
                     continue;
                 }
 
-                var equalsMethodInfo = numericMemberExpression.Type.GetMethod
-                    ("Equals", new[] { numericMemberExpression.Type });
+                MethodInfo equalsMethodInfo = numericMemberExpression.Type.GetMethod
+                    ("Equals", new[] { numericMemberExpression.Type })!;
 
-                var constantExpression = Expression.Constant
+                ConstantExpression constantExpression = Expression.Constant
                     (numericSearchValue, numericMemberExpression.Type);
 
-                var methodCallExpression = Expression.Call
+                MethodCallExpression methodCallExpression = Expression.Call
                     (expression, equalsMethodInfo, constantExpression);
 
-                var numericExpression = Expression.Lambda<Func<T, bool>>
+                Expression<Func<T, bool>> numericExpression = Expression.Lambda<Func<T, bool>>
                     (methodCallExpression, parameterExpression);
 
                 numericExpressions.Add(numericExpression);

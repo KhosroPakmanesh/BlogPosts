@@ -8,23 +8,23 @@ namespace QueryableExtensions.ExpressionCreators
         public List<Expression<Func<T, bool>>> CreateExpressions<T>
             (string searchValue, Expression<Func<T, object>> keySelector)
         {
-            var typedSearchValue = GetTypedSearchValue(searchValue);
+            object typedSearchValue = GetTypedSearchValue(searchValue);
             if (typedSearchValue == null)
             {
                 return new List<Expression<Func<T, bool>>>();
             }
 
-            var dateTimeMemberExpressions = keySelector.Body
+            List<MemberExpression> dateTimeMemberExpressions = keySelector.Body
                 .ExtractDateTimeMemberExpressions();
 
             var dateOnlyExpressions = new List<Expression<Func<T, bool>>>();
             foreach (var dateTimeMemberExpression in dateTimeMemberExpressions)
             {
-                var properties = dateTimeMemberExpression.GetPropertyChain();
+                List<string> properties = dateTimeMemberExpression.GetPropertyChain();
 
                 AddTailProperty(properties, typedSearchValue);
 
-                var parameterExpression = keySelector.Parameters.Single();
+                ParameterExpression parameterExpression = keySelector.Parameters.Single();
 
                 Expression expression = parameterExpression;
                 foreach (var property in properties)
@@ -34,12 +34,12 @@ namespace QueryableExtensions.ExpressionCreators
 
                 try
                 {
-                    var constantExpression = CreateConstantExpression(typedSearchValue);
+                    ConstantExpression constantExpression = CreateConstantExpression(typedSearchValue);
 
-                    var equalityExpression = Expression.Equal
+                    BinaryExpression equalityExpression = Expression.Equal
                         (expression, constantExpression);
 
-                    var dateOnlyExpression = Expression.Lambda<Func<T, bool>>
+                    Expression<Func<T, bool>> dateOnlyExpression = Expression.Lambda<Func<T, bool>>
                         (equalityExpression, parameterExpression);
 
                     dateOnlyExpressions.Add(dateOnlyExpression);
@@ -51,21 +51,21 @@ namespace QueryableExtensions.ExpressionCreators
         }
         private object GetTypedSearchValue(string searchValue)
         {
-            var dateOnlyParsingResult = DateOnly.TryParse
+            bool dateOnlyParsingResult = DateOnly.TryParse
                 (searchValue, out DateOnly searchedDateOnlyValue);
             if (dateOnlyParsingResult)
             {
                 return searchedDateOnlyValue;
             }
 
-            var timeOnlyParsingResult = TimeOnly.TryParse
+            bool timeOnlyParsingResult = TimeOnly.TryParse
                 (searchValue, out TimeOnly searchedTimeOnlyValue);
             if (timeOnlyParsingResult)
             {
                 return searchedTimeOnlyValue;
             }
 
-            var dateTimeParsingResult = DateTime.TryParse
+            bool dateTimeParsingResult = DateTime.TryParse
                 (searchValue, out DateTime searchedDateTimeValue);
             if (dateTimeParsingResult)
             {
@@ -76,7 +76,7 @@ namespace QueryableExtensions.ExpressionCreators
         }
         private void AddTailProperty(List<string> properties, object typedSearchValue)
         {
-            var tailProperty = typedSearchValue switch
+            string tailProperty = typedSearchValue switch
             {
                 DateOnly => "Date",
                 TimeOnly => "TimeOfDay",

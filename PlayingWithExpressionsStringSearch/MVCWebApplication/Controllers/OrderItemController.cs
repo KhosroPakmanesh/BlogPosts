@@ -47,6 +47,18 @@ namespace MVCWebApplication.Controllers
                         orderItem.Product.Description
                     },
                     searchValue);
+
+                var enumerableOrderItemss = DataProvider
+                    .GetEnumerableOrderItems(parentId);
+                var retrievedEnumerableOrderItems = enumerableOrderItemss
+                   .Search(orderItem => new
+                   {
+                       orderItem.Product.Name,
+                       orderItem.Quantity,
+                       orderItem.Price,
+                       orderItem.Product.Description
+                   }, searchValue)
+                   .ToList();
             }
 
             recordsTotal = await queryableOrderItems.CountAsync();

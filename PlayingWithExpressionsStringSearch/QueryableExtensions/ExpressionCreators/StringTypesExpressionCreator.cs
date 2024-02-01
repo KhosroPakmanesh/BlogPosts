@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Reflection;
 using QueryableExtensions.Extensions;
 
 namespace QueryableExtensions.ExpressionCreators
@@ -8,14 +9,15 @@ namespace QueryableExtensions.ExpressionCreators
         public List<Expression<Func<T, bool>>> CreateExpressions<T>
             (string searchValue, Expression<Func<T, object>> keySelector)
         {
-            var stringMemberExpressions = keySelector.Body.ExtractStringMemberExpressions();
+            List<MemberExpression> stringMemberExpressions = 
+                keySelector.Body.ExtractStringMemberExpressions();
 
             var stringExpressions = new List<Expression<Func<T, bool>>>();
             foreach (var stringMemberExpression in stringMemberExpressions)
             {
-                var properties = stringMemberExpression.GetPropertyChain();
+                List<string> properties = stringMemberExpression.GetPropertyChain();
 
-                var parameterExpression = keySelector.Parameters.Single();
+                ParameterExpression parameterExpression = keySelector.Parameters.Single();
 
                 Expression expression = parameterExpression;
                 foreach (var property in properties)
@@ -23,7 +25,7 @@ namespace QueryableExtensions.ExpressionCreators
                     expression = Expression.Property(expression, property);
                 }
 
-                var conversionResult =
+                bool conversionResult =
                     stringMemberExpression.Type.TryChangeType(
                         searchValue, out dynamic stringSearchValue);
 
@@ -32,16 +34,16 @@ namespace QueryableExtensions.ExpressionCreators
                     continue;
                 }
 
-                var containsMethodInfo = stringMemberExpression.Type.GetMethod
-                    ("Contains", new[] { stringMemberExpression.Type });
+                MethodInfo containsMethodInfo = stringMemberExpression.Type.GetMethod
+                    ("Contains", new[] { stringMemberExpression.Type })!;
 
-                var constantExpression = Expression.Constant
+                ConstantExpression constantExpression = Expression.Constant
                     (stringSearchValue, stringMemberExpression.Type);
 
-                var methodCallExpression = Expression.Call
+                MethodCallExpression methodCallExpression = Expression.Call
                     (expression, containsMethodInfo, constantExpression);
 
-                var stringExpression = Expression.Lambda<Func<T, bool>>
+                Expression<Func<T, bool>> stringExpression = Expression.Lambda<Func<T, bool>>
                     (methodCallExpression, parameterExpression);
 
                 stringExpressions.Add(stringExpression);

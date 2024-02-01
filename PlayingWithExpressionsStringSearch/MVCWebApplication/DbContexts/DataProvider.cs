@@ -47,6 +47,20 @@ namespace MVCWebApplication.DbContexts
 
             return orders;
         }
+        public static IEnumerable<OrderItem> GetEnumerableOrderItems(int orderId)
+        {
+            var products = GetProducts();
+            var orderItems = GetOrderItems(products)
+                .Where(t=>t.OrderId == orderId);
+
+            foreach (var orderItem in orderItems)
+            {
+                orderItem.Product = products
+                    .FirstOrDefault(t => t.IdProduct == orderItem.ProductId)!;
+            }
+
+            return orderItems;
+        }
 
         private static List<User> GetUsers()
         {
