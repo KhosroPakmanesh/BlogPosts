@@ -40,11 +40,11 @@ namespace OAuth2MultiClientIntegrator.Gateways
             httpClient.DefaultRequestHeaders.Authorization = authValue;
 
             // Prepare the request body
-            var authenticationRedirectUri = _httpContextAccessor
-                .HttpContext.Request.CreateAuthenticationRedirectUri();
+            var authorizationRedirectUri = _httpContextAccessor
+                .HttpContext.Request.CreateAuthorizationRedirectUri();
             var requestBody = new FormUrlEncodedContent(
                 oauth2Client.AccessTokenOptions.GenerateSettings
-                (authorizationCode, authenticationRedirectUri));
+                (authorizationCode, authorizationRedirectUri));
 
             AccessTokenResponse accessTokenResponse = null;
 

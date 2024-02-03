@@ -19,7 +19,7 @@ namespace OAuth2MultiClientIntegrator.Connectors.Configurations
             services.AddScoped<IOAuth2ClientDataStore, DefaultDbBasedClientDataStore>();
             services.AddScoped<IOAuth2AccessTokenProvider, DefaultOAuth2AccessTokenProvider>();
             services.AddScoped<IOAuth2TargetUriGenerator, DefaultOAuth2TargetUriGenerator>();
-            services.AddScoped<IOAuth2AuthenticationUriGenerator, DefaultOAuth2AuthenticationUriGenerator>();
+            services.AddScoped<IOAuth2AuthorizationUriGenerator, DefaultOAuth2AuthorizationUriGenerator>();
 
             services.AddDbContext<OAuth2ServerAuthInfoDbContext>(options =>
             {
@@ -34,7 +34,7 @@ namespace OAuth2MultiClientIntegrator.Connectors.Configurations
             services.AddMvc().AddMvcOptions(options =>
             {
                 options.Filters.Add(
-                    new OAuth2AuthenticationRedirectSignalExceptionFilter());
+                    new OAuth2AuthorizationRedirectSignalExceptionFilter());
             });
 
             return services;

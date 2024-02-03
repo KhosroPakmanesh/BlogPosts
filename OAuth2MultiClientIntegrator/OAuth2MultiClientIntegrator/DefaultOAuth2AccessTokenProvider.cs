@@ -47,17 +47,17 @@ namespace OAuth2MultiClientIntegrator
         {
             var clientId = oAuth2Client.ClientCredentialOptions.ClientId;
 
-            var authenticationCodeResponse =
-                await GetAuthenticationCodeResponseFromDataStore(clientId);
-            if (authenticationCodeResponse != null)
+            var authorizationCodeResponse =
+                await GetAuthorizationCodeResponseFromDataStore(clientId);
+            if (authorizationCodeResponse != null)
             {
-                var authenticationCodeStatus = authenticationCodeResponse
+                var authorizationCodeStatus = authorizationCodeResponse
                     .GetStatus(_dateTimeProvider.GetUTCDateTimeNow);
-                if (authenticationCodeStatus == AuthenticationCodeStatus.Valid)
+                if (authorizationCodeStatus == AuthorizationCodeStatus.Valid)
                 {
                     var accessTokenResponse =
                         await GetAccessTokenResponseFromGateway
-                        (clientId, authenticationCodeResponse.AuthenticationCode);
+                        (clientId, authorizationCodeResponse.AuthorizationCode);
 
                     if (accessTokenResponse == null)
                     {
@@ -133,11 +133,11 @@ namespace OAuth2MultiClientIntegrator
             return await _oAuth2ClientDataStore
                 .GetAccessTokenResponse(clientId);
         }
-        private async Task<AuthenticationCodeResponse>
-            GetAuthenticationCodeResponseFromDataStore(string clientId)
+        private async Task<AuthorizationCodeResponse>
+            GetAuthorizationCodeResponseFromDataStore(string clientId)
         {
             return await _oAuth2ClientDataStore.
-                GetAuthenticationCodeResponse(clientId);
+                GetAuthorizationCodeResponse(clientId);
         }
         private async Task SetAccessTokenResponseToDataStore
             (ClientCredentialOptions clientCredentialOptions,
@@ -149,10 +149,10 @@ namespace OAuth2MultiClientIntegrator
 
         private async Task<AccessTokenResponse>
             GetAccessTokenResponseFromGateway
-            (string clientId, string authenticationCode)
+            (string clientId, string authorizationCode)
         {
             return await _oauth2ClientGateway.GetAccessTokenResponse
-                (clientId, authenticationCode);
+                (clientId, authorizationCode);
         }
         private async Task<AccessTokenResponse>
             GetRefreshAccessTokenResponseFromGatway

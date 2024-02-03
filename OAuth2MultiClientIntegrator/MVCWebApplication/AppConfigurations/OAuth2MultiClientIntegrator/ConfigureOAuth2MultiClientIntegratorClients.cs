@@ -27,9 +27,9 @@ namespace MVCWebApplication.AppConfigurations.OAuth2MultiClientIntegrator
                         ClientId = options.Value.ARegularClientSettings.ClientSettings.ClientId,
                         ClientSecret = options.Value.ARegularClientSettings.ClientSettings.ClientSecret
                     },
-                    new AuthenticationCodeOptions
+                    new AuthorizationCodeOptions
                     {
-                        BaseAuthenticationUri = "BaseAuthenticationUri",
+                        BaseAuthorizationUri = "BaseAuthorizationUri",
                         TargetUri = options.Value.ARegularClientSettings.ClientSettings.TargetUri,
                         Scope = "Scope",
                         NonestandardSettings = new List<KeyValuePair<string, string>>
@@ -53,9 +53,9 @@ namespace MVCWebApplication.AppConfigurations.OAuth2MultiClientIntegrator
                         ClientId = options.Value.FacebookSettings.ClientSettings.ClientId,
                         ClientSecret = options.Value.FacebookSettings.ClientSettings.ClientSecret
                     },
-                    new AuthenticationCodeOptions
+                    new AuthorizationCodeOptions
                     {
-                        BaseAuthenticationUri = "https://accounts.google.com/o/oauth2/v2/auth",
+                        BaseAuthorizationUri = "https://accounts.google.com/o/oauth2/v2/auth",
                         TargetUri = options.Value.FacebookSettings.ClientSettings.TargetUri,
                         Scope = "https://www.googleapis.com/auth/business.manage",
                         StaticExpirationValue = 60
@@ -75,9 +75,9 @@ namespace MVCWebApplication.AppConfigurations.OAuth2MultiClientIntegrator
                         ClientId = options.Value.GoogleSettings.ClientSettings.ClientId,
                         ClientSecret = options.Value.GoogleSettings.ClientSettings.ClientSecret
                     },
-                    new AuthenticationCodeOptions
+                    new AuthorizationCodeOptions
                     {
-                        BaseAuthenticationUri = "https://www.facebook.com/v18.0/dialog/oauth",
+                        BaseAuthorizationUri = "https://www.facebook.com/v18.0/dialog/oauth",
                         TargetUri = options.Value.GoogleSettings.ClientSettings.TargetUri,
                         Scope = "public_profile,email",
                         StaticExpirationValue = 60,

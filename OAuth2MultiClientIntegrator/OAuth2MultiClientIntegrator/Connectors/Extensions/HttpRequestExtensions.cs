@@ -22,7 +22,7 @@ namespace OAuth2MultiClientIntegrator.Connectors.Extensions
             return false;
         }
 
-        public static string CreateAuthenticationRedirectUri(this HttpRequest request)
+        public static string CreateAuthorizationRedirectUri(this HttpRequest request)
         {
             return
                 $"{request.Scheme}://" +

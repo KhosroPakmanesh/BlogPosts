@@ -1,8 +1,8 @@
 ﻿namespace OAuth2MultiClientIntegrator.Connectors.Dtos
 {
-    public sealed class AuthenticationCodeOptions
+    public sealed class AuthorizationCodeOptions
     {
-        public string BaseAuthenticationUri { get; set; }
+        public string BaseAuthorizationUri { get; set; }
         public string TargetUri { get; set; } = "/";
         public string Scope { get; set; }
         public string AccessType { get; set; } = "offline";
@@ -13,36 +13,36 @@
         public List<KeyValuePair<string, string>> NonestandardSettings { get; set; }
             = new List<KeyValuePair<string, string>>();
 
-        public string GenerateFullAuthenticationUri(
-            string clientId, string authenticationState, string authenticationRedirectUri)
+        public string GenerateFullAuthorizationUri(
+            string clientId, string authorizationState, string authorizationRedirectUri)
         {
-            string fullAuthenticationUri = $"{BaseAuthenticationUri}?" +
+            string fullAuthorizationUri = $"{BaseAuthorizationUri}?" +
                 $"client_id={clientId}" +
-                $"&redirect_uri={authenticationRedirectUri}" +
+                $"&redirect_uri={authorizationRedirectUri}" +
                 $"&scope={Scope}" +
-                $"&state={authenticationState}" +
+                $"&state={authorizationState}" +
                 $"&access_type={AccessType}" +
                 $"&response_type={ResponseType}";
 
             foreach (var NonestandardSetting in NonestandardSettings)
             {
-                fullAuthenticationUri +=
+                fullAuthorizationUri +=
                     $"&{NonestandardSetting.Key}={NonestandardSetting.Value}";
             }
 
             foreach (var alternativeNamesForStandardName in StandardAlternativeNamePairs)
             {
-                var fullAuthenticationUriContainsAlternativeName =
-                    fullAuthenticationUri.Contains(alternativeNamesForStandardName.Item1);
-                if (fullAuthenticationUriContainsAlternativeName)
+                var fullAuthorizationUriContainsAlternativeName =
+                    fullAuthorizationUri.Contains(alternativeNamesForStandardName.Item1);
+                if (fullAuthorizationUriContainsAlternativeName)
                 {
-                    fullAuthenticationUri.Replace
+                    fullAuthorizationUri.Replace
                         (alternativeNamesForStandardName.Item1,
                         alternativeNamesForStandardName.Item2);
                 }
             }
 
-            return fullAuthenticationUri;
+            return fullAuthorizationUri;
         }
     }
 }

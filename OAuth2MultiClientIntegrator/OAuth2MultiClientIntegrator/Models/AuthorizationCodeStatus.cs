@@ -1,6 +1,6 @@
 ﻿namespace OAuth2MultiClientIntegrator.Models
 {
-    internal enum AuthenticationCodeStatus
+    internal enum AuthorizationCodeStatus
     {
         Valid,
         Invalid

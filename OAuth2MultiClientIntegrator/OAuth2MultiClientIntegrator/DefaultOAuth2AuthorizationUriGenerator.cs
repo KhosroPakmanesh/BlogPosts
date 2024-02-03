@@ -4,12 +4,12 @@ using OAuth2MultiClientIntegrator.Exceptions;
 
 namespace OAuth2MultiClientIntegrator
 {
-    internal sealed class DefaultOAuth2AuthenticationUriGenerator : IOAuth2AuthenticationUriGenerator
+    internal sealed class DefaultOAuth2AuthorizationUriGenerator : IOAuth2AuthorizationUriGenerator
     {
         private readonly IOAuth2ClientDataStore _oAuth2ClientDataStore;
         private readonly List<OAuth2Client> _oAuth2Clients;
 
-        public DefaultOAuth2AuthenticationUriGenerator(
+        public DefaultOAuth2AuthorizationUriGenerator(
             IOAuth2ClientDataStore oAuth2ClientDataStore,
             List<OAuth2Client> oAuth2Clients)
         {
@@ -17,8 +17,8 @@ namespace OAuth2MultiClientIntegrator
             _oAuth2Clients = oAuth2Clients;
         }
 
-        public async Task<string> GenerateAuthenticationUri
-            (string clientId, string authenticationRedirectUri)
+        public async Task<string> GenerateAuthorizationUri
+            (string clientId, string authorizationRedirectUri)
         {
             var oAuth2Client = _oAuth2Clients.FirstOrDefault
                 (t => t.ClientCredentialOptions.ClientId == clientId);
@@ -28,14 +28,14 @@ namespace OAuth2MultiClientIntegrator
                     ("No suitable OAuthClient found.");
             }
 
-            var authenticationState = $"{Guid.NewGuid()},{clientId}";
-            await _oAuth2ClientDataStore.SetAuthenticationState
-                (oAuth2Client.ClientCredentialOptions, authenticationState);
+            var authorizationState = $"{Guid.NewGuid()},{clientId}";
+            await _oAuth2ClientDataStore.SetAuthorizationState
+                (oAuth2Client.ClientCredentialOptions, authorizationState);
 
-            var fullAuthenticationUri = oAuth2Client.AuthenticationCodeOptions
-                .GenerateFullAuthenticationUri(clientId, authenticationState,
-                    authenticationRedirectUri);
-            return fullAuthenticationUri;
+            var fullAuthorizationUri = oAuth2Client.AuthorizationCodeOptions
+                .GenerateFullAuthorizationUri(clientId, authorizationState,
+                    authorizationRedirectUri);
+            return fullAuthorizationUri;
         }
     }
 }

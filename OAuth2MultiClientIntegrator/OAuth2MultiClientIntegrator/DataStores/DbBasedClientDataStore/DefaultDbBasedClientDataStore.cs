@@ -15,21 +15,21 @@ namespace OAuth2MultiClientIntegrator.DataStores.DbBasedClientDataStore
             _oAuth2ServerAuthInfoRepository = oauth2ServerAuthInfoRepository;
         }
 
-        public async Task<AuthenticationCodeResponse>
-            GetAuthenticationCodeResponse(string clientId)
+        public async Task<AuthorizationCodeResponse>
+            GetAuthorizationCodeResponse(string clientId)
         {
             var oAuth2ServerAuthInfo = await
                 _oAuth2ServerAuthInfoRepository.Get(clientId);
             if (oAuth2ServerAuthInfo != null)
             {
-                return oAuth2ServerAuthInfo.AuthenticationCodeResponse;
+                return oAuth2ServerAuthInfo.AuthorizationCodeResponse;
             }
 
             return default;
         }
-        public async Task SetAuthenticationCodeResponse(
+        public async Task SetAuthorizationCodeResponse(
             ClientCredentialOptions clientCredentialOptions,
-            AuthenticationCodeResponse authenticationCodeResponse)
+            AuthorizationCodeResponse authorizationCodeResponse)
         {
             var oAuth2ServerAuthInfo = await _oAuth2ServerAuthInfoRepository
                 .Get(clientCredentialOptions.ClientId);
@@ -37,14 +37,14 @@ namespace OAuth2MultiClientIntegrator.DataStores.DbBasedClientDataStore
             {
                 var newOAuth2ServerAuthInfo =
                     new OAuth2ServerAuthInfo(clientCredentialOptions,
-                        authenticationCodeResponse);
+                        authorizationCodeResponse);
                 await _oAuth2ServerAuthInfoRepository
                     .Add(newOAuth2ServerAuthInfo);
             }
             else
             {
-                oAuth2ServerAuthInfo.UpdateAuthenticationCodeResponse
-                    (authenticationCodeResponse);
+                oAuth2ServerAuthInfo.UpdateAuthorizationCodeResponse
+                    (authorizationCodeResponse);
                 await _oAuth2ServerAuthInfoRepository
                     .Update(oAuth2ServerAuthInfo);
             }
@@ -52,20 +52,20 @@ namespace OAuth2MultiClientIntegrator.DataStores.DbBasedClientDataStore
             await _oAuth2ServerAuthInfoRepository.CommitAsync();
         }
 
-        public async Task<string> GetAuthenticationState(string clientId)
+        public async Task<string> GetAuthorizationState(string clientId)
         {
             var oAuth2ServerAuthInfo = await
                 _oAuth2ServerAuthInfoRepository.Get(clientId);
             if (oAuth2ServerAuthInfo != null)
             {
-                return oAuth2ServerAuthInfo.AuthenticationState;
+                return oAuth2ServerAuthInfo.AuthorizationState;
             }
 
             return default;
         }
-        public async Task SetAuthenticationState(
+        public async Task SetAuthorizationState(
             ClientCredentialOptions clientCredentialOptions
-            , string authenticationState)
+            , string authorizationState)
         {
             var oAuth2ServerAuthInfo =
                 await _oAuth2ServerAuthInfoRepository
@@ -74,14 +74,14 @@ namespace OAuth2MultiClientIntegrator.DataStores.DbBasedClientDataStore
             {
                 var newOAuth2ServerAuthInfo =
                     new OAuth2ServerAuthInfo(clientCredentialOptions,
-                    authenticationState);
+                    authorizationState);
                 await _oAuth2ServerAuthInfoRepository
                     .Add(newOAuth2ServerAuthInfo);
             }
             else
             {
                 oAuth2ServerAuthInfo
-                    .UpdateAuthenticationState(authenticationState);
+                    .UpdateAuthorizationState(authorizationState);
                 await _oAuth2ServerAuthInfoRepository
                     .Update(oAuth2ServerAuthInfo);
             }

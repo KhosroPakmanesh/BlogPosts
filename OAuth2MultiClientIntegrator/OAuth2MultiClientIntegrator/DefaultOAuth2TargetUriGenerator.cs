@@ -23,18 +23,18 @@ namespace OAuth2MultiClientIntegrator
             _dateTimeProvider = dateTimeProvider;
         }
         public async Task<string> GenerateTargetUri
-            (string authenticationCode, string authenticationState)
+            (string authorizationCode, string authorizationState)
         {
             var dataNotReturnedCorrectly =
-                authenticationCode == null ||
-                authenticationState == null;
+                authorizationCode == null ||
+                authorizationState == null;
             if (dataNotReturnedCorrectly)
             {
                 throw new OAuth2MultiClientIntegratorFailureException
                     ("IdentityServer callback data is missing.");
             }
 
-            var clientId = authenticationState!.Split(',').LastOrDefault();
+            var clientId = authorizationState!.Split(',').LastOrDefault();
             var oAuth2Client = _oAuth2Clients.FirstOrDefault
                 (t => t.ClientCredentialOptions.ClientId == clientId);
             if (oAuth2Client == null)
@@ -43,21 +43,21 @@ namespace OAuth2MultiClientIntegrator
                     ("No suitable OAuthClient found.");
             }
 
-            var expectedAuthenticationState = await
-                _oauth2ClientDataStore.GetAuthenticationState(clientId);
-            if (expectedAuthenticationState != authenticationState)
+            var expectedAuthorizationState = await
+                _oauth2ClientDataStore.GetAuthorizationState(clientId);
+            if (expectedAuthorizationState != authorizationState)
             {
                 throw new PossibleOAuth2CsrfAttackException();
             }
 
-            var authenticationCodeResponse = new AuthenticationCodeResponse
-                    (authenticationCode!, oAuth2Client.AuthenticationCodeOptions
+            var authorizationCodeResponse = new AuthorizationCodeResponse
+                    (authorizationCode!, oAuth2Client.AuthorizationCodeOptions
                     .StaticExpirationValue, _dateTimeProvider.GetUTCDateTimeNow);
 
-            await _oauth2ClientDataStore.SetAuthenticationCodeResponse
-                    (oAuth2Client.ClientCredentialOptions, authenticationCodeResponse);
+            await _oauth2ClientDataStore.SetAuthorizationCodeResponse
+                    (oAuth2Client.ClientCredentialOptions, authorizationCodeResponse);
 
-            return oAuth2Client.AuthenticationCodeOptions.TargetUri;
+            return oAuth2Client.AuthorizationCodeOptions.TargetUri;
         }
     }
 }

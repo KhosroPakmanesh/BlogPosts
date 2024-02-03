@@ -12,13 +12,13 @@
             = new List<KeyValuePair<string, string>>();
 
         public List<KeyValuePair<string, string>> GenerateSettings
-            (string authenticationCode, string authenticationRedirectUri)
+            (string authorizationCode, string authorizationRedirectUri)
         {
             var settings = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("grant_type", GrantType),
-                new KeyValuePair<string, string>("code", authenticationCode),
-                new KeyValuePair<string, string>("redirect_uri", authenticationRedirectUri)
+                new KeyValuePair<string, string>("code", authorizationCode),
+                new KeyValuePair<string, string>("redirect_uri", authorizationRedirectUri)
             };
             settings.AddRange(NonestandardSettings);
 

@@ -4,12 +4,12 @@
     {
         public OAuth2Client(
             ClientCredentialOptions clientCredentialOptions,
-            AuthenticationCodeOptions authenticationCodeOptions,
+            AuthorizationCodeOptions authorizationCodeOptions,
             AccessTokenOptions accessTokenOptions,
             RefreshTokenOptions refreshTokenOptions)
         {
             ClientCredentialOptions = clientCredentialOptions;
-            AuthenticationCodeOptions = authenticationCodeOptions;
+            AuthorizationCodeOptions = authorizationCodeOptions;
             AccessTokenOptions = accessTokenOptions;
             RefreshTokenOptions = refreshTokenOptions;
 
@@ -17,11 +17,11 @@
         }
         public OAuth2Client(
             ClientCredentialOptions clientCredentialOptions,
-            AuthenticationCodeOptions authenticationCodeOptions,
+            AuthorizationCodeOptions authorizationCodeOptions,
             AccessTokenOptions accessTokenOptions)
         {
             ClientCredentialOptions = clientCredentialOptions;
-            AuthenticationCodeOptions = authenticationCodeOptions;
+            AuthorizationCodeOptions = authorizationCodeOptions;
             AccessTokenOptions = accessTokenOptions;
             RefreshTokenOptions = new RefreshTokenOptions();
 
@@ -30,7 +30,7 @@
 
 
         public ClientCredentialOptions ClientCredentialOptions { get; set; }
-        public AuthenticationCodeOptions AuthenticationCodeOptions { get; set; }
+        public AuthorizationCodeOptions AuthorizationCodeOptions { get; set; }
         public AccessTokenOptions AccessTokenOptions { get; set; }
         public RefreshTokenOptions RefreshTokenOptions { get; set; }
 

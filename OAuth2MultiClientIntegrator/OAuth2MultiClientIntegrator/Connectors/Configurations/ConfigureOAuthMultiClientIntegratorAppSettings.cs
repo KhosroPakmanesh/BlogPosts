@@ -18,11 +18,11 @@ namespace OAuth2MultiClientIntegrator.Connectors.Configurations
                     var oauth2TargetUriGenerator = serviceScope.ServiceProvider
                         .GetRequiredService<IOAuth2TargetUriGenerator>();
 
-                    string authenticationCode = httpContext.Request.Query["code"]!;
-                    string authenticationState = httpContext.Request.Query["state"]!;
+                    string authorizationCode = httpContext.Request.Query["code"]!;
+                    string authorizationState = httpContext.Request.Query["state"]!;
 
                     string targetUri = await oauth2TargetUriGenerator
-                        .GenerateTargetUri(authenticationCode, authenticationState);
+                        .GenerateTargetUri(authorizationCode, authorizationState);
 
                     httpContext.Response.Redirect(targetUri);
                 });

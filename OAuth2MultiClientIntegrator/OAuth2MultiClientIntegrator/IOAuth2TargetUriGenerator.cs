@@ -3,6 +3,6 @@
     internal interface IOAuth2TargetUriGenerator
     {
         Task<string> GenerateTargetUri
-            (string authenticationCode, string authenticationState);
+            (string authorizationCode, string authorizationState);
     }
 }

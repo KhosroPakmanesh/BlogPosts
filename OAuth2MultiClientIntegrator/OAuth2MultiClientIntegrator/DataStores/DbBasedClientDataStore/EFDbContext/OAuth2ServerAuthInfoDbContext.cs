@@ -35,20 +35,20 @@ namespace OAuth2MultiClientIntegrator.DataStores.DbBasedClientDataStore.EFDbCont
                 entity.Property(e => e.ClientName).HasColumnName("client_name");
                 entity.Property(e => e.ClientId).HasColumnName("client_id");
 
-                entity.OwnsOne(x => x.AuthenticationCodeResponse,
-                    authenticationCodeResponse =>
+                entity.OwnsOne(x => x.AuthorizationCodeResponse,
+                    authorizationCodeResponse =>
                     {
-                        authenticationCodeResponse.Property
-                            (x => x.AuthenticationCode).HasColumnName("acr_code");
-                        authenticationCodeResponse.Property
+                        authorizationCodeResponse.Property
+                            (x => x.AuthorizationCode).HasColumnName("acr_code");
+                        authorizationCodeResponse.Property
                             (x => x.ExpiresIn).HasColumnName("acr_expires_in");
-                        authenticationCodeResponse.Property
+                        authorizationCodeResponse.Property
                             (x => x.IssuingDateTime)
                             .HasColumnType("smalldatetime")
                             .HasColumnName("acr_issuing_date_time");
                     });
 
-                entity.Property(e => e.AuthenticationState).HasColumnName("authentication_state");
+                entity.Property(e => e.AuthorizationState).HasColumnName("authorization_state");
 
                 entity.OwnsOne(x => x.AccessTokenResponse,
                     accessTokenResponse =>

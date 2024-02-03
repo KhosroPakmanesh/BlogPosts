@@ -12,17 +12,17 @@ namespace OAuth2MultiClientIntegrator.DataStores.DbBasedClientDataStore.DbDtos
 
         public OAuth2ServerAuthInfo
             (ClientCredentialOptions clientCredentialOptions,
-            AuthenticationCodeResponse authenticationCodeResponse)
+            AuthorizationCodeResponse authorizationCodeResponse)
         {
-            AuthenticationCodeResponse = authenticationCodeResponse;
+            AuthorizationCodeResponse = authorizationCodeResponse;
             ClientName = clientCredentialOptions.ClientName;
             ClientId = clientCredentialOptions.ClientId;
         }
         public OAuth2ServerAuthInfo(
             ClientCredentialOptions clientCredentialOptions,
-            string authenticationState)
+            string authorizationState)
         {
-            AuthenticationState = authenticationState;
+            AuthorizationState = authorizationState;
             ClientName = clientCredentialOptions.ClientName;
             ClientId = clientCredentialOptions.ClientId;
         }
@@ -38,18 +38,18 @@ namespace OAuth2MultiClientIntegrator.DataStores.DbBasedClientDataStore.DbDtos
         public Guid Id { get; private set; }
         public string ClientName { get; private set; }
         public string ClientId { get; private set; }
-        public AuthenticationCodeResponse? AuthenticationCodeResponse { get; private set; }
-        public string? AuthenticationState { get; private set; }
+        public AuthorizationCodeResponse? AuthorizationCodeResponse { get; private set; }
+        public string? AuthorizationState { get; private set; }
         public AccessTokenResponse? AccessTokenResponse { get; private set; }
 
-        public void UpdateAuthenticationCodeResponse
-            (AuthenticationCodeResponse authenticationCodeResponse)
+        public void UpdateAuthorizationCodeResponse
+            (AuthorizationCodeResponse authorizationCodeResponse)
         {
-            AuthenticationCodeResponse = authenticationCodeResponse;
+            AuthorizationCodeResponse = authorizationCodeResponse;
         }
-        public void UpdateAuthenticationState(string authenticationState)
+        public void UpdateAuthorizationState(string authorizationState)
         {
-            AuthenticationState = authenticationState;
+            AuthorizationState = authorizationState;
         }
         public void UpdateAccessTokenResponse
             (AccessTokenResponse accessTokenResponse)

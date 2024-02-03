@@ -5,13 +5,13 @@ namespace OAuth2MultiClientIntegrator.DataStores
 {
     internal interface IOAuth2ClientDataStore
     {
-        Task<AuthenticationCodeResponse> GetAuthenticationCodeResponse(string clientId);
-        Task SetAuthenticationCodeResponse(ClientCredentialOptions clientCredentialOptions,
-            AuthenticationCodeResponse authenticationCodeResponse);
+        Task<AuthorizationCodeResponse> GetAuthorizationCodeResponse(string clientId);
+        Task SetAuthorizationCodeResponse(ClientCredentialOptions clientCredentialOptions,
+            AuthorizationCodeResponse authorizationCodeResponse);
 
-        Task<string> GetAuthenticationState(string clientId);
-        Task SetAuthenticationState
-            (ClientCredentialOptions clientCredentialOptions, string authenticationState);
+        Task<string> GetAuthorizationState(string clientId);
+        Task SetAuthorizationState
+            (ClientCredentialOptions clientCredentialOptions, string authorizationState);
 
         Task<AccessTokenResponse> GetAccessTokenResponse(string clientId);
         Task SetAccessTokenResponse(ClientCredentialOptions clientCredentialOptions,
