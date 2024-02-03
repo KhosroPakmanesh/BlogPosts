@@ -12,17 +12,17 @@ namespace LogEnabledHttpClient.Configurations
             serviceCollection.AddHttpClient("LogEnabledClient")
                 .AddHttpMessageHandler<LoggingDelegatingHandler>();
 
-#if DEBUG
+            #if DEBUG
             {
                 serviceCollection.AddSingleton<ILoggerSetting,
                     ConsoleLoggerSetting>();
             }
-#else
+            #else
             {
                 serviceCollection.AddSingleton<ILoggerSetting,
                     ApplicationInsightsLoggerSetting>();
             }            
-#endif
+            #endif
 
             var loggerSetting = serviceCollection.BuildServiceProvider()
                 .GetRequiredService<ILoggerSetting>();
